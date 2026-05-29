@@ -1,0 +1,29 @@
+---
+import Layout from "../components/common/Layout/Layout.astro";
+import NavBar from "../components/common/NavBar/NavBar.astro";
+import AnimatedBrandLink from "../components/pages/home/AnimatedBrandLink/AnimatedBrandLink.astro";
+import FeaturedProjectsSection from "../components/pages/home/FeaturedProjectsSection/FeaturedProjectsSection.astro";
+import Hero from "../components/pages/home/Hero/Hero.astro";
+import SkillsSection from "../components/pages/home/SkillsSection/SkillsSection.astro";
+import metadata from "../metadata.json";
+---
+
+<Layout pageTitle="Homepage">
+  <NavBar slot="navbar">
+    <AnimatedBrandLink
+      href="#"
+      animationStartTargetSelector="[data-brand-target]"
+    >
+      {metadata.siteTitle}
+    </AnimatedBrandLink>
+  </NavBar>
+  <div
+    class="flex flex-col gap-14 lg:flex-row lg:items-center lg:justify-between lg:gap-12"
+  >
+    <Hero />
+    <SkillsSection />
+  </div>
+  <div class="mt-14">
+    <FeaturedProjectsSection />
+  </div>
+</Layout>

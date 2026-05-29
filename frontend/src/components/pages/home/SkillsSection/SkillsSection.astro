@@ -1,0 +1,38 @@
+---
+import Badge from "../../../common/Badge/Badge.astro";
+import BadgeGroup from "../../../common/BadgeGroup/BadgeGroup.astro";
+import Heading from "../../../common/Heading/Heading.astro";
+
+const CORE_SKILLS = [
+  "TypeScript",
+  "React",
+  "Node",
+  "MongoDB",
+  "AWS",
+  "Terraform",
+  "AI",
+  "Accessibility",
+];
+
+const EXTENDED_SKILLS = [
+  "Snowflake",
+  "Claude Code",
+  "Agentic workflows",
+  "Docker",
+  "Serverless",
+  "CI/CD",
+  "Datadog",
+];
+---
+
+<section>
+  <Heading level={2} class="sr-only">Core skills</Heading>
+  <BadgeGroup>
+    {CORE_SKILLS.map((skill) => <Badge>{skill}</Badge>)}
+    {
+      EXTENDED_SKILLS.map((skill) => (
+        <Badge class="hidden lg:block">{skill}</Badge>
+      ))
+    }
+  </BadgeGroup>
+</section>

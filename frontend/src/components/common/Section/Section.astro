@@ -1,0 +1,25 @@
+---
+import type { Props as HeadingProps } from "../Heading/Heading.astro";
+import Heading from "../Heading/Heading.astro";
+
+interface Props {
+  heading: string;
+  headingLevel?: HeadingProps["level"];
+  headingVariant?: HeadingProps["variant"];
+  class?: string;
+}
+
+const {
+  heading,
+  headingLevel = 2,
+  headingVariant = headingLevel,
+  class: className,
+} = Astro.props;
+---
+
+<section class={className}>
+  <Heading level={headingLevel} variant={headingVariant} spacing>
+    {heading}
+  </Heading>
+  <slot />
+</section>

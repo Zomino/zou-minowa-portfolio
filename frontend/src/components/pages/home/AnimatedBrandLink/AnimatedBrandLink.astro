@@ -1,0 +1,91 @@
+---
+import type { Props as LinkProps } from "../../../common/Link/Link.astro";
+
+import Link from "../../../common/Link/Link.astro";
+
+interface Props extends LinkProps {
+  animationStartTargetSelector: string;
+}
+
+const {
+  animationStartTargetSelector,
+  class: className = "",
+  ...rest
+} = Astro.props;
+
+const classes = [
+  "transition-all duration-250 ease-in-out pointer-events-none -translate-x-4 opacity-0",
+  className,
+]
+  .filter(Boolean)
+  .join(" ");
+---
+
+<Link
+  class={classes}
+  aria-hidden="true"
+  tabindex="-1"
+  data-animated-brand-link
+  data-target-selector={animationStartTargetSelector}
+  {...rest}
+>
+  <slot />
+</Link>
+
+<script>
+  document
+    .querySelectorAll<HTMLAnchorElement>("[data-animated-brand-link]")
+    .forEach((link) => {
+      const selector = link.dataset["targetSelector"];
+      if (!selector) return;
+
+      const target = document.querySelector<HTMLElement>(selector);
+
+      const show = () => {
+        link.classList.remove(
+          "pointer-events-none",
+          "-translate-x-4",
+          "opacity-0",
+        );
+        link.classList.add("translate-x-0", "opacity-100");
+        link.setAttribute("aria-hidden", "false");
+        link.tabIndex = 0;
+      };
+
+      const hide = () => {
+        link.classList.add(
+          "pointer-events-none",
+          "-translate-x-4",
+          "opacity-0",
+        );
+        link.classList.remove("translate-x-0", "opacity-100");
+        link.setAttribute("aria-hidden", "true");
+        link.tabIndex = -1;
+      };
+
+      if (!target) {
+        show();
+        return;
+      }
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.intersectionRatio === 0) {
+              show();
+            } else {
+              hide();
+            }
+          });
+        },
+        { threshold: 0 },
+      );
+
+      observer.observe(target);
+
+      link.addEventListener("click", (event) => {
+        event.preventDefault();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+    });
+</script>

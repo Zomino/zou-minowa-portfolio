@@ -1,0 +1,88 @@
+@import url("https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700&display=swap");
+@import "tailwindcss";
+@import "./markdown.css";
+
+@theme {
+  --color-theme: #f5f7fb;
+  --font-serif: "Noto Serif JP", serif;
+}
+
+@utility heading-1 {
+  @apply text-5xl font-semibold tracking-tight text-slate-900;
+}
+
+@utility heading-2 {
+  @apply text-2xl font-semibold text-slate-900;
+}
+
+@utility heading-3 {
+  @apply text-xl font-semibold text-slate-900;
+}
+
+@utility heading-4 {
+  @apply text-base font-semibold text-slate-900;
+}
+
+@utility heading-5 {
+  @apply text-sm font-semibold text-slate-900;
+}
+
+@utility heading-6 {
+  @apply text-xs font-semibold text-slate-900;
+}
+
+@utility heading-1-spacing {
+  @apply mb-9;
+}
+
+@utility heading-2-spacing {
+  @apply mt-8 mb-4;
+}
+
+@utility heading-3-spacing {
+  @apply mt-6 mb-3;
+}
+
+@utility heading-4-spacing {
+  @apply mt-4 mb-2;
+}
+
+@utility heading-5-spacing {
+  @apply mt-4 mb-2;
+}
+
+@utility heading-6-spacing {
+  @apply mt-4 mb-2;
+}
+
+@utility text-body {
+  @apply text-sm text-slate-600;
+}
+
+@utility text-body-spacing {
+  @apply mt-4 mb-4;
+}
+
+@utility text-small {
+  @apply text-xs text-slate-600;
+}
+
+@utility text-strong {
+  @apply font-semibold text-slate-900;
+}
+
+@utility link {
+  @apply text-sm font-semibold text-slate-900 decoration-current underline-offset-4 transition hover:underline;
+}
+
+@utility list-bulleted {
+  @apply list-disc pl-5 text-sm;
+}
+
+@utility list-numbered {
+  @apply list-decimal pl-5 text-sm;
+}
+
+@utility list-item {
+  @apply marker:text-slate-400;
+}

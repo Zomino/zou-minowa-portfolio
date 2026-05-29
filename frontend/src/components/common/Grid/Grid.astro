@@ -1,0 +1,50 @@
+---
+import clsx from "clsx";
+
+type Breakpoint = "default" | "sm" | "md" | "lg" | "xl" | "2xl";
+type Columns = number | Partial<Record<Breakpoint, number>>;
+
+interface Props {
+  columns?: Columns;
+  class?: string;
+}
+
+function normalizeColumns(
+  columns: Columns,
+): Partial<Record<Breakpoint, number>> {
+  return typeof columns === "number" ? { default: columns } : columns;
+}
+
+function buildColumnClasses(
+  columns: Partial<Record<Breakpoint, number>>,
+): string[] {
+  return Object.entries(columns)
+    .filter(([, count]) => count !== undefined)
+    .map(([breakpoint, count]) => {
+      const prefix = breakpoint === "default" ? "" : `${breakpoint}:`;
+      return `${prefix}grid-cols-${count}`;
+    });
+}
+
+const { columns = 1, class: className } = Astro.props;
+const columnClasses = buildColumnClasses(normalizeColumns(columns));
+---
+
+{
+  /*
+  Cells draw inner-only dividers (border-t/border-l) + padding. The inner grid is
+  pulled out by `-m-6` so the outer band — the perimeter borders and padding — is
+  clipped by the wrapper's `overflow-hidden`, leaving no outer border or padding.
+*/
+}
+<div class={clsx("overflow-hidden", className)}>
+  <div
+    class={clsx(
+      "-m-6 grid",
+      columnClasses,
+      "*:border-t *:border-l *:border-slate-200 *:p-6",
+    )}
+  >
+    <slot />
+  </div>
+</div>

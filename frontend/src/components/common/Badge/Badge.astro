@@ -1,0 +1,25 @@
+---
+import clsx from "clsx";
+
+import Text from "../Text/Text.astro";
+
+interface Props {
+  variant?: "default" | "muted";
+  class?: string;
+}
+
+const { variant = "default", class: className = "" } = Astro.props;
+
+const classes = clsx(
+  "rounded-full border border-slate-200 px-4 py-2 text-xs shadow-sm",
+  {
+    "bg-white/90": variant === "default",
+    "bg-slate-100/80": variant === "muted",
+  },
+  className,
+);
+---
+
+<Text class={classes}>
+  <slot />
+</Text>

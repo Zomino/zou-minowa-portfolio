@@ -1,0 +1,44 @@
+---
+import clsx from "clsx";
+
+interface Props {
+  direction?: "vertical" | "horizontal";
+  spacing?: "none" | "xs" | "sm" | "md" | "lg" | "xl";
+  variant?: "default" | "divided";
+  class?: string;
+}
+
+const {
+  direction = "vertical",
+  spacing = "md",
+  variant = "default",
+  class: className = "",
+} = Astro.props;
+
+const classes = clsx(
+  "flex",
+  {
+    "flex-col": direction === "vertical",
+    "flex-row items-center": direction === "horizontal",
+  },
+  {
+    "gap-0": spacing === "none",
+    "gap-2": spacing === "xs",
+    "gap-4": spacing === "sm",
+    "gap-6": spacing === "md",
+    "gap-8": spacing === "lg",
+    "gap-12": spacing === "xl",
+  },
+  {
+    "divide-y divide-slate-200 [&>*]:py-8 [&>*:first-child]:pt-0 [&>*:last-child]:pb-0":
+      variant === "divided" && direction === "vertical",
+    "divide-x divide-slate-200 [&>*]:px-8 [&>*:first-child]:pl-0 [&>*:last-child]:pr-0":
+      variant === "divided" && direction === "horizontal",
+  },
+  className,
+);
+---
+
+<div class={classes}>
+  <slot />
+</div>

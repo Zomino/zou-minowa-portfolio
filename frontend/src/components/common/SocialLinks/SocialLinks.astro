@@ -1,0 +1,30 @@
+---
+import clsx from "clsx";
+import IconLink from "../IconLink/IconLink.astro";
+
+interface Props {
+  class?: string;
+}
+
+const { class: className = "" } = Astro.props;
+const classes = clsx("flex items-center justify-center gap-4", className);
+---
+
+<div class={classes}>
+  <IconLink
+    href="https://github.com/example"
+    icon="github"
+    ariaLabel="GitHub"
+  />
+  <IconLink
+    href="https://www.linkedin.com/in/example"
+    icon="linkedin"
+    ariaLabel="LinkedIn"
+  />
+  <IconLink
+    href="mailto:hello@example.com"
+    icon="mail"
+    ariaLabel="Email"
+    openNewTab={false}
+  />
+</div>

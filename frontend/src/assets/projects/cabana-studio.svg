@@ -1,0 +1,18 @@
+<svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Cabana Studio booking preview</title>
+  <desc id="desc">Abstract preview card with calendar blocks and form fields.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0" stop-color="#ecfccb" />
+      <stop offset="1" stop-color="#d9f99d" />
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" rx="28" fill="url(#bg)" />
+  <rect x="70" y="70" width="660" height="110" rx="20" fill="#ffffff" />
+  <rect x="70" y="210" width="220" height="220" rx="20" fill="#ffffff" />
+  <rect x="320" y="210" width="410" height="220" rx="20" fill="#ffffff" />
+  <rect x="100" y="110" width="260" height="18" rx="9" fill="#84cc16" opacity="0.6" />
+  <rect x="100" y="140" width="210" height="12" rx="6" fill="#d9f99d" />
+  <rect x="100" y="240" width="160" height="18" rx="9" fill="#bef264" />
+  <rect x="350" y="240" width="260" height="18" rx="9" fill="#bef264" />
+</svg>

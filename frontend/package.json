@@ -1,0 +1,58 @@
+{
+  "name": "zou-minowa-portfolio",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "astro dev --host",
+    "build": "astro build",
+    "preview": "astro preview",
+    "format": "prettier --write .",
+    "check": "astro check",
+    "lint": "eslint .",
+    "prepare": "cd .. && git config core.hooksPath .husky && husky install",
+    "test": "vitest"
+  },
+  "lint-staged": {
+    "*.{astro,css,md,json,yml,yaml}": "prettier --write",
+    "*.{astro,js,jsx,ts,tsx}": [
+      "prettier --write",
+      "eslint --fix"
+    ]
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.11.0",
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "sharp"
+    ]
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.9",
+    "@tailwindcss/postcss": "^4.1.18",
+    "@tailwindcss/vite": "^4.1.18",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@typescript-eslint/parser": "^8.54.0",
+    "astro": "^5.16.6",
+    "autoprefixer": "^10.4.23",
+    "eslint": "^9.39.2",
+    "eslint-plugin-astro": "^1.5.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7",
+    "prettier": "^3.6.2",
+    "prettier-plugin-astro": "^0.14.1",
+    "prettier-plugin-tailwindcss": "^0.7.2",
+    "tailwindcss": "^4.1.18",
+    "typescript": "^6.0.3",
+    "vitest": "^4.0.16"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.2",
+    "astro-icon": "^1.1.5",
+    "clsx": "^2.1.1",
+    "sharp": "^0.34.5"
+  }
+}

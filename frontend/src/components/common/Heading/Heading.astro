@@ -1,0 +1,53 @@
+---
+import clsx from "clsx";
+
+const TAGS = {
+  1: "h1",
+  2: "h2",
+  3: "h3",
+  4: "h4",
+  5: "h5",
+  6: "h6",
+} as const;
+
+export type Level = keyof typeof TAGS;
+
+export interface Props {
+  level?: Level;
+  variant?: Level;
+  spacing?: boolean;
+  class?: string;
+}
+
+const {
+  level = 1,
+  variant = level,
+  spacing = false,
+  class: className = "",
+} = Astro.props;
+
+const Tag = TAGS[level];
+const classes = clsx(
+  {
+    "heading-1": variant === 1,
+    "heading-2": variant === 2,
+    "heading-3": variant === 3,
+    "heading-4": variant === 4,
+    "heading-5": variant === 5,
+    "heading-6": variant === 6,
+  },
+  spacing && {
+    "heading-1-spacing": variant === 1,
+    "heading-2-spacing": variant === 2,
+    "heading-3-spacing": variant === 3,
+    "heading-4-spacing": variant === 4,
+    "heading-5-spacing": variant === 5,
+    "heading-6-spacing": variant === 6,
+  },
+  className,
+);
+---
+
+<Tag class={classes}>
+  <slot />
+</Tag>

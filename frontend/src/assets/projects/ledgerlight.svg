@@ -1,0 +1,18 @@
+<svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Ledgerlight finance app preview</title>
+  <desc id="desc">Abstract preview card with charts and balance tiles.</desc>
+  <defs>
+    <linearGradient id="bg" x1="1" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fdf2f8" />
+      <stop offset="1" stop-color="#fee2e2" />
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" rx="28" fill="url(#bg)" />
+  <rect x="70" y="70" width="660" height="120" rx="22" fill="#ffffff" />
+  <rect x="70" y="220" width="320" height="210" rx="22" fill="#ffffff" />
+  <rect x="410" y="220" width="320" height="210" rx="22" fill="#ffffff" />
+  <rect x="100" y="100" width="260" height="20" rx="10" fill="#f97316" opacity="0.6" />
+  <rect x="100" y="130" width="200" height="14" rx="7" fill="#fed7aa" />
+  <rect x="100" y="250" width="240" height="16" rx="8" fill="#fda4af" />
+  <rect x="440" y="250" width="240" height="16" rx="8" fill="#fda4af" />
+</svg>
