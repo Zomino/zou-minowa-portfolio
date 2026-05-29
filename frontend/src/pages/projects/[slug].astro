@@ -1,0 +1,74 @@
+---
+import { getCollection, render } from "astro:content";
+import Badge from "../../components/common/Badge/Badge.astro";
+import BadgeGroup from "../../components/common/BadgeGroup/BadgeGroup.astro";
+// TODO: Re-enable the work/personal label once we display work projects again.
+// import EyebrowText from "../../components/common/EyebrowText/EyebrowText.astro";
+import ProjectLinks from "../../components/common/ProjectLinks/ProjectLinks.astro";
+import Heading from "../../components/common/Heading/Heading.astro";
+import Image from "../../components/common/Image/Image.astro";
+import Group from "../../components/common/Group/Group.astro";
+import Text from "../../components/common/Text/Text.astro";
+import Layout from "../../components/common/Layout/Layout.astro";
+import { formatDate } from "../../utils/formatDate/formatDate";
+
+export async function getStaticPaths() {
+  const projects = await getCollection("projects");
+
+  return projects.map((project) => ({
+    params: { slug: project.id },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+const { Content } = await render(project);
+
+const formattedDate = formatDate(project.data.date);
+---
+
+<Layout
+  pageTitle={project.data.title}
+  description={project.data.description}
+  wordmark={project.data.titleJa}
+>
+  <Group spacing="xl">
+    <section>
+      {
+        /* TODO: Re-enable the work/personal label once we display work projects again. */
+      }
+      {
+        /* <EyebrowText>
+        {project.data.type === "work" ? "Work project" : "Personal project"}
+      </EyebrowText> */
+      }
+      <Heading level={1} spacing>
+        {project.data.title}
+      </Heading>
+      <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+        <Image
+          src={project.data.image}
+          alt={`${project.data.title} screenshot`}
+          height={project.data.image.height}
+          width={project.data.image.width}
+        />
+        <Group>
+          <div class="flex items-center justify-between gap-4">
+            <Text variant="small">{formattedDate}</Text>
+            <ProjectLinks
+              github={project.data.github}
+              link={project.data.link}
+            />
+          </div>
+          <Text>{project.data.description}</Text>
+          <BadgeGroup>
+            {project.data.tech.map((tech) => <Badge>{tech}</Badge>)}
+          </BadgeGroup>
+        </Group>
+      </div>
+    </section>
+    <section class="rich-text">
+      <Content />
+    </section>
+  </Group>
+</Layout>

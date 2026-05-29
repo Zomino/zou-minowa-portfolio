@@ -1,0 +1,26 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import clsx from "clsx";
+
+export interface Props extends HTMLAttributes<"a"> {
+  href: string;
+  openNewTab?: boolean;
+  class?: string;
+}
+
+const {
+  href,
+  openNewTab = false,
+  class: className = "",
+  ...rest
+} = Astro.props;
+
+const classes = clsx("link", className);
+
+const target = openNewTab ? "_blank" : undefined;
+const rel = openNewTab ? "noreferrer noopener" : undefined;
+---
+
+<a class={classes} href={href} target={target} rel={rel} {...rest}>
+  <slot />
+</a>

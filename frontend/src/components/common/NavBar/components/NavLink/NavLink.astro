@@ -1,0 +1,20 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+import Link from "../../../Link/Link.astro";
+
+interface Props extends HTMLAttributes<"a"> {
+  href: string;
+  class?: string;
+}
+
+const { href, class: className = "", ...rest } = Astro.props;
+
+const classes = ["text-sm transition hover:text-slate-500", className]
+  .filter(Boolean)
+  .join(" ");
+---
+
+<Link href={href} class={classes} {...rest}>
+  <slot />
+</Link>

@@ -1,0 +1,80 @@
+---
+import type { ImageMetadata } from "astro";
+
+import Badge from "../Badge/Badge.astro";
+import BadgeGroup from "../BadgeGroup/BadgeGroup.astro";
+// TODO: Re-enable the work/personal label once we display work projects again.
+// import EyebrowText from "../EyebrowText/EyebrowText.astro";
+import Heading from "../Heading/Heading.astro";
+import type { Props as HeadingProps } from "../Heading/Heading.astro";
+import ProjectLinks from "../ProjectLinks/ProjectLinks.astro";
+import Image from "../Image/Image.astro";
+import Link from "../Link/Link.astro";
+import Text from "../Text/Text.astro";
+
+interface Props {
+  title: string;
+  description: string;
+  link: string;
+  github: string;
+  image: ImageMetadata;
+  tech: string[];
+  type?: "work" | "personal";
+  slug: string;
+  headingLevel?: HeadingProps["level"];
+  headingVariant?: HeadingProps["variant"];
+  class?: string;
+}
+
+const {
+  title,
+  description,
+  link,
+  github,
+  image,
+  tech,
+  // TODO: Re-enable the work/personal label once we display work projects again.
+  // type,
+  slug,
+  headingLevel = 3,
+  headingVariant = headingLevel,
+  class: className = "",
+} = Astro.props;
+
+const classes =
+  `group relative flex h-full cursor-pointer flex-col gap-5 ${className}`.trim();
+---
+
+<article class={classes}>
+  <Link href={`/projects/${slug}`} class="absolute inset-0 z-10">
+    <span class="sr-only">View {title}</span>
+  </Link>
+  <div class="space-y-3">
+    {
+      /* TODO: Re-enable the work/personal label once we display work projects again. */
+    }
+    {/* {type && <EyebrowText variant="small">{type}</EyebrowText>} */}
+    <div class="flex flex-wrap items-center justify-between gap-2">
+      <a href={`/projects/${slug}`} class="relative z-20">
+        <Heading
+          level={headingLevel}
+          variant={headingVariant}
+          class="transition hover:text-slate-500"
+        >
+          {title}
+        </Heading>
+      </a>
+      <ProjectLinks github={github} link={link} class="relative z-20" />
+    </div>
+  </div>
+  <Image
+    src={image}
+    alt={`${title} screenshot`}
+    height={image.height}
+    width={image.width}
+  />
+  <Text variant="body">{description}</Text>
+  <BadgeGroup>
+    {tech.map((item) => <Badge>{item}</Badge>)}
+  </BadgeGroup>
+</article>

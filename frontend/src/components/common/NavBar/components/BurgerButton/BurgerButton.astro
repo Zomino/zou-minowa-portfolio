@@ -1,0 +1,32 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+import clsx from "clsx";
+
+import Burger from "./components/Burger/Burger.astro";
+
+interface Props extends HTMLAttributes<"button"> {
+  ariaLabel: string;
+  ariaControls: string;
+  class?: string;
+}
+
+const { ariaLabel, ariaControls, class: className, ...rest } = Astro.props;
+
+const buttonClassName = clsx(
+  "m-0 flex cursor-pointer appearance-none items-center justify-center border-0 bg-transparent p-0 leading-none text-inherit",
+  className,
+);
+---
+
+<button
+  type="button"
+  class={buttonClassName}
+  aria-label={ariaLabel}
+  aria-controls={ariaControls}
+  aria-expanded="false"
+  data-navbar-burger
+  {...rest}
+>
+  <Burger />
+</button>

@@ -1,0 +1,36 @@
+---
+import { Icon } from "astro-icon/components";
+import clsx from "clsx";
+
+import Link from "../Link/Link.astro";
+
+interface Props {
+  href: string;
+  icon: string;
+  ariaLabel: string;
+  class?: string;
+  openNewTab?: boolean;
+}
+
+const {
+  href,
+  icon,
+  ariaLabel,
+  class: className = "",
+  openNewTab = true,
+} = Astro.props;
+
+const classes = clsx(
+  "inline-flex items-center transition-opacity hover:opacity-60",
+  className,
+);
+---
+
+<Link
+  href={href}
+  class={classes}
+  aria-label={ariaLabel}
+  openNewTab={openNewTab}
+>
+  <Icon name={icon} class="h-5 w-5" />
+</Link>

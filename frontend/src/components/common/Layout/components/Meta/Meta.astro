@@ -1,0 +1,38 @@
+---
+interface Props {
+  documentTitle: string;
+  description: string;
+  canonicalUrl: string;
+  siteName: string;
+  image?: string | undefined;
+  twitterImage?: string | undefined;
+}
+
+const {
+  documentTitle,
+  description,
+  canonicalUrl,
+  siteName,
+  image,
+  twitterImage,
+} = Astro.props;
+---
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content={description} />
+<meta name="author" content={siteName} />
+<meta name="robots" content="index, follow" />
+<meta name="theme-color" content="var(--color-theme)" />
+<meta name="generator" content={Astro.generator} />
+<meta property="og:title" content={documentTitle} />
+<meta property="og:description" content={description} />
+<meta property="og:type" content="website" />
+<meta property="og:url" content={canonicalUrl} />
+<meta property="og:site_name" content={siteName} />
+<meta property="og:locale" content="en" />
+{image && <meta property="og:image" content={image} />}
+<meta name="twitter:card" content={image ? "summary_large_image" : "summary"} />
+<meta name="twitter:title" content={documentTitle} />
+<meta name="twitter:description" content={description} />
+{twitterImage && <meta name="twitter:image" content={twitterImage} />}

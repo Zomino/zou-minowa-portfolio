@@ -1,0 +1,16 @@
+---
+import { formatDate } from "../../../../../utils/formatDate/formatDate";
+import Text from "../../../../common/Text/Text.astro";
+
+interface Props {
+  siteTitle: string;
+}
+
+const { siteTitle } = Astro.props;
+
+const year = formatDate(new Date(), { format: { year: "numeric" } });
+---
+
+<Text variant="small" class="text-slate-400">
+  {`© ${year} ${siteTitle}`}
+</Text>

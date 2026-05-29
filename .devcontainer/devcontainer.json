@@ -1,0 +1,26 @@
+{
+  "name": "Zou Minowa Portfolio",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "dev",
+  "workspaceFolder": "/workspaces/zou-minowa-portfolio",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "astro-build.astro-vscode",
+        "bradlc.vscode-tailwindcss",
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "vercel.vercel"
+      ],
+      "settings": {
+        "editor.formatOnSave": true,
+        "files.autoSave": "afterDelay",
+        "files.eol": "\n",
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "css.lint.unknownAtRules": "ignore",
+        "scss.lint.unknownAtRules": "ignore",
+        "less.lint.unknownAtRules": "ignore"
+      }
+    }
+  }
+}

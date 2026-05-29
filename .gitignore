@@ -1,0 +1,12 @@
+frontend/node_modules/
+frontend/.astro/
+frontend/dist/
+frontend/.pnpm-store/
+.env
+.gitconfig
+.playwright-mcp/
+.claude/settings.local.json
+infra/.terraform/
+infra/*.tfstate
+infra/*.tfstate.backup
+infra/.terraform.lock.hcl

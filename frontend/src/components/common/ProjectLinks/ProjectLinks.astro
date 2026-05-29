@@ -1,0 +1,18 @@
+---
+import clsx from "clsx";
+
+import IconLink from "../IconLink/IconLink.astro";
+
+interface Props {
+  github: string;
+  link: string;
+  class?: string;
+}
+
+const { github, link, class: className } = Astro.props;
+---
+
+<div class={clsx("flex items-center gap-3", className)}>
+  <IconLink href={github} icon="github" ariaLabel="GitHub" />
+  <IconLink href={link} icon="globe" ariaLabel="Live site" />
+</div>

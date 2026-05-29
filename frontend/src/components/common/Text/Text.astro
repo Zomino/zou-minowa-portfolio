@@ -1,0 +1,38 @@
+---
+import clsx from "clsx";
+
+const TAGS = {
+  body: "p",
+  small: "span",
+  strong: "strong",
+} as const;
+
+type Variant = keyof typeof TAGS;
+
+export interface Props {
+  variant?: Variant;
+  spacing?: boolean;
+  class?: string;
+}
+
+const {
+  variant = "body",
+  spacing = false,
+  class: className = "",
+} = Astro.props;
+
+const Tag = TAGS[variant];
+const classes = clsx(
+  {
+    "text-body": variant === "body",
+    "text-small": variant === "small",
+    "text-strong": variant === "strong",
+  },
+  spacing && "text-body-spacing",
+  className,
+);
+---
+
+<Tag class={classes}>
+  <slot />
+</Tag>

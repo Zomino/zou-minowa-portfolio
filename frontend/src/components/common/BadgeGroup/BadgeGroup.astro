@@ -1,0 +1,15 @@
+---
+import clsx from "clsx";
+
+import Group from "../Group/Group.astro";
+
+interface Props {
+  class?: string;
+}
+
+const { class: className = "" } = Astro.props;
+---
+
+<Group direction="horizontal" spacing="xs" class={clsx("flex-wrap", className)}>
+  <slot />
+</Group>

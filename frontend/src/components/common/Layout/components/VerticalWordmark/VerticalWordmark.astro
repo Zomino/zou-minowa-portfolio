@@ -1,0 +1,17 @@
+---
+import clsx from "clsx";
+
+interface Props {
+  class?: string;
+}
+
+const { class: className = "" } = Astro.props;
+const classes = clsx(
+  "font-serif text-[5rem] font-semibold tracking-[0.2em] text-slate-900/[0.04] [writing-mode:vertical-rl] md:text-[6rem] lg:text-[7.5rem]",
+  className,
+);
+---
+
+<span class={classes}>
+  <slot />
+</span>

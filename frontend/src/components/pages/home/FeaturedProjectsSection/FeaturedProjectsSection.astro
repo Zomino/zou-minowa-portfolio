@@ -1,0 +1,32 @@
+---
+import { getCollection } from "astro:content";
+
+import ProjectSummary from "../../../common/ProjectSummary/ProjectSummary.astro";
+import Section from "../../../common/Section/Section.astro";
+const MAX_FEATURED = 3;
+
+const projects = (await getCollection("projects"))
+  .filter((project) => project.data.featured)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, MAX_FEATURED);
+---
+
+<Section heading="Featured projects">
+  <div class="mt-9 grid grid-cols-1 gap-10 lg:grid-cols-3">
+    {
+      projects.map((project) => (
+        <ProjectSummary
+          title={project.data.title}
+          description={project.data.description}
+          link={project.data.link}
+          github={project.data.github}
+          image={project.data.image}
+          tech={project.data.tech}
+          type={project.data.type}
+          slug={project.id}
+          headingVariant={4}
+        />
+      ))
+    }
+  </div>
+</Section>

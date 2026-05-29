@@ -1,0 +1,37 @@
+---
+import { getCollection } from "astro:content";
+import ProjectSummary from "../../components/common/ProjectSummary/ProjectSummary.astro";
+import Section from "../../components/common/Section/Section.astro";
+import Layout from "../../components/common/Layout/Layout.astro";
+
+const TITLE = "Projects";
+const DESCRIPTION =
+  "Selected software projects spanning product builds, platform tooling, and client-facing delivery.";
+const WORDMARK = "プロジェクト";
+
+const projects = (await getCollection("projects")).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+);
+---
+
+<Layout pageTitle={TITLE} description={DESCRIPTION} wordmark={WORDMARK}>
+  <Section heading={TITLE} headingLevel={1}>
+    <div class="mt-12 grid grid-cols-1 gap-10 lg:grid-cols-3">
+      {
+        projects.map((project) => (
+          <ProjectSummary
+            title={project.data.title}
+            description={project.data.description}
+            link={project.data.link}
+            github={project.data.github}
+            image={project.data.image}
+            tech={project.data.tech}
+            type={project.data.type}
+            slug={project.id}
+            headingVariant={4}
+          />
+        ))
+      }
+    </div>
+  </Section>
+</Layout>

@@ -1,0 +1,121 @@
+---
+import clsx from "clsx";
+
+import BurgerButton from "./components/BurgerButton/BurgerButton.astro";
+import NavLink from "./components/NavLink/NavLink.astro";
+
+export interface NavItem {
+  url: string;
+  pageTitle: string;
+}
+
+const DEFAULT_NAV_ITEMS: NavItem[] = [
+  { url: "/", pageTitle: "Home" },
+  { url: "/projects", pageTitle: "Projects" },
+];
+
+interface Props {
+  navItems?: NavItem[];
+  class?: string;
+}
+
+const PANEL_ID = "navbar-mobile-panel";
+const MENU_CLASS_NAME =
+  "absolute left-0 w-full bg-theme shadow-lg overflow-hidden transition-[max-height] duration-250 ease-in-out md:hidden pointer-events-none max-h-0";
+
+const { navItems = DEFAULT_NAV_ITEMS, class: className } = Astro.props;
+
+const navClassName = clsx(
+  "group bg-theme relative w-full shadow-lg",
+  className,
+);
+---
+
+<nav class={navClassName} data-navbar>
+  <div
+    class="mx-auto flex w-full max-w-sm items-center justify-between px-5 py-4 md:max-w-xl md:px-16 lg:max-w-6xl lg:px-16"
+  >
+    <slot />
+    <div class="flex items-center">
+      <BurgerButton
+        class="md:hidden"
+        ariaLabel="Toggle navigation"
+        ariaControls={PANEL_ID}
+      />
+      <div class="hidden items-center gap-6 md:flex">
+        {
+          navItems.map((item) => (
+            <NavLink href={item.url}>{item.pageTitle}</NavLink>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+  <div
+    id={PANEL_ID}
+    class={MENU_CLASS_NAME}
+    aria-hidden="true"
+    data-navbar-panel
+  >
+    <div class="flex flex-col items-center gap-6 pt-6 pb-10">
+      {
+        navItems.map((item) => (
+          <NavLink href={item.url}>{item.pageTitle}</NavLink>
+        ))
+      }
+    </div>
+  </div>
+</nav>
+
+<script>
+  (() => {
+    const nav = document.querySelector<HTMLElement>("[data-navbar]");
+    if (!nav) return;
+
+    const burger = nav.querySelector<HTMLButtonElement>("[data-navbar-burger]");
+    const panel = nav.querySelector<HTMLElement>("[data-navbar-panel]");
+    if (!burger || !panel) return;
+
+    const isOpen = () => nav.dataset["open"] !== undefined;
+
+    const onDocClick = (event: MouseEvent) => {
+      if (!(event.target instanceof Node)) return;
+      if (nav.contains(event.target)) return;
+      close();
+    };
+
+    const onDocKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== "Escape") return;
+      close();
+      burger.focus();
+    };
+
+    const open = () => {
+      nav.dataset["open"] = "";
+      burger.setAttribute("aria-expanded", "true");
+      panel.setAttribute("aria-hidden", "false");
+      panel.classList.remove("pointer-events-none", "max-h-0");
+      panel.classList.add("pointer-events-auto", "max-h-screen");
+      document.addEventListener("click", onDocClick);
+      document.addEventListener("keydown", onDocKeyDown);
+    };
+
+    const close = () => {
+      delete nav.dataset["open"];
+      burger.setAttribute("aria-expanded", "false");
+      panel.setAttribute("aria-hidden", "true");
+      panel.classList.add("pointer-events-none", "max-h-0");
+      panel.classList.remove("pointer-events-auto", "max-h-screen");
+      document.removeEventListener("click", onDocClick);
+      document.removeEventListener("keydown", onDocKeyDown);
+    };
+
+    burger.addEventListener("click", () => {
+      if (isOpen()) {
+        close();
+      } else {
+        open();
+      }
+    });
+  })();
+</script>

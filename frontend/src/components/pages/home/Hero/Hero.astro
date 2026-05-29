@@ -1,0 +1,20 @@
+---
+import EyebrowText from "../../../common/EyebrowText/EyebrowText.astro";
+import Heading from "../../../common/Heading/Heading.astro";
+import SocialLinks from "../../../common/SocialLinks/SocialLinks.astro";
+import Text from "../../../common/Text/Text.astro";
+import metadata from "../../../../metadata.json";
+
+const nameLines = metadata.siteTitle.split(" ");
+---
+
+<section class="lg:shrink-0">
+  <EyebrowText>Fullstack software engineer</EyebrowText>
+  <div data-brand-target>
+    <Heading level={1} class="text-6xl md:text-7xl">
+      {nameLines.map((line) => <span class="block">{line}</span>)}
+    </Heading>
+  </div>
+  <Text class="mt-6">London-based. Generalist. AI enthusiast.</Text>
+  <SocialLinks class="mt-6 justify-start" />
+</section>

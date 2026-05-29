@@ -1,0 +1,27 @@
+---
+import { Image as AstroImage } from "astro:assets";
+import type { ImageMetadata } from "astro";
+
+interface Props {
+  src: ImageMetadata;
+  alt: string;
+  height: number;
+  width: number;
+  class?: string;
+}
+
+const { src, alt, height, width, class: className = "" } = Astro.props;
+---
+
+<div
+  class={`overflow-hidden rounded-xl border border-slate-200 bg-slate-50 ${className}`.trim()}
+>
+  <AstroImage
+    src={src}
+    alt={alt}
+    width={width}
+    height={height}
+    class="h-auto w-full"
+    loading="lazy"
+  />
+</div>

@@ -1,0 +1,77 @@
+---
+import "../../../styles/global.css";
+
+import { require } from "../../../utils/require/require";
+import metadata from "../../../metadata.json";
+
+import Link from "../Link/Link.astro";
+import Copyright from "./components/Copyright/Copyright.astro";
+import Meta from "./components/Meta/Meta.astro";
+import NavBar from "../NavBar/NavBar.astro";
+import VerticalWordmark from "./components/VerticalWordmark/VerticalWordmark.astro";
+
+interface Props {
+  pageTitle?: string;
+  description?: string;
+  image?: string;
+  twitterImage?: string;
+  wordmark?: string | undefined;
+}
+
+const {
+  pageTitle,
+  description = metadata.siteDescription,
+  image,
+  twitterImage,
+  wordmark = "簑輪象",
+} = Astro.props;
+
+const siteOrigin = require(Astro.site?.toString() ?? Astro.url?.origin);
+const pathname = require(Astro.url?.pathname);
+
+const documentTitle = pageTitle
+  ? `${pageTitle} | ${metadata.siteTitle}`
+  : metadata.siteTitle;
+const canonicalUrl = new URL(pathname, siteOrigin).toString();
+---
+
+<html lang="en">
+  <head>
+    <title>{documentTitle}</title>
+    <Meta
+      documentTitle={documentTitle}
+      description={description}
+      canonicalUrl={canonicalUrl}
+      siteName={metadata.siteTitle}
+      image={image}
+      twitterImage={twitterImage}
+    />
+    <link rel="canonical" href={canonicalUrl} />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="icon" href="/favicon.ico" />
+  </head>
+  <body class="bg-theme flex min-h-screen flex-col font-serif text-slate-900">
+    <header class="sticky top-0 z-50">
+      <slot name="navbar">
+        <NavBar>
+          <Link href="/">{metadata.siteTitle}</Link>
+        </NavBar>
+      </slot>
+    </header>
+    <main
+      class="mx-auto w-full max-w-sm flex-1 px-5 py-5 md:max-w-xl md:px-16 lg:max-w-6xl lg:px-16 lg:py-8"
+    >
+      <div class="relative">
+        <div class="pointer-events-none absolute top-0 right-0 bottom-0 -z-10">
+          <VerticalWordmark class="block h-full">{wordmark}</VerticalWordmark>
+        </div>
+        <slot />
+      </div>
+    </main>
+    <footer
+      class="border-t border-slate-200/80 p-5 text-center text-sm text-slate-500"
+    >
+      <Copyright siteTitle={metadata.siteTitle} />
+    </footer>
+  </body>
+</html>

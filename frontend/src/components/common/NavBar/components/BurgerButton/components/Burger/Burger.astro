@@ -1,0 +1,22 @@
+---
+const BURGER_LINE_BASE_CLASS =
+  "absolute left-0 block h-px w-full bg-slate-900 duration-200";
+---
+
+<span aria-hidden="true" class="relative h-4 w-5">
+  <span
+    class:list={[
+      BURGER_LINE_BASE_CLASS,
+      "top-0 transition-transform group-data-open:translate-y-1.5 group-data-open:rotate-45",
+    ]}></span>
+  <span
+    class:list={[
+      BURGER_LINE_BASE_CLASS,
+      "top-1.5 transition-opacity group-data-open:opacity-0",
+    ]}></span>
+  <span
+    class:list={[
+      BURGER_LINE_BASE_CLASS,
+      "top-3 transition-transform group-data-open:-translate-y-1.5 group-data-open:-rotate-45",
+    ]}></span>
+</span>
