@@ -4,7 +4,7 @@ description: Booking experience for creative studios with availability and contr
 link: https://cabanastudio.example.com
 github: https://github.com/example/cabana-studio
 image: ../../assets/projects/cabana-studio.svg
-tech:
+tags:
   - Next.js
   - TypeScript
   - Prisma

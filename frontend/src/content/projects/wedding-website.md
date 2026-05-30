@@ -4,7 +4,7 @@ description: A bilingual wedding website with a pre-wedding photo gallery.
 link: https://66e881633fd2d30008d543d4--angela-and-zou.netlify.app/
 github: https://github.com/Zomino/wedding-website
 image: ../../assets/projects/wedding-website.png
-tech:
+tags:
   - Gatsby
   - TypeScript
   - Tailwind CSS

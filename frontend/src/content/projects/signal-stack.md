@@ -4,7 +4,7 @@ description: Realtime incident dashboard for triaging outages with alert routing
 link: https://signalstack.example.com
 github: https://github.com/example/signal-stack
 image: ../../assets/projects/signal-stack.svg
-tech:
+tags:
   - Astro
   - TypeScript
   - Tailwind

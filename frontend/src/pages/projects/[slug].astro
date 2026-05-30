@@ -62,7 +62,7 @@ const formattedDate = formatDate(project.data.date);
           </div>
           <Text>{project.data.description}</Text>
           <BadgeGroup>
-            {project.data.tech.map((tech) => <Badge>{tech}</Badge>)}
+            {project.data.tags.map((tag) => <Badge>{tag}</Badge>)}
           </BadgeGroup>
         </Group>
       </div>

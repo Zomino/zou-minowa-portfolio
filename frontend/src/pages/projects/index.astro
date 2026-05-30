@@ -2,6 +2,8 @@
 import { getCollection } from "astro:content";
 import Grid from "../../components/common/Grid/Grid.astro";
 import ProjectSummary from "../../components/common/ProjectSummary/ProjectSummary.astro";
+import ProjectTagFilter from "../../components/common/ProjectTagFilter/ProjectTagFilter.astro";
+import ProjectTagFilterToggle from "../../components/common/ProjectTagFilterToggle/ProjectTagFilterToggle.astro";
 import Section from "../../components/common/Section/Section.astro";
 import Layout from "../../components/common/Layout/Layout.astro";
 
@@ -13,26 +15,48 @@ const WORDMARK = "プロジェクト";
 const projects = (await getCollection("projects")).sort(
   (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
 );
+
+const allTags = [...new Set(projects.flatMap((p) => p.data.tags))].sort();
 ---
 
 <Layout pageTitle={TITLE} description={DESCRIPTION} wordmark={WORDMARK}>
   <Section heading={TITLE} headingLevel={1}>
-    <Grid columns={{ default: 1, lg: 3 }} class="mt-12">
+    <div class="mt-8">
+      <ProjectTagFilterToggle />
+      <ProjectTagFilter tags={allTags} />
+    </div>
+    <Grid columns={{ default: 1, lg: 3 }} class="mt-8">
       {
         projects.map((project) => (
-          <ProjectSummary
-            title={project.data.title}
-            description={project.data.description}
-            link={project.data.link}
-            github={project.data.github}
-            image={project.data.image}
-            tech={project.data.tech}
-            type={project.data.type}
-            slug={project.id}
-            headingVariant={4}
-          />
+          <div data-project data-tags={project.data.tags.join(",")}>
+            <ProjectSummary
+              title={project.data.title}
+              description={project.data.description}
+              link={project.data.link}
+              github={project.data.github}
+              image={project.data.image}
+              tags={project.data.tags}
+              type={project.data.type}
+              slug={project.id}
+              headingVariant={4}
+            />
+          </div>
         ))
       }
     </Grid>
   </Section>
 </Layout>
+
+<script>
+  const projects = document.querySelectorAll<HTMLElement>("[data-project]");
+
+  document.addEventListener("tagfilter:change", (e) => {
+    const { tags } = (e as CustomEvent<{ tags: string[] }>).detail;
+    projects.forEach((project) => {
+      const projectTags = (project.dataset.tags ?? "").split(",");
+      const visible =
+        tags.length === 0 || projectTags.some((t) => tags.includes(t));
+      project.classList.toggle("hidden", !visible);
+    });
+  });
+</script>

@@ -27,7 +27,7 @@ describe("ProjectSummary", () => {
         link: "https://example.com/signal",
         github: "https://github.com/example/signal",
         image: projectImage,
-        tech: ["TypeScript", "Astro"],
+        tags: ["TypeScript", "Astro"],
         type: "personal",
         slug: "signal-stack",
       },

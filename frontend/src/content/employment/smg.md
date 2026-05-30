@@ -2,7 +2,7 @@
 company: SMG
 role: Software Engineer
 startDate: 2022-05-01
-tech:
+tags:
   - TypeScript
   - React
   - Node

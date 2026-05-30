@@ -4,7 +4,7 @@ description: Headless CMS with drag-and-drop content blocks and multi-tenant pub
 link: https://patchwork.example.com
 github: https://github.com/example/patchwork
 image: ../../assets/projects/patchwork.svg
-tech:
+tags:
   - Vue
   - Nuxt
   - PostgreSQL

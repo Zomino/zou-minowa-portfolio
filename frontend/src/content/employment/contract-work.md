@@ -3,7 +3,7 @@ company: Independent
 role: Contract Full-Stack Developer
 startDate: 2019-03-01
 endDate: 2022-04-01
-tech:
+tags:
   - TypeScript
   - Astro
   - PostgreSQL

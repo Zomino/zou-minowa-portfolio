@@ -4,7 +4,7 @@ description: Audio analytics platform that visualises listening patterns and eng
 link: https://waveform.example.com
 github: https://github.com/example/waveform
 image: ../../assets/projects/waveform.svg
-tech:
+tags:
   - Next.js
   - D3.js
   - Python

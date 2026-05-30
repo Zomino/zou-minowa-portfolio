@@ -1,0 +1,55 @@
+---
+
+---
+
+<button
+  data-tag-filter-toggle
+  class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/90 px-4 py-2 text-xs text-slate-600 shadow-sm transition-colors hover:border-slate-400"
+  aria-expanded="false"
+>
+  Filter by tag
+  <span
+    data-tag-filter-count
+    class="text-2xs hidden rounded-full bg-slate-900 px-1.5 py-0.5 leading-none text-white"
+  ></span>
+  <svg
+    data-tag-filter-chevron
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 16 16"
+    fill="currentColor"
+    class="h-3 w-3 transition-transform"
+    aria-hidden="true"
+  >
+    <path
+      fill-rule="evenodd"
+      d="M4.22 6.22a.75.75 0 0 1 1.06 0L8 8.94l2.72-2.72a.75.75 0 1 1 1.06 1.06l-3.25 3.25a.75.75 0 0 1-1.06 0L4.22 7.28a.75.75 0 0 1 0-1.06Z"
+      clip-rule="evenodd"></path>
+  </svg>
+</button>
+
+<script>
+  const toggle = document.querySelector<HTMLButtonElement>(
+    "[data-tag-filter-toggle]",
+  );
+  const count = document.querySelector<HTMLElement>("[data-tag-filter-count]");
+  const chevron = document.querySelector<SVGElement>(
+    "[data-tag-filter-chevron]",
+  );
+
+  toggle?.addEventListener("click", () => {
+    const isOpen = toggle.getAttribute("aria-expanded") === "true";
+    toggle.setAttribute("aria-expanded", String(!isOpen));
+    chevron?.classList.toggle("rotate-180", !isOpen);
+    document.dispatchEvent(
+      new CustomEvent("tagfilter:toggle", { bubbles: true }),
+    );
+  });
+
+  document.addEventListener("tagfilter:change", (e) => {
+    const { tags } = (e as CustomEvent<{ tags: string[] }>).detail;
+    if (count) {
+      count.textContent = String(tags.length);
+      count.classList.toggle("hidden", tags.length === 0);
+    }
+  });
+</script>

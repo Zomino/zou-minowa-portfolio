@@ -4,7 +4,7 @@ description: Kanban-style project tracker with real-time collaboration and sprin
 link: https://taskflow.example.com
 github: https://github.com/example/taskflow
 image: ../../assets/projects/taskflow.svg
-tech:
+tags:
   - React
   - TypeScript
   - GraphQL

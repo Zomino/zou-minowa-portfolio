@@ -29,7 +29,7 @@ const projects = defineCollection({
       link: z.string().url(),
       github: z.string().url(),
       image: image(),
-      tech: z.array(z.string()).min(1),
+      tags: z.array(z.string()).min(1),
       type: z.enum(["work", "personal"]),
       date: z.date(),
       featured: z.boolean().default(false),
@@ -45,7 +45,7 @@ const employment = defineCollection({
       role: z.string(),
       startDate: z.date(),
       endDate: z.date().optional(),
-      tech: z.array(z.string()).min(1),
+      tags: z.array(z.string()).min(1),
     }),
 });
 

@@ -4,7 +4,7 @@ description: Personal finance tracker that pairs budgets with daily cashflow ins
 link: https://ledgerlight.example.com
 github: https://github.com/example/ledgerlight
 image: ../../assets/projects/ledgerlight.svg
-tech:
+tags:
   - React
   - Node
   - PostgreSQL
