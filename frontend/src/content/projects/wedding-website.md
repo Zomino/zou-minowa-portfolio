@@ -11,7 +11,7 @@ tech:
   - Headless UI
   - AWS S3
 type: personal
-date: 2024-11-23
+date: 2024-07-14
 featured: true
 titleJa: 結婚式ウェブサイト
 ---
@@ -20,46 +20,52 @@ titleJa: 結婚式ウェブサイト
 
 When my wife and I were planning our wedding, I wanted to avoid the expense of printing nearly a hundred invitation cards, so I decided to build a website instead. In the end, we printed cards anyway (my wife insisted), but I still learned quite a few new skills in the process.
 
-This was the first personal project I actually deployed, and the first time I really thought seriously about performance and accessibility.
+It was the first personal project I actually deployed, and the first time I really thought seriously about web performance and accessibility.
 
-## The Process
+## Highlights
 
-I started in Figma, settling on a calm palette and a hand-drawn elephant and rabbit illustration to give the site some personality, then chose the tooling:
+### Performant
 
-- **Gatsby and React** for a fast static site with the bilingual routing the guest list needed.
-- **Tailwind CSS** for styling, kept consistent through a small set of design tokens.
-- **Headless UI** for the interactive pieces, such as the menus and the language selector, so behaviour and styling stayed cleanly separated.
-- **AWS S3** to host the photo gallery, with image optimisation handling the heavy lifting on load times.
+I chose Gatsby, a static site generator, because I imagined most guests would be on mobile, often on slower connections, and pre-rendered HTML would be the most reliable way to serve them quickly. Images load with blurred placeholder lazy loading, so the page feels fast even on the photo-heavy gallery. The final site scored 100% on Lighthouse performance. It was a shame not many people saw it in the end...
 
-Doing every part myself meant the work did not stop at writing components. I had to reason about hosting, builds, image pipelines, and deployment. When the final site scored 100% across the board on Lighthouse, accessibility included, it felt earned.
+### Bilingual English and Chinese
+
+The site runs in both English and Chinese, with separate URLs for each locale. The two versions differ in more than just language: date formats, addresses, and schedule details are all adapted for each. Chinese translation courtesy of my wife.
+
+### Accessible
+
+Accessibility was a deliberate focus from the start. I used Headless UI components with baked-in accessibility, and took care with semantic HTML and ARIA attributes so that keyboard-only users and screen readers both have a good experience. I tested both manually, and the site scored 100% on Lighthouse accessibility.
+
+### Handcrafted
+
+Every line of code was written by hand (sans boilerplate and library generated code), which seems almost unthinkable now in the age of AI!
+
+### Help from family
+
+The hero illustration was drawn by my father, [Daisuke Minowa](https://www.daisukeminowa.com/), who is an artist. I wanted it in his style, so I kept the brief deliberately loose: an elephant and a rabbit, simple, abstract. What came back was something I could not have done by myself, and it gave the site a personality it had been missing.
 
 ## Reflections and Learnings
 
+### Figma before building
+
+Before touching any code, I spent time in Figma exploring colour palettes and font pairings. This was not full wireframing, more lightweight visual prototyping, but it saved a lot of trial and error in the browser, and in retrospect it is something I should do more often.
+
 ### Accessibility changed how I write HTML
 
-Accessibility was a deliberate focus from the start, not something bolted on at the end. I tested the site with a screen reader, with keyboard-only navigation, and with my computer's built-in voice control. Part of the motivation was frustration with the poor accessibility I had seen at work, and a determination to do it properly when it was my own.
+I had always cared about writing good HTML, but taking accessibility seriously gave me a much better understanding of why semantic tags like article, section, and heading matter. The way I now design and structure pages is also influenced by things like default tab order and ease of keyboard navigation.
 
-That process genuinely changed how I think about markup. When you are not considering accessibility, it is easy to reach for divs and spans everywhere. Thinking about it seriously forces you towards semantic structure instead: sections, articles, headings, and a sensible page hierarchy. I came away suspecting that good websites look the way they do partly because good design and good semantic structure tend to reinforce each other.
+### Dependency management is a skill
 
-### Every problem is the tip of an iceberg
+Some Gatsby dependencies had not been maintained and would not work on the latest release. I had never properly met a dependency conflict before, having always just run installs and upgrades without much thought. Resolving it meant pinning Gatsby to an older version and manually configuring packages until everything cooperated. It gave me a much deeper appreciation for dependency management.
 
-The biggest lesson was about how learning actually happens on a solo project. When you hit a problem, that problem is only the tip of the iceberg. To fix it properly you have to build layers of understanding underneath it, and those layers are where the real learning lives.
+### The skills proved useful at work
 
-This is why a small personal project teaches you far more than its size suggests. At work, someone else has usually set things up, and you only ever learn enough syntax to get by. You never really own the full picture. Owning the setup yourself, and watching it break, is where the depth comes from.
+- **Accessibility**: I gave presentations and demos to other engineers to help raise awareness.
+- **Tailwind**: when my team eventually adopted it, I was able to get up to speed quickly.
+- **Headless components**: introduced at work around the same time. A small project was the perfect place to learn them and get a feel for building good component APIs.
+- **Image optimisation**: now under consideration at work.
+- **Dependency management**: sudden environment-breaking issues often come down to package versions.
 
-I felt this most acutely with package management. Some Gatsby dependencies had not been maintained and would not work on the latest release. I had never properly met a dependency conflict before, having always just run installs and upgrades without a second thought. Resolving it meant pinning Gatsby to an older version and manually configuring packages until everything cooperated. It was a formative experience that I later applied directly at work.
+### Solo projects are great for learning
 
-### The skills transferred almost immediately
-
-What surprised me most was how quickly nearly everything I learned became relevant to my day job:
-
-- **Tailwind**: my team adopted it not long after I had already shipped something with it.
-- **Headless components**: introduced at work around the same time, and having built my own first was invaluable.
-- **Image optimisation**: now under consideration at work, and already second nature to me.
-- **Accessibility**: the team is now making a conscious effort, and I arrived with hands-on experience.
-
-The scale of a project does not limit the scale of what you learn from it. The skills are transferable regardless.
-
-### Worth biting off
-
-The usual advice is not to bite off more than you can chew. Going in without knowing most of these technologies was daunting, and there is something to that warning. But doing it anyway was worth it. That very constraint, being out of my depth, is exactly what forced the deeper learning, and it convinced me to keep building personal projects whenever I have the time.
+On a solo project, there is no one to rescue you when something breaks. Every problem is the tip of an iceberg, and to solve it properly you have to learn what lies beneath. You come away with far more knowledge than the size of the project suggests.

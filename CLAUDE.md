@@ -42,6 +42,11 @@ See `frontend/package.json` scripts for available commands.
 - Use `UPPER_SNAKE_CASE` for constants with static literal values (strings, numbers).
 - Always mock external dependencies (e.g. `getCollection`, `getEntry`) in tests instead of skipping them.
 
+## Writing style
+
+- Never use hyphens or dashes as punctuation in written content (no em dashes, en dashes, or hyphen separators). Use commas or full stops instead.
+
 ## Language
 
 - All project files (code, comments, config, docs) must be written in English.
+- Always use British English spelling (e.g. colour, optimise, behaviour, organise).
