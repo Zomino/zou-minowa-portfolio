@@ -9,6 +9,7 @@ tech:
   - TypeScript
   - Tailwind
   - Supabase
+type: work
 date: 2025-11-08
 featured: true
 ---

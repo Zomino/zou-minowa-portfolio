@@ -28,11 +28,13 @@ describe("ProjectSummary", () => {
         github: "https://github.com/example/signal",
         image: projectImage,
         tech: ["TypeScript", "Astro"],
+        type: "personal",
         slug: "signal-stack",
       },
     });
 
     expect(html).toContain("Signal Stack");
+    expect(html).toContain("personal");
     expect(html).toContain("Realtime observability platform.");
     expect(html).toContain('href="https://github.com/example/signal"');
     expect(html).toContain('href="https://example.com/signal"');

@@ -9,6 +9,7 @@ tech:
   - Nuxt
   - PostgreSQL
   - Docker
+type: work
 date: 2025-02-10
 featured: false
 ---

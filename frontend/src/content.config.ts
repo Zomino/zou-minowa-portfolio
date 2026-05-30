@@ -30,6 +30,7 @@ const projects = defineCollection({
       github: z.string().url(),
       image: image(),
       tech: z.array(z.string()).min(1),
+      type: z.enum(["work", "personal"]),
       date: z.date(),
       featured: z.boolean().default(false),
     }),

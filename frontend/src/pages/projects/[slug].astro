@@ -28,7 +28,9 @@ const formattedDate = formatDate(project.data.date);
 <Layout pageTitle={project.data.title} description={project.data.description}>
   <Group spacing="xl">
     <section>
-      <Text variant="eyebrow">Project</Text>
+      <Text variant="eyebrow">
+        {project.data.type === "work" ? "Work project" : "Personal project"}
+      </Text>
       <Heading level={1} spacing>
         {project.data.title}
       </Heading>

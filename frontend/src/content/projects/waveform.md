@@ -9,6 +9,7 @@ tech:
   - D3.js
   - Python
   - BigQuery
+type: work
 date: 2025-04-20
 featured: false
 ---

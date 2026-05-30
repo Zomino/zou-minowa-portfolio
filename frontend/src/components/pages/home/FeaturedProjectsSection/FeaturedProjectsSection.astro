@@ -23,6 +23,7 @@ const projects = (await getCollection("projects"))
           github={project.data.github}
           image={project.data.image}
           tech={project.data.tech}
+          type={project.data.type}
           slug={project.id}
           headingVariant={4}
         />

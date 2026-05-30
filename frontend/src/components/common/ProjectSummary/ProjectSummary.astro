@@ -17,6 +17,7 @@ interface Props {
   github: string;
   image: ImageMetadata;
   tech: string[];
+  type?: "work" | "personal";
   slug: string;
   headingLevel?: HeadingProps["level"];
   headingVariant?: HeadingProps["variant"];
@@ -30,6 +31,7 @@ const {
   github,
   image,
   tech,
+  type,
   slug,
   headingLevel = 3,
   headingVariant = headingLevel,
@@ -45,6 +47,7 @@ const classes =
     <span class="sr-only">View {title}</span>
   </Link>
   <div class="space-y-3">
+    {type && <Text variant="eyebrow">{type}</Text>}
     <div class="flex flex-wrap items-center justify-between gap-2">
       <Heading level={headingLevel} variant={headingVariant}>
         {title}

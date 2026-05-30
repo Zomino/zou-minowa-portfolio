@@ -9,6 +9,7 @@ tech:
   - TypeScript
   - GraphQL
   - Redis
+type: work
 date: 2025-06-15
 featured: false
 ---

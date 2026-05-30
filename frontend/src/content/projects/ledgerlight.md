@@ -9,6 +9,7 @@ tech:
   - Node
   - PostgreSQL
   - Stripe
+type: work
 date: 2025-07-22
 featured: true
 ---
