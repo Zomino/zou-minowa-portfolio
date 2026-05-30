@@ -73,7 +73,7 @@
 }
 
 @utility link {
-  @apply text-sm font-semibold text-slate-900 decoration-current underline-offset-4 transition hover:underline;
+  @apply text-sm font-semibold text-slate-900 transition hover:text-slate-500;
 }
 
 @utility list-bulleted {

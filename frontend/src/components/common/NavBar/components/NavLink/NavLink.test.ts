@@ -13,7 +13,7 @@ describe("NavLink", () => {
 
     expect(html).toContain("link");
     expect(html).toContain("text-sm");
-    expect(html).toContain("text-slate-700");
+    expect(html).toContain("hover:text-slate-500");
   });
 
   it("renders the link with correct href", async () => {
@@ -35,7 +35,7 @@ describe("NavLink", () => {
     });
 
     expect(html).toContain("text-sm");
-    expect(html).toContain("text-slate-700");
+    expect(html).toContain("hover:text-slate-500");
     expect(html).toContain("extra-class");
   });
 });

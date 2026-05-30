@@ -20,7 +20,10 @@ const {
   openNewTab = true,
 } = Astro.props;
 
-const classes = clsx("inline-flex items-center", className);
+const classes = clsx(
+  "inline-flex items-center transition-opacity hover:opacity-60",
+  className,
+);
 ---
 
 <Link

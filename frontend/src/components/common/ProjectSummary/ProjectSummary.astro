@@ -55,13 +55,15 @@ const classes =
     }
     {/* {type && <EyebrowText variant="small">{type}</EyebrowText>} */}
     <div class="flex flex-wrap items-center justify-between gap-2">
-      <Heading
-        level={headingLevel}
-        variant={headingVariant}
-        class="underline-offset-4 transition group-hover:underline group-hover:decoration-1"
-      >
-        {title}
-      </Heading>
+      <a href={`/projects/${slug}`} class="relative z-20">
+        <Heading
+          level={headingLevel}
+          variant={headingVariant}
+          class="transition hover:text-slate-500"
+        >
+          {title}
+        </Heading>
+      </a>
       <ProjectLinks github={github} link={link} class="relative z-20" />
     </div>
   </div>
