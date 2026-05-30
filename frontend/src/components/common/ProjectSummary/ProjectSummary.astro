@@ -42,7 +42,7 @@ const {
 } = Astro.props;
 
 const classes =
-  `relative flex h-full cursor-pointer flex-col gap-5 ${className}`.trim();
+  `group relative flex h-full cursor-pointer flex-col gap-5 ${className}`.trim();
 ---
 
 <article class={classes}>
@@ -55,7 +55,11 @@ const classes =
     }
     {/* {type && <EyebrowText variant="small">{type}</EyebrowText>} */}
     <div class="flex flex-wrap items-center justify-between gap-2">
-      <Heading level={headingLevel} variant={headingVariant}>
+      <Heading
+        level={headingLevel}
+        variant={headingVariant}
+        class="underline-offset-4 transition group-hover:underline group-hover:decoration-1"
+      >
         {title}
       </Heading>
       <ProjectLinks github={github} link={link} class="relative z-20" />
