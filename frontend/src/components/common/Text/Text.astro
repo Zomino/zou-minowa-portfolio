@@ -5,7 +5,6 @@ const TAGS = {
   body: "p",
   small: "span",
   strong: "strong",
-  eyebrow: "span",
 } as const;
 
 type Variant = keyof typeof TAGS;
@@ -28,7 +27,6 @@ const classes = clsx(
     "text-body": variant === "body",
     "text-small": variant === "small",
     "text-strong": variant === "strong",
-    "text-xs tracking-wider text-slate-400 uppercase": variant === "eyebrow",
   },
   spacing && "text-body-spacing",
   className,

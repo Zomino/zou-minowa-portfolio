@@ -61,27 +61,6 @@ describe("Text", () => {
     expect(html).toContain("text-strong");
   });
 
-  it("renders a span for the eyebrow variant", async () => {
-    const container = await AstroContainer.create();
-    const html = await container.renderToString(Text, {
-      props: { variant: "eyebrow" },
-      slots: { default: "Eyebrow text" },
-    });
-
-    expect(html).toContain("<span");
-  });
-
-  it("applies eyebrow styles", async () => {
-    const container = await AstroContainer.create();
-    const html = await container.renderToString(Text, {
-      props: { variant: "eyebrow" },
-      slots: { default: "Eyebrow text" },
-    });
-
-    expect(html).toContain("uppercase");
-    expect(html).toContain("tracking-wider");
-  });
-
   it("does not apply spacing by default", async () => {
     const container = await AstroContainer.create();
     const html = await container.renderToString(Text, {
@@ -104,8 +83,8 @@ describe("Text", () => {
   it("merges custom classes", async () => {
     const container = await AstroContainer.create();
     const html = await container.renderToString(Text, {
-      props: { variant: "eyebrow", class: "text-red-500" },
-      slots: { default: "Eyebrow text" },
+      props: { variant: "small", class: "text-red-500" },
+      slots: { default: "Small text" },
     });
 
     expect(html).toContain("text-red-500");

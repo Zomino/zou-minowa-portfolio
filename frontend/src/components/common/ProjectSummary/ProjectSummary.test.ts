@@ -34,7 +34,8 @@ describe("ProjectSummary", () => {
     });
 
     expect(html).toContain("Signal Stack");
-    expect(html).toContain("personal");
+    // TODO: Re-enable the work/personal label once we display work projects again.
+    // expect(html).toContain("personal");
     expect(html).toContain("Realtime observability platform.");
     expect(html).toContain('href="https://github.com/example/signal"');
     expect(html).toContain('href="https://example.com/signal"');

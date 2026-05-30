@@ -1,0 +1,23 @@
+---
+import clsx from "clsx";
+
+export interface Props {
+  variant?: "default" | "small";
+  class?: string;
+}
+
+const { variant = "default", class: className = "" } = Astro.props;
+
+const classes = clsx(
+  "tracking-wider text-slate-400 uppercase",
+  {
+    "text-xs": variant === "default",
+    "text-2xs": variant === "small",
+  },
+  className,
+);
+---
+
+<span class={classes}>
+  <slot />
+</span>

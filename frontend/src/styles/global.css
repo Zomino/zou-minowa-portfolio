@@ -5,6 +5,7 @@
 @theme {
   --color-theme: #f5f7fb;
   --font-serif: "Noto Serif JP", serif;
+  --text-2xs: 0.625rem;
 }
 
 @utility heading-1 {

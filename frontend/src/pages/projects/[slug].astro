@@ -2,6 +2,8 @@
 import { getCollection, render } from "astro:content";
 import Badge from "../../components/common/Badge/Badge.astro";
 import BadgeGroup from "../../components/common/BadgeGroup/BadgeGroup.astro";
+// TODO: Re-enable the work/personal label once we display work projects again.
+// import EyebrowText from "../../components/common/EyebrowText/EyebrowText.astro";
 import ProjectLinks from "../../components/common/ProjectLinks/ProjectLinks.astro";
 import Heading from "../../components/common/Heading/Heading.astro";
 import Image from "../../components/common/Image/Image.astro";
@@ -28,9 +30,14 @@ const formattedDate = formatDate(project.data.date);
 <Layout pageTitle={project.data.title} description={project.data.description}>
   <Group spacing="xl">
     <section>
-      <Text variant="eyebrow">
+      {
+        /* TODO: Re-enable the work/personal label once we display work projects again. */
+      }
+      {
+        /* <EyebrowText>
         {project.data.type === "work" ? "Work project" : "Personal project"}
-      </Text>
+      </EyebrowText> */
+      }
       <Heading level={1} spacing>
         {project.data.title}
       </Heading>
