@@ -25,7 +25,7 @@ describe("Hero", () => {
     expect(html).toContain("Fullstack software engineer");
     expect(html).toContain("Zou");
     expect(html).toContain("Minowa");
-    expect(html).toContain("London-based. Generalist. AI pilled.");
+    expect(html).toContain("London-based. Generalist. AI enthusiast.");
   });
 
   it("includes the brand target data attribute", async () => {
