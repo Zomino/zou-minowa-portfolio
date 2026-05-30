@@ -33,6 +33,7 @@ const projects = defineCollection({
       type: z.enum(["work", "personal"]),
       date: z.date(),
       featured: z.boolean().default(false),
+      titleJa: z.string().optional(),
     }),
 });
 

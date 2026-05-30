@@ -8,13 +8,14 @@ import Layout from "../../components/common/Layout/Layout.astro";
 const TITLE = "Projects";
 const DESCRIPTION =
   "Selected software projects spanning product builds, platform tooling, and client-facing delivery.";
+const WORDMARK = "プロジェクト";
 
 const projects = (await getCollection("projects")).sort(
   (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
 );
 ---
 
-<Layout pageTitle={TITLE} description={DESCRIPTION}>
+<Layout pageTitle={TITLE} description={DESCRIPTION} wordmark={WORDMARK}>
   <Section heading={TITLE} headingLevel={1}>
     <Grid columns={{ default: 1, lg: 3 }} class="mt-12">
       {

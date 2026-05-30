@@ -15,6 +15,7 @@ interface Props {
   description?: string;
   image?: string;
   twitterImage?: string;
+  wordmark?: string | undefined;
 }
 
 const {
@@ -22,6 +23,7 @@ const {
   description = metadata.siteDescription,
   image,
   twitterImage,
+  wordmark = "簑輪象",
 } = Astro.props;
 
 const siteOrigin = require(Astro.site?.toString() ?? Astro.url?.origin);
@@ -61,7 +63,7 @@ const canonicalUrl = new URL(pathname, siteOrigin).toString();
     >
       <div class="relative">
         <div class="pointer-events-none absolute top-0 right-0 -z-10">
-          <VerticalWordmark>簑輪象</VerticalWordmark>
+          <VerticalWordmark>{wordmark}</VerticalWordmark>
         </div>
         <slot />
       </div>
