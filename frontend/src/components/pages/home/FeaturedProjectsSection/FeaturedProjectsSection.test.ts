@@ -113,6 +113,6 @@ describe("FeaturedProjectsSection", () => {
 
     expect(html).toContain("grid-cols-1");
     expect(html).toContain("lg:grid-cols-3");
-    expect(html).toContain("*:border-t");
+    expect(html).toContain("*:border-b");
   });
 });

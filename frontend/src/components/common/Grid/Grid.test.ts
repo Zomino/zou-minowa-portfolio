@@ -63,17 +63,29 @@ describe("Grid", () => {
   it("draws inner borders and padding on each cell", async () => {
     const html = await render();
 
-    expect(html).toContain("*:border-t");
+    expect(html).toContain("*:border-b");
     expect(html).toContain("*:border-l");
     expect(html).toContain("*:border-slate-200");
     expect(html).toContain("*:p-6");
   });
 
-  it("does not draw bottom/right borders (no outer perimeter lines)", async () => {
+  it("does not draw top/right borders (no outer perimeter lines)", async () => {
     const html = await render();
 
-    expect(html).not.toContain("*:border-b");
+    expect(html).not.toContain("*:border-t");
     expect(html).not.toContain("*:border-r");
+  });
+
+  it("keeps the row divider full-width when the last row is partial", async () => {
+    // 7 cells in a 3-column grid leave a single cell in the last row. Drawing
+    // the divider with border-b (the always-full upper row) rather than
+    // border-t (the partial lower row) keeps the line spanning every column.
+    const cells = Array.from({ length: 7 }, (_, i) => `<p>${i}</p>`).join("");
+    const html = await render({ columns: 3 }, cells);
+
+    expect(html).toContain("*:border-b");
+    expect(html).not.toContain("*:border-t");
+    expect(html).toContain("<p>6</p>");
   });
 
   it("does not use gap-based spacing", async () => {

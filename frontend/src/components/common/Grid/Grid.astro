@@ -32,9 +32,12 @@ const columnClasses = buildColumnClasses(normalizeColumns(columns));
 
 {
   /*
-  Cells draw inner-only dividers (border-t/border-l) + padding. The inner grid is
+  Cells draw inner-only dividers (border-b/border-l) + padding. The inner grid is
   pulled out by `-m-6` so the outer band — the perimeter borders and padding — is
   clipped by the wrapper's `overflow-hidden`, leaving no outer border or padding.
+  Using border-b (not border-t) means each row divider is drawn by the row above,
+  which is always full, so the line spans every column even when the last row is
+  only partially filled.
 */
 }
 <div class={clsx("overflow-hidden", className)}>
@@ -42,7 +45,7 @@ const columnClasses = buildColumnClasses(normalizeColumns(columns));
     class={clsx(
       "-m-6 grid",
       columnClasses,
-      "*:border-t *:border-l *:border-slate-200 *:p-6",
+      "*:border-b *:border-l *:border-slate-200 *:p-6",
     )}
   >
     <slot />
