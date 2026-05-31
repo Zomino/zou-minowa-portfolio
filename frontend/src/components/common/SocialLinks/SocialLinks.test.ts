@@ -22,11 +22,11 @@ describe("SocialLinks", () => {
     const container = await AstroContainer.create();
     const html = await container.renderToString(SocialLinks);
 
-    expect(html).toContain('href="mailto:hello@example.com"');
+    expect(html).toContain('href="mailto:zouminowa@gmail.com"');
     expect(html).toContain('aria-label="Email"');
-    expect(html).toContain('href="https://www.linkedin.com/in/example"');
+    expect(html).toContain('href="https://www.linkedin.com/in/zouminowa/"');
     expect(html).toContain('aria-label="LinkedIn"');
-    expect(html).toContain('href="https://github.com/example"');
+    expect(html).toContain('href="https://github.com/Zomino"');
     expect(html).toContain('aria-label="GitHub"');
   });
 
@@ -35,12 +35,12 @@ describe("SocialLinks", () => {
     const html = await container.renderToString(SocialLinks);
 
     expect(html).not.toContain(
-      'href="mailto:hello@example.com" target="_blank"',
+      'href="mailto:zouminowa@gmail.com" target="_blank"',
     );
     expect(html).toContain(
-      'href="https://www.linkedin.com/in/example" target="_blank"',
+      'href="https://www.linkedin.com/in/zouminowa/" target="_blank"',
     );
-    expect(html).toContain('href="https://github.com/example" target="_blank"');
+    expect(html).toContain('href="https://github.com/Zomino" target="_blank"');
     expect(html).toContain('rel="noreferrer noopener"');
   });
 });
