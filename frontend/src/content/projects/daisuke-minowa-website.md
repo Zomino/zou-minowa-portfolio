@@ -31,7 +31,7 @@ Strapi runs as the CMS backend. My father has a least-privilege account scoped t
 
 ### Cost optimisation
 
-The replacement costs nothing to run: the site stays comfortably within the free tiers of both Vercel and Strapi Cloud, down from the hundred pounds a year my father was paying for Wix. That is not a life-changing saving, but it's not bad.
+The replacement costs nothing to run: the site stays comfortably within the free tiers of both Vercel and Strapi Cloud, down from the hundred pounds a year my father was paying for Wix. It is a modest saving, but a real one.
 
 ### Image optimisation
 
@@ -41,7 +41,7 @@ For a painter's portfolio, image performance matters. I made use of Next.js's bu
 
 My father shows his work at exhibitions. I assumed that people who encounter his work there and look him up would most likely do so on a mobile device. I pictured someone in a gallery, an exhibition pamphlet in one hand, phone in the other, and designed the site to be something you could use comfortably in that situation.
 
-The site is a single scrollable page with no routing or pagination, putting the art first and foremost, with a swipe carousel for browsing individual pieces. The navigation is built around that same scrolling motion. It is visible when you land but hides as you scroll down so the art can fill the screen. When you want to navigate, I assumed the natural instinct would be to scroll back up toward where you first saw the navigation, so that is exactly when it pops back in from the top.
+The site is a single scrollable page with no routing or pagination, putting the art first, with a swipe carousel for browsing individual pieces. The navigation is built around that same scrolling motion. It is visible when you land but hides as you scroll down so the art can fill the screen. When you want to navigate, I assumed the natural instinct would be to scroll back up toward where you first saw the navigation, so that is exactly when it pops back in from the top.
 
 ### Accessibility
 
@@ -77,4 +77,4 @@ I had originally assumed I would need to build out my own custom backend to mana
 
 ### CSS always takes the longest
 
-The site itself is simple, but for a portfolio I feel it is important for the design to feel personal, so I did not just want to reach for a component library. It meant most of the time went into writing CSS and getting animations to work correctly, which is great for learning but an enormous amount of effort. Thank goodness we have AI to do this for us now...
+The site itself is simple, but for a portfolio I feel it is important for the design to feel personal, so I did not just want to reach for a component library. It meant most of the time went into writing CSS and getting animations to work correctly, which is great for learning but an enormous amount of effort.
