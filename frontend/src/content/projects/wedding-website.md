@@ -1,7 +1,7 @@
 ---
 title: Wedding Website
 description: A bilingual wedding website with a pre-wedding photo gallery.
-link: https://66e881633fd2d30008d543d4--angela-and-zou.netlify.app/
+link: https://angela-and-zou.netlify.app/
 github: https://github.com/Zomino/wedding-website
 image: ../../assets/projects/wedding-website.png
 tech:
@@ -20,7 +20,7 @@ titleJa: 結婚式のウェブ招待状
 
 ## Background
 
-When my wife and I were planning our wedding, I wanted to avoid the expense of printing nearly a hundred invitation cards, so I decided to build a website instead. In the end, we printed cards anyway (my wife insisted), but I still learned quite a few new skills in the process.
+When my wife and I were planning our wedding, I wanted to avoid the expense of printing nearly a hundred invitation cards, so I decided to build a website instead. In the end, we printed cards anyway, but I still learned quite a few new skills in the process.
 
 It was the first personal project I actually deployed, and the first time I really thought seriously about web performance and accessibility.
 
@@ -28,7 +28,7 @@ It was the first personal project I actually deployed, and the first time I real
 
 ### Performant
 
-I chose Gatsby, a static site generator, because I imagined most guests would be on mobile, often on slower connections, and pre-rendered HTML would be the most reliable way to serve them quickly. Images load with blurred placeholder lazy loading, so the page feels fast even on the photo-heavy gallery. The final site scored 100% on Lighthouse performance. It was a shame not many people saw it in the end...
+I chose Gatsby, a static site generator, because I imagined most guests would be on mobile, often on slower connections, and pre-rendered HTML would be the most reliable way to serve them quickly. Images are lazy-loaded with blurred placeholders, so the page feels fast even on the photo-heavy gallery. The final site scored 100% on Lighthouse performance. It was a shame not many people saw it in the end...
 
 ### Bilingual English and Chinese
 
