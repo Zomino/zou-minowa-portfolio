@@ -1,6 +1,6 @@
 ---
-title: Personal Trainer Website
-description: A digital business card for Victor Five, a personal trainer.
+title: Fitness Coach Website
+description: A digital business card for Victor Five, a fitness coach.
 link: https://www.victorfivecoaching.com/
 github: https://github.com/Zomino/victor-five-website
 image: ../../assets/projects/victor-five-website.png
@@ -15,12 +15,12 @@ tech:
 type: personal
 date: 2025-08-23
 featured: true
-titleJa: パーソナルトレーナーのデジタル名刺
+titleJa: フィットネスコーチのデジタル名刺
 ---
 
 ## Background
 
-I built a digital business card for Victor Five, a personal trainer. The goal was to give him a more professional online presence beyond social media, since having only an Instagram account was not enough to stand out. He needed a single, clean page he could point prospective clients to, with the essentials and a way to get in touch.
+I built a digital business card for Victor Five, a fitness coach. The goal was to give him a more professional online presence beyond social media, since having only an Instagram account was not enough to stand out. He needed a single, clean page he could point prospective clients to, with the essentials and a way to get in touch.
 
 This was the first project I built for a professional, which shaped several of the decisions below.
 
