@@ -1,5 +1,5 @@
 ---
-name: imports
+name: organise-imports
 description: Import grouping and ordering rules for TypeScript, TSX, and Astro frontmatter. Use when writing or editing imports.
 ---
 
