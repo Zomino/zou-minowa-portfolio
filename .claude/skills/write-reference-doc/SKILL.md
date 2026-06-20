@@ -27,3 +27,5 @@ description: >
    - No em dashes or en dashes as punctuation. Use commas or full stops.
    - No evocative language. Facts only.
    - No hedging unless genuinely uncertain.
+   - Never include specific prices, quotas, or instance counts (e.g. "$0.005 per path", "450 edge locations", "first 1,000 free"). These go out of date. Link to the relevant AWS pricing page instead.
+   - Every feature, setting, or concept must explain **why it exists or why it matters** — not just what it does. A reader should understand the consequence of getting it wrong or skipping it. "This maximises cache hits" is not enough; explain what fewer cache hits costs (latency, origin load, money). "Set Min TTL to 0" is not enough; explain what happens if you don't.
