@@ -4,11 +4,14 @@ dist/
 .pnpm-store/
 pnpm-debug.log*
 *.env
+.env*
+!.env.example
 .gitconfig
 .playwright-mcp/
 .vercel/
 *.report.html
 .claude/settings.local.json
+.claude/worktrees/
 .terraform/
 *.tfstate
 *.tfstate.backup

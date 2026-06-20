@@ -1,4 +1,19 @@
 {
   "siteTitle": "Zou Minowa",
-  "siteDescription": "London-based software engineer with a diverse skill set, a passion for AI, and a focus on building maintainable products and clean, well-crafted code."
+  "siteDescription": "London-based software engineer with a diverse skill set, a passion for AI, and a focus on building maintainable products and clean, well-crafted code.",
+  "jobTitle": "Fullstack Software Engineer",
+  "email": "zouminowa@gmail.com",
+  "github": "https://github.com/Zomino",
+  "linkedin": "https://www.linkedin.com/in/zouminowa/",
+  "skills": [
+    "TypeScript",
+    "React",
+    "Node.js",
+    "MongoDB",
+    "AWS",
+    "Terraform",
+    "Docker",
+    "Accessibility",
+    "Agentic coding"
+  ]
 }

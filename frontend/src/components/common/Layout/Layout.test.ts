@@ -63,4 +63,13 @@ describe("Layout", () => {
 
     expect(html).toContain("<p>Test content</p>");
   });
+
+  it("renders Person JSON-LD in the head", async () => {
+    const container = await createContainer();
+    const html = await container.renderToString(Layout);
+
+    expect(html).toContain('type="application/ld+json"');
+    expect(html).toContain('"@type":"Person"');
+    expect(html).toContain('"name":"Zou Minowa"');
+  });
 });
