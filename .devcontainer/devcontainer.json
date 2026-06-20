@@ -10,7 +10,8 @@
         "bradlc.vscode-tailwindcss",
         "dbaeumer.vscode-eslint",
         "esbenp.prettier-vscode",
-        "vercel.vercel"
+        "vercel.vercel",
+        "hashicorp.terraform"
       ],
       "settings": {
         "editor.formatOnSave": true,

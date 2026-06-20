@@ -5,6 +5,8 @@ services:
       dockerfile: .devcontainer/Dockerfile
     container_name: zou-minowa-portfolio-dev
     user: node
+    env_file:
+      - ../.env
     ports:
       - "4321:4321"
     volumes:
