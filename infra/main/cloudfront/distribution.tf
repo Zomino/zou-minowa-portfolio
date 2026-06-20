@@ -35,7 +35,7 @@ resource "aws_cloudfront_function" "rewrite" {
 
 resource "aws_cloudfront_distribution" "site" {
   enabled             = true
-  default_root_object = "index.html"
+  default_root_object = var.default_root_object
   price_class         = "PriceClass_100"
 
   origin {
@@ -44,24 +44,20 @@ resource "aws_cloudfront_distribution" "site" {
     origin_access_control_id = aws_cloudfront_origin_access_control.site.id
   }
 
-  ordered_cache_behavior {
-    path_pattern           = "/_astro/*"
-    allowed_methods        = ["GET", "HEAD"]
-    cached_methods         = ["GET", "HEAD"]
-    target_origin_id       = "s3-${aws_s3_bucket.site.id}"
-    viewer_protocol_policy = "redirect-to-https"
-    cache_policy_id        = "658327ea-f89d-4fab-a63d-7e88639e58f6"
-    compress               = true
-  }
-
-  ordered_cache_behavior {
-    path_pattern           = "/fonts/*"
-    allowed_methods        = ["GET", "HEAD"]
-    cached_methods         = ["GET", "HEAD"]
-    target_origin_id       = "s3-${aws_s3_bucket.site.id}"
-    viewer_protocol_policy = "redirect-to-https"
-    cache_policy_id        = "658327ea-f89d-4fab-a63d-7e88639e58f6"
-    compress               = true
+  dynamic "ordered_cache_behavior" {
+    for_each = var.enable_asset_cache_behaviors ? [
+      { pattern = "/_astro/*" },
+      { pattern = "/fonts/*" }
+    ] : []
+    content {
+      path_pattern           = ordered_cache_behavior.value.pattern
+      allowed_methods        = ["GET", "HEAD"]
+      cached_methods         = ["GET", "HEAD"]
+      target_origin_id       = "s3-${aws_s3_bucket.site.id}"
+      viewer_protocol_policy = "redirect-to-https"
+      cache_policy_id        = "658327ea-f89d-4fab-a63d-7e88639e58f6"
+      compress               = true
+    }
   }
 
   default_cache_behavior {

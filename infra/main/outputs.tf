@@ -1,15 +1,15 @@
-output "cloudfront_domain_name" {
+output "production_distribution_domain" {
   value = module.cloudfront.domain_name
 }
 
-output "bucket_name" {
-  value = module.cloudfront.bucket_name
+output "production_github_actions_role_arn" {
+  value = aws_iam_role.github_actions["deploy"].arn
 }
 
-output "distribution_id" {
-  value = module.cloudfront.distribution_id
+output "preview_distribution_domain" {
+  value = module.cloudfront_preview.domain_name
 }
 
-output "github_actions_role_arn" {
-  value = aws_iam_role.github_actions_deploy.arn
+output "preview_github_actions_role_arn" {
+  value = aws_iam_role.github_actions["preview"].arn
 }

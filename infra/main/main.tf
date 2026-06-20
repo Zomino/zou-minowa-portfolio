@@ -30,5 +30,18 @@ provider "aws" {
 module "cloudfront" {
   source       = "./cloudfront"
   project_name = var.project_name
+  bucket_name  = var.project_name
   alert_email  = var.alert_email
+}
+
+# No ordered cache behaviours for /_astro/* or /fonts/* because preview S3 keys
+# are prefixed (pr-42/_astro/...), so those path patterns never match. All content
+# is served through the default behaviour at zero TTL.
+module "cloudfront_preview" {
+  source                       = "./cloudfront"
+  project_name                 = "${var.project_name}-preview"
+  bucket_name                  = "${var.project_name}-previews"
+  alert_email                  = var.alert_email
+  default_root_object          = null
+  enable_asset_cache_behaviors = false
 }

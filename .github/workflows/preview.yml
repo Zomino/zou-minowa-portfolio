@@ -1,0 +1,58 @@
+name: Preview
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, closed]
+
+permissions:
+  id-token: write
+  contents: read
+  pull-requests: write
+
+env:
+  PREVIEW_BUCKET: zou-minowa-portfolio-previews
+
+jobs:
+  deploy:
+    if: github.event.action != 'closed'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ./.github/actions/build
+        with:
+          base-path: ${{ format('/pr-{0}', github.event.number) }}
+          site-url: ${{ format('https://{0}/pr-{1}', vars.PREVIEW_DISTRIBUTION_DOMAIN, github.event.number) }}
+
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.PREVIEW_ROLE_ARN }}
+          aws-region: eu-west-2
+
+      - name: Deploy to preview prefix
+        run: bash scripts/deploy.sh
+        env:
+          DEPLOY_BUCKET: ${{ env.PREVIEW_BUCKET }}
+          DEPLOY_PREFIX: ${{ format('pr-{0}', github.event.number) }}
+
+      - name: Post preview URL
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh pr comment ${{ github.event.number }} \
+            --body "${{ format('Preview: https://{0}/pr-{1}/', vars.PREVIEW_DISTRIBUTION_DOMAIN, github.event.number) }}"
+
+  teardown:
+    if: github.event.action == 'closed'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.PREVIEW_ROLE_ARN }}
+          aws-region: eu-west-2
+
+      - name: Delete preview prefix
+        env:
+          DEPLOY_PREFIX: ${{ format('pr-{0}', github.event.number) }}
+        run: |
+          aws s3 rm "s3://${PREVIEW_BUCKET}/${DEPLOY_PREFIX}/" --recursive

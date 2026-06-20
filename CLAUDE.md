@@ -43,6 +43,10 @@ See `frontend/package.json` scripts for available commands.
 - Always mock external dependencies (e.g. `getCollection`, `getEntry`) in tests instead of skipping them.
 - Never add code comments or documentation unless explicitly requested.
 
+## Git
+
+- Never commit without explicit permission from the user.
+
 ## Writing style
 
 - Never use hyphens or dashes as punctuation in written content (no em dashes, en dashes, or hyphen separators). Use commas or full stops instead.

@@ -1,0 +1,33 @@
+name: Build
+description: Install dependencies and build the Astro site.
+
+inputs:
+  base-path:
+    required: false
+    default: /
+  site-url:
+    required: false
+
+runs:
+  using: composite
+  steps:
+    - uses: pnpm/action-setup@v4
+      with:
+        version: 10.11.0
+
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 22
+        cache: pnpm
+        cache-dependency-path: frontend/pnpm-lock.yaml
+
+    - run: pnpm install --frozen-lockfile
+      shell: bash
+      working-directory: frontend
+
+    - run: pnpm build
+      shell: bash
+      working-directory: frontend
+      env:
+        BASE_PATH: ${{ inputs.base-path }}
+        SITE_URL: ${{ inputs.site-url }}
