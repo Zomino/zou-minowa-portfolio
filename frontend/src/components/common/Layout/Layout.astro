@@ -1,7 +1,6 @@
 ---
 import "../../../styles/global.css";
 
-import { require } from "../../../utils/require/require";
 import metadata from "../../../metadata.json";
 
 import Link from "../Link/Link.astro";
@@ -26,8 +25,8 @@ const {
   wordmark = "簑輪象",
 } = Astro.props;
 
-const siteOrigin = require(Astro.site?.toString() ?? Astro.url?.origin);
-const pathname = require(Astro.url?.pathname);
+const siteOrigin = Astro.site?.toString() ?? Astro.url?.origin;
+const pathname = Astro.url?.pathname;
 
 const documentTitle = pageTitle
   ? `${pageTitle} | ${metadata.siteTitle}`
