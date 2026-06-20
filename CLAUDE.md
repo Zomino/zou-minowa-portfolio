@@ -41,6 +41,7 @@ See `frontend/package.json` scripts for available commands.
 - Never use `<style>` tags in components; use Tailwind utility classes only.
 - Use `UPPER_SNAKE_CASE` for constants with static literal values (strings, numbers).
 - Always mock external dependencies (e.g. `getCollection`, `getEntry`) in tests instead of skipping them.
+- Never add code comments or documentation unless explicitly requested.
 
 ## Writing style
 

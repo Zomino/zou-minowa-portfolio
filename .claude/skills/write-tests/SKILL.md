@@ -1,5 +1,5 @@
 ---
-name: testing
+name: write-tests
 description: Vitest testing patterns and conventions for Astro components. Use when writing or editing tests.
 ---
 
