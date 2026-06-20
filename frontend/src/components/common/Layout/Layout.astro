@@ -2,6 +2,7 @@
 import "../../../styles/global.css";
 
 import metadata from "../../../metadata.json";
+import { buildPersonJsonLd } from "../../../utils/buildPersonJsonLd/buildPersonJsonLd";
 
 import Link from "../Link/Link.astro";
 import Copyright from "./components/Copyright/Copyright.astro";
@@ -32,6 +33,7 @@ const documentTitle = pageTitle
   ? `${pageTitle} | ${metadata.siteTitle}`
   : metadata.siteTitle;
 const canonicalUrl = new URL(pathname, siteOrigin).toString();
+const personJsonLd = buildPersonJsonLd(siteOrigin, metadata);
 ---
 
 <html lang="en">
@@ -48,6 +50,12 @@ const canonicalUrl = new URL(pathname, siteOrigin).toString();
     <link rel="canonical" href={canonicalUrl} />
     <link rel="sitemap" href="/sitemap-index.xml" />
     <link rel="icon" href="/favicon.ico" />
+    <script
+      type="application/ld+json"
+      is:inline
+      set:html={JSON.stringify(personJsonLd)}
+    />
+    <slot name="head" />
   </head>
   <body class="bg-theme flex min-h-screen flex-col font-serif text-slate-900">
     <header class="sticky top-0 z-50">

@@ -11,6 +11,8 @@ import Group from "../../components/common/Group/Group.astro";
 import Text from "../../components/common/Text/Text.astro";
 import Layout from "../../components/common/Layout/Layout.astro";
 import { formatDate } from "../../utils/formatDate/formatDate";
+import { buildSoftwareSourceCodeJsonLd } from "../../utils/buildSoftwareSourceCodeJsonLd/buildSoftwareSourceCodeJsonLd";
+import metadata from "../../metadata.json";
 
 export async function getStaticPaths() {
   const projects = await getCollection("projects");
@@ -25,6 +27,12 @@ const { project } = Astro.props;
 const { Content } = await render(project);
 
 const formattedDate = formatDate(project.data.date);
+const siteUrl = Astro.site?.toString() ?? Astro.url.origin;
+const softwareJsonLd = buildSoftwareSourceCodeJsonLd(
+  siteUrl,
+  project,
+  metadata.siteTitle,
+);
 ---
 
 <Layout
@@ -32,6 +40,12 @@ const formattedDate = formatDate(project.data.date);
   description={project.data.description}
   wordmark={project.data.titleJa}
 >
+  <script
+    type="application/ld+json"
+    slot="head"
+    is:inline
+    set:html={JSON.stringify(softwareJsonLd)}
+  />
   <Group spacing="xl">
     <section>
       {

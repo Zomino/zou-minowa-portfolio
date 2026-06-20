@@ -1,6 +1,7 @@
 ---
 import clsx from "clsx";
 import IconLink from "../IconLink/IconLink.astro";
+import metadata from "../../../metadata.json";
 
 interface Props {
   class?: string;
@@ -11,14 +12,10 @@ const classes = clsx("flex items-center justify-center gap-4", className);
 ---
 
 <div class={classes}>
-  <IconLink href="https://github.com/Zomino" icon="github" ariaLabel="GitHub" />
+  <IconLink href={metadata.github} icon="github" ariaLabel="GitHub" />
+  <IconLink href={metadata.linkedin} icon="linkedin" ariaLabel="LinkedIn" />
   <IconLink
-    href="https://www.linkedin.com/in/zouminowa/"
-    icon="linkedin"
-    ariaLabel="LinkedIn"
-  />
-  <IconLink
-    href="mailto:zouminowa@gmail.com"
+    href={`mailto:${metadata.email}`}
     icon="mail"
     ariaLabel="Email"
     openNewTab={false}

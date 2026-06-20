@@ -1,3 +1,0 @@
-# Controls what bots can crawl this site; this allows everything.
-User-agent: *
-Allow: /
