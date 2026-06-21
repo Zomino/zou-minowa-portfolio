@@ -21,9 +21,28 @@ jobs:
     if: github.event.action != 'closed'
     uses: ./.github/workflows/checks.yml
 
+  changes:
+    if: github.event.action != 'closed'
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
+    outputs:
+      frontend: ${{ steps.filter.outputs.frontend }}
+    steps:
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            frontend:
+              - 'frontend/**'
+              - '.github/actions/build/**'
+              - '.github/workflows/preview.yml'
+              - '.github/workflows/checks.yml'
+              - 'scripts/deploy.sh'
+
   deploy:
-    needs: quality
-    if: ${{ github.event.action != 'closed' && needs.quality.result == 'success' }}
+    needs: [quality, changes]
+    if: ${{ github.event.action != 'closed' && needs.quality.result == 'success' && needs.changes.outputs.frontend == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
