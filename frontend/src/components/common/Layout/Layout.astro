@@ -55,6 +55,11 @@ const personJsonLd = buildPersonJsonLd(siteOrigin, metadata);
       is:inline
       set:html={JSON.stringify(personJsonLd)}
     />
+    <script>
+      import { initRum } from "../../../utils/initRum/initRum";
+
+      void initRum();
+    </script>
     <slot name="head" />
   </head>
   <body class="bg-theme flex min-h-screen flex-col font-serif text-slate-900">
