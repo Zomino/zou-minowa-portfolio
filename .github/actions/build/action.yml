@@ -7,6 +7,10 @@ inputs:
     default: /
   site-url:
     required: false
+  rum-app-monitor-id:
+    required: false
+  rum-identity-pool-id:
+    required: false
 
 runs:
   using: composite
@@ -31,3 +35,5 @@ runs:
       env:
         BASE_PATH: ${{ inputs.base-path }}
         SITE_URL: ${{ inputs.site-url }}
+        PUBLIC_RUM_APP_MONITOR_ID: ${{ inputs.rum-app-monitor-id }}
+        PUBLIC_RUM_IDENTITY_POOL_ID: ${{ inputs.rum-identity-pool-id }}
