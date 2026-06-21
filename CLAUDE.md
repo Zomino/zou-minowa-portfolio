@@ -46,6 +46,7 @@ See `frontend/package.json` scripts for available commands.
 ## Git
 
 - Never commit without explicit permission from the user.
+- Never merge a pull request yourself, under any circumstances. The user always merges in the UI. Opening a PR and reporting it is fine; running a merge (gh pr merge, git merge into main, etc.) is not.
 
 ## Writing style
 

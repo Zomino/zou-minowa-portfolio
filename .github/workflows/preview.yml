@@ -12,24 +12,47 @@ permissions:
 env:
   PREVIEW_BUCKET: zou-minowa-portfolio-previews
 
+concurrency:
+  group: preview-${{ github.event.number }}
+  cancel-in-progress: true
+
 jobs:
   quality:
     if: github.event.action != 'closed'
     uses: ./.github/workflows/checks.yml
 
+  changes:
+    if: github.event.action != 'closed'
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
+    outputs:
+      frontend: ${{ steps.filter.outputs.frontend }}
+    steps:
+      - uses: dorny/paths-filter@v4
+        id: filter
+        with:
+          filters: |
+            frontend:
+              - 'frontend/**'
+              - '.github/actions/build/**'
+              - '.github/workflows/preview.yml'
+              - '.github/workflows/checks.yml'
+              - 'scripts/deploy.sh'
+
   deploy:
-    needs: quality
-    if: ${{ github.event.action != 'closed' && needs.quality.result == 'success' }}
+    needs: [quality, changes]
+    if: ${{ github.event.action != 'closed' && github.actor != 'dependabot[bot]' && needs.quality.result == 'success' && needs.changes.outputs.frontend == 'true' }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - uses: ./.github/actions/build
         with:
           base-path: ${{ format('/pr-{0}', github.event.number) }}
           site-url: ${{ format('https://{0}/pr-{1}', vars.PREVIEW_DISTRIBUTION_DOMAIN, github.event.number) }}
 
-      - uses: aws-actions/configure-aws-credentials@v4
+      - uses: aws-actions/configure-aws-credentials@v6
         with:
           role-to-assume: ${{ secrets.PREVIEW_ROLE_ARN }}
           aws-region: eu-west-2
@@ -48,10 +71,10 @@ jobs:
           gh pr comment ${{ github.event.number }} --body "Preview: ${PREVIEW_URL}"
 
   teardown:
-    if: github.event.action == 'closed'
+    if: ${{ github.event.action == 'closed' && github.actor != 'dependabot[bot]' }}
     runs-on: ubuntu-latest
     steps:
-      - uses: aws-actions/configure-aws-credentials@v4
+      - uses: aws-actions/configure-aws-credentials@v6
         with:
           role-to-assume: ${{ secrets.PREVIEW_ROLE_ARN }}
           aws-region: eu-west-2
