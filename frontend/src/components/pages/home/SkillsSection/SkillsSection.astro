@@ -36,7 +36,7 @@ const MAX_EXTENDED_SKILLS = 4;
 
 const projects = await getCollection("projects");
 const extendedSkills = getTopTags(
-  projects.map((project) => project.data.tech),
+  projects.map((project) => project.data.tags),
   MAX_EXTENDED_SKILLS,
 );
 ---

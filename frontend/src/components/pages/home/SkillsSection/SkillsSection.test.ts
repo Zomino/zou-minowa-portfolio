@@ -3,11 +3,11 @@ import { describe, expect, it, vi } from "vitest";
 
 vi.mock("astro:content", () => ({
   getCollection: vi.fn().mockResolvedValue([
-    { data: { tech: ["Astro", "Tailwind", "Go"] } },
-    { data: { tech: ["Astro", "Tailwind", "Rust"] } },
+    { data: { tags: ["Astro", "Tailwind", "Go"] } },
+    { data: { tags: ["Astro", "Tailwind", "Rust"] } },
     {
       data: {
-        tech: [
+        tags: [
           "Astro",
           "ESLint",
           "Vercel",

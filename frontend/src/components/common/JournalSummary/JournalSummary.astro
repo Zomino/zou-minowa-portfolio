@@ -1,0 +1,65 @@
+---
+import Badge from "../Badge/Badge.astro";
+import BadgeGroup from "../BadgeGroup/BadgeGroup.astro";
+import EyebrowText from "../EyebrowText/EyebrowText.astro";
+import Heading from "../Heading/Heading.astro";
+import type { Props as HeadingProps } from "../Heading/Heading.astro";
+import Link from "../Link/Link.astro";
+import Text from "../Text/Text.astro";
+import { formatDate } from "../../../utils/formatDate/formatDate";
+
+interface Props {
+  title: string;
+  description: string;
+  date: Date;
+  tags: string[];
+  slug: string;
+  headingLevel?: HeadingProps["level"];
+  headingVariant?: HeadingProps["variant"];
+  class?: string;
+}
+
+const {
+  title,
+  description,
+  date,
+  tags,
+  slug,
+  headingLevel = 3,
+  headingVariant = headingLevel,
+  class: className = "",
+} = Astro.props;
+
+const formattedDate = formatDate(date, {
+  format: { year: "numeric", month: "short", day: "numeric" },
+});
+
+const classes =
+  `group relative flex h-full cursor-pointer flex-col gap-3 ${className}`.trim();
+---
+
+<article class={classes}>
+  <Link href={`/journal/${slug}`} class="absolute inset-0 z-10">
+    <span class="sr-only">Read {title}</span>
+  </Link>
+  <EyebrowText variant="small">{formattedDate}</EyebrowText>
+  <a href={`/journal/${slug}`} class="relative z-20">
+    <Heading
+      level={headingLevel}
+      variant={headingVariant}
+      class="transition hover:text-slate-500"
+    >
+      {title}
+    </Heading>
+  </a>
+  <Text variant="body">{description}</Text>
+  {
+    tags.length > 0 && (
+      <BadgeGroup>
+        {tags.map((tag) => (
+          <Badge>{tag}</Badge>
+        ))}
+      </BadgeGroup>
+    )
+  }
+</article>

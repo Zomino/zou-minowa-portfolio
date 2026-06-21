@@ -4,7 +4,7 @@ description: A portfolio website for my father, a painter.
 link: https://www.daisukeminowa.com/
 github: https://github.com/Zomino/daisuke-minowa-website
 image: ../../assets/projects/daisuke-minowa-website.png
-tech:
+tags:
   - Next.js
   - Strapi
   - TypeScript

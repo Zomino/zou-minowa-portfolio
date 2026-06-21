@@ -1,0 +1,56 @@
+---
+import { getCollection, render } from "astro:content";
+
+import Badge from "../../components/common/Badge/Badge.astro";
+import BadgeGroup from "../../components/common/BadgeGroup/BadgeGroup.astro";
+import Group from "../../components/common/Group/Group.astro";
+import Heading from "../../components/common/Heading/Heading.astro";
+import Layout from "../../components/common/Layout/Layout.astro";
+import Text from "../../components/common/Text/Text.astro";
+import { formatDate } from "../../utils/formatDate/formatDate";
+
+export async function getStaticPaths() {
+  const entries = await getCollection("journal");
+
+  return entries.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+
+const formattedDate = formatDate(entry.data.date, {
+  format: { year: "numeric", month: "short", day: "numeric" },
+});
+---
+
+<Layout
+  pageTitle={entry.data.title}
+  description={entry.data.description}
+  wordmark={entry.data.titleJa}
+>
+  <Group spacing="xl">
+    <section>
+      <Heading level={1} spacing>
+        {entry.data.title}
+      </Heading>
+      <div class="flex flex-wrap items-center justify-between gap-4">
+        <Text variant="small">{formattedDate}</Text>
+        {
+          entry.data.tags.length > 0 && (
+            <BadgeGroup>
+              {entry.data.tags.map((tag) => (
+                <Badge>{tag}</Badge>
+              ))}
+            </BadgeGroup>
+          )
+        }
+      </div>
+    </section>
+    <section class="rich-text">
+      <Content />
+    </section>
+  </Group>
+</Layout>

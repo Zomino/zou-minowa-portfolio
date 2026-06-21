@@ -33,6 +33,16 @@ describe("NavBar", () => {
     expect(html).toContain("Projects");
   });
 
+  it("includes Journal in the default nav items", async () => {
+    const container = await AstroContainer.create();
+    const html = await container.renderToString(NavBar, {
+      slots: { default: '<a href="/">My Site</a>' },
+    });
+
+    expect(html).toContain('href="/journal"');
+    expect(html).toContain("Journal");
+  });
+
   it("merges extra classes onto the navigation bar", async () => {
     const container = await AstroContainer.create();
     const html = await container.renderToString(NavBar, {

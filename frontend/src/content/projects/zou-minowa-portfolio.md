@@ -4,7 +4,7 @@ description: The site you are reading right now.
 link: https://zouminowa.com
 github: https://github.com/Zomino/zou-minowa-portfolio
 image: ../../assets/projects/zou-minowa-portfolio.png
-tech:
+tags:
   - AI-assisted development
   - Claude Code
   - Astro
