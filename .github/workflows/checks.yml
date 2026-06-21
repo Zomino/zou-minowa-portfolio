@@ -25,6 +25,11 @@ jobs:
       - run: pnpm install --frozen-lockfile
         working-directory: frontend
 
+      - name: Audit production dependencies
+        working-directory: frontend
+        continue-on-error: true
+        run: pnpm audit --prod --audit-level high
+
       - run: pnpm lint
         working-directory: frontend
 
