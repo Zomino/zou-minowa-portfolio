@@ -1,0 +1,20 @@
+---
+import Layout from "../Layout/Layout.astro";
+import Heading from "../Heading/Heading.astro";
+import Text from "../Text/Text.astro";
+import Link from "../Link/Link.astro";
+
+interface Props {
+  pageTitle: string;
+  title: string;
+  message: string;
+}
+
+const { pageTitle, title, message } = Astro.props;
+---
+
+<Layout pageTitle={pageTitle}>
+  <Heading level={1} spacing>{title}</Heading>
+  <Text spacing>{message}</Text>
+  <Link href="/">Go back home</Link>
+</Layout>
