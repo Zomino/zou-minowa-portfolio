@@ -5,8 +5,7 @@ import Section from "../../components/common/Section/Section.astro";
 import Layout from "../../components/common/Layout/Layout.astro";
 
 const TITLE = "Projects";
-const DESCRIPTION =
-  "Selected software projects spanning product builds, platform tooling, and client-facing delivery.";
+const DESCRIPTION = "Software projects I have built.";
 const WORDMARK = "プロジェクト";
 
 const projects = (await getCollection("projects")).sort(
@@ -25,7 +24,7 @@ const projects = (await getCollection("projects")).sort(
             link={project.data.link}
             github={project.data.github}
             image={project.data.image}
-            tech={project.data.tech}
+            tags={project.data.tags}
             type={project.data.type}
             slug={project.id}
             headingVariant={4}

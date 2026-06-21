@@ -1,0 +1,35 @@
+---
+import { getCollection } from "astro:content";
+
+import JournalSummary from "../../components/common/JournalSummary/JournalSummary.astro";
+import Layout from "../../components/common/Layout/Layout.astro";
+import Section from "../../components/common/Section/Section.astro";
+
+const TITLE = "Journal";
+const DESCRIPTION = "Things I have written.";
+const WORDMARK = "雑記";
+
+const entries = (await getCollection("journal")).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+);
+---
+
+<Layout pageTitle={TITLE} description={DESCRIPTION} wordmark={WORDMARK}>
+  <Section heading={TITLE} headingLevel={1}>
+    <div class="mt-12 flex flex-col divide-y divide-slate-200">
+      {
+        entries.map((entry) => (
+          <JournalSummary
+            title={entry.data.title}
+            description={entry.data.description}
+            date={entry.data.date}
+            tags={entry.data.tags}
+            slug={entry.id}
+            headingVariant={4}
+            class="py-8 first:pt-0 last:pb-0"
+          />
+        ))
+      }
+    </div>
+  </Section>
+</Layout>

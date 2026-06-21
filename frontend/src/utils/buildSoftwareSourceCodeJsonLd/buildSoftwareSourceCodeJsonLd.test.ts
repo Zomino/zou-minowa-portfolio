@@ -7,7 +7,7 @@ const project = {
     description: "A portfolio website for my father, a painter.",
     link: "https://www.daisukeminowa.com/",
     github: "https://github.com/Zomino/daisuke-minowa-website",
-    tech: ["Next.js", "TypeScript"],
+    tags: ["Next.js", "TypeScript"],
     date: new Date("2025-05-31"),
   },
 };

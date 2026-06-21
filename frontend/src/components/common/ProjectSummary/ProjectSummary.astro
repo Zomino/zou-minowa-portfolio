@@ -18,7 +18,7 @@ interface Props {
   link: string;
   github: string;
   image: ImageMetadata;
-  tech: string[];
+  tags: string[];
   type?: "work" | "personal";
   slug: string;
   headingLevel?: HeadingProps["level"];
@@ -32,7 +32,7 @@ const {
   link,
   github,
   image,
-  tech,
+  tags,
   // TODO: Re-enable the work/personal label once we display work projects again.
   // type,
   slug,
@@ -75,6 +75,6 @@ const classes =
   />
   <Text variant="body">{description}</Text>
   <BadgeGroup>
-    {tech.map((item) => <Badge>{item}</Badge>)}
+    {tags.map((item) => <Badge>{item}</Badge>)}
   </BadgeGroup>
 </article>

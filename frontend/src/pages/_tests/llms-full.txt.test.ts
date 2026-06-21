@@ -6,7 +6,7 @@ vi.mock("astro:content", () => ({
       data: {
         title: "Newer Project",
         description: "A newer one.",
-        tech: ["Astro", "TypeScript"],
+        tags: ["Astro", "TypeScript"],
         link: "https://newer.example.com",
         github: "https://github.com/Zomino/newer",
         date: new Date("2025-01-01"),

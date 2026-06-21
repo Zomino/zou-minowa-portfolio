@@ -4,7 +4,7 @@ description: A digital business card for Victor Five, a fitness coach.
 link: https://www.victorfivecoaching.com/
 github: https://github.com/Zomino/victor-five-website
 image: ../../assets/projects/victor-five-website.png
-tech:
+tags:
   - Next.js
   - TypeScript
   - Mantine

@@ -11,7 +11,7 @@ const projects = [
     data: {
       title: "Older Project",
       description: "An older one.",
-      tech: ["Gatsby"],
+      tags: ["Gatsby"],
       link: "https://older.example.com",
       github: "https://github.com/Zomino/older",
       date: new Date("2024-01-01"),
@@ -22,7 +22,7 @@ const projects = [
     data: {
       title: "Newer Project",
       description: "A newer one.",
-      tech: ["Astro", "TypeScript"],
+      tags: ["Astro", "TypeScript"],
       link: "https://newer.example.com",
       github: "https://github.com/Zomino/newer",
       date: new Date("2025-01-01"),

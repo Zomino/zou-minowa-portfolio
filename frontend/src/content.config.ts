@@ -1,21 +1,29 @@
 import { defineCollection, z } from "astro:content";
 import { glob } from "astro/loaders";
 
+const baseSchema = z.object({
+  title: z.string(),
+  description: z.string(),
+  date: z.date(),
+  tags: z.array(z.string()).min(1),
+  titleJa: z.string().optional(),
+});
+
 const projects = defineCollection({
   loader: glob({ base: "./src/content/projects", pattern: "**/*.md" }),
   schema: ({ image }) =>
-    z.object({
-      title: z.string(),
-      description: z.string(),
+    baseSchema.extend({
       link: z.string().url(),
       github: z.string().url(),
       image: image(),
-      tech: z.array(z.string()).min(1),
       type: z.enum(["work", "personal"]),
-      date: z.date(),
       featured: z.boolean().default(false),
-      titleJa: z.string().optional(),
     }),
 });
 
-export const collections = { projects };
+const journal = defineCollection({
+  loader: glob({ base: "./src/content/journal", pattern: "**/*.md" }),
+  schema: baseSchema,
+});
+
+export const collections = { projects, journal };
