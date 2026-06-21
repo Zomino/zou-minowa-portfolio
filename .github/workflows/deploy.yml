@@ -25,6 +25,8 @@ jobs:
       - uses: ./.github/actions/build
         with:
           site-url: ${{ vars.SITE_URL || format('https://{0}', vars.PRODUCTION_DISTRIBUTION_DOMAIN) }}
+          rum-app-monitor-id: ${{ vars.RUM_APP_MONITOR_ID }}
+          rum-identity-pool-id: ${{ vars.RUM_IDENTITY_POOL_ID }}
 
       - uses: actions/upload-artifact@v7
         with:
