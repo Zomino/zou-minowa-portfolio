@@ -74,6 +74,49 @@ resource "aws_cloudfront_distribution" "site" {
     }
   }
 
+  # S3 with OAC returns 403 (not 404) for missing objects — map to the custom 404 page
+  custom_error_response {
+    error_code            = 403
+    response_code         = 404
+    response_page_path    = "/404.html"
+    error_caching_min_ttl = 10
+  }
+
+  custom_error_response {
+    error_code            = 404
+    response_code         = 404
+    response_page_path    = "/404.html"
+    error_caching_min_ttl = 10
+  }
+
+  custom_error_response {
+    error_code            = 500
+    response_code         = 500
+    response_page_path    = "/500.html"
+    error_caching_min_ttl = 0
+  }
+
+  custom_error_response {
+    error_code            = 502
+    response_code         = 502
+    response_page_path    = "/500.html"
+    error_caching_min_ttl = 0
+  }
+
+  custom_error_response {
+    error_code            = 503
+    response_code         = 503
+    response_page_path    = "/500.html"
+    error_caching_min_ttl = 0
+  }
+
+  custom_error_response {
+    error_code            = 504
+    response_code         = 504
+    response_page_path    = "/500.html"
+    error_caching_min_ttl = 0
+  }
+
   restrictions {
     geo_restriction {
       restriction_type = "none"
