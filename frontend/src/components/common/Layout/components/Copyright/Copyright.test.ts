@@ -29,6 +29,6 @@ describe("Copyright", () => {
       props: { siteTitle: "Zou Minowa" },
     });
 
-    expect(html).toContain("text-slate-400");
+    expect(html).toContain("text-slate-600");
   });
 });

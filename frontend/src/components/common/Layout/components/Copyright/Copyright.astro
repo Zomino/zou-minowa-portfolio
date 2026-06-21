@@ -11,6 +11,6 @@ const { siteTitle } = Astro.props;
 const year = formatDate(new Date(), { format: { year: "numeric" } });
 ---
 
-<Text variant="small" class="text-slate-400">
+<Text variant="small" class="text-slate-600">
   {`© ${year} ${siteTitle}`}
 </Text>
