@@ -12,6 +12,10 @@ permissions:
 env:
   PREVIEW_BUCKET: zou-minowa-portfolio-previews
 
+concurrency:
+  group: preview-${{ github.event.number }}
+  cancel-in-progress: true
+
 jobs:
   quality:
     if: github.event.action != 'closed'
@@ -22,14 +26,14 @@ jobs:
     if: ${{ github.event.action != 'closed' && needs.quality.result == 'success' }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - uses: ./.github/actions/build
         with:
           base-path: ${{ format('/pr-{0}', github.event.number) }}
           site-url: ${{ format('https://{0}/pr-{1}', vars.PREVIEW_DISTRIBUTION_DOMAIN, github.event.number) }}
 
-      - uses: aws-actions/configure-aws-credentials@v4
+      - uses: aws-actions/configure-aws-credentials@v6
         with:
           role-to-assume: ${{ secrets.PREVIEW_ROLE_ARN }}
           aws-region: eu-west-2
@@ -51,7 +55,7 @@ jobs:
     if: github.event.action == 'closed'
     runs-on: ubuntu-latest
     steps:
-      - uses: aws-actions/configure-aws-credentials@v4
+      - uses: aws-actions/configure-aws-credentials@v6
         with:
           role-to-assume: ${{ secrets.PREVIEW_ROLE_ARN }}
           aws-region: eu-west-2

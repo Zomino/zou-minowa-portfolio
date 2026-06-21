@@ -8,6 +8,10 @@ permissions:
   id-token: write
   contents: read
 
+concurrency:
+  group: deploy-main
+  cancel-in-progress: false
+
 jobs:
   quality:
     uses: ./.github/workflows/checks.yml
@@ -16,13 +20,13 @@ jobs:
     needs: quality
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - uses: ./.github/actions/build
         with:
           site-url: ${{ vars.SITE_URL || format('https://{0}', vars.PRODUCTION_DISTRIBUTION_DOMAIN) }}
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: dist
           path: frontend/dist
@@ -31,14 +35,14 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           name: dist
           path: frontend/dist
 
-      - uses: aws-actions/configure-aws-credentials@v4
+      - uses: aws-actions/configure-aws-credentials@v6
         with:
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           aws-region: eu-west-2
