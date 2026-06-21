@@ -1,0 +1,19 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+type Props = HTMLAttributes<"div">;
+
+const { class: className, ...rest } = Astro.props;
+---
+
+<div
+  class:list={[
+    "grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 ease-out motion-reduce:transition-none",
+    className,
+  ]}
+  {...rest}
+>
+  <div class="overflow-hidden">
+    <slot />
+  </div>
+</div>

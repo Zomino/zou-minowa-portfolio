@@ -1,0 +1,126 @@
+---
+import { Icon } from "astro-icon/components";
+
+import Layout from "../Layout/Layout.astro";
+import Section from "../Section/Section.astro";
+import Collapsible from "./components/Collapsible/Collapsible.astro";
+import CountBadge from "./components/CountBadge/CountBadge.astro";
+import Pill from "./components/Pill/Pill.astro";
+import PillGroup from "./components/PillGroup/PillGroup.astro";
+
+interface Props {
+  pageTitle: string;
+  description: string;
+  wordmark: string;
+  heading: string;
+  tags: string[];
+}
+
+const { pageTitle, description, wordmark, heading, tags } = Astro.props;
+
+const PILL_INACTIVE =
+  "border-slate-200 bg-white/90 text-slate-600 hover:border-slate-400";
+const PILL_ACTIVE = "border-slate-900 bg-slate-900 text-white";
+---
+
+<Layout pageTitle={pageTitle} description={description} wordmark={wordmark}>
+  <Section heading={heading} headingLevel={1} data-list-page>
+    <Pill
+      data-list-page-toggle
+      class={`mt-12 inline-flex items-center gap-2 ${PILL_INACTIVE}`}
+      aria-expanded="false"
+    >
+      Filter by tag
+      <CountBadge data-list-page-count />
+      <Icon
+        name="chevron"
+        data-list-page-chevron
+        class="h-3 w-3 transition-transform"
+        aria-hidden="true"
+      />
+    </Pill>
+
+    <Collapsible data-list-page-panel>
+      <PillGroup data-list-page-tags class="mt-3">
+        <Pill data-list-page-tag="all" class={PILL_ACTIVE}>All</Pill>
+        {
+          tags.map((tag) => (
+            <Pill data-list-page-tag={tag} class={PILL_INACTIVE}>
+              {tag}
+            </Pill>
+          ))
+        }
+      </PillGroup>
+    </Collapsible>
+
+    <slot />
+  </Section>
+</Layout>
+
+<script>
+  import { createTagFilter } from "./utils/filterItems/filterItems";
+
+  const root = document.querySelector<HTMLElement>("[data-list-page]");
+
+  if (root) {
+    const toggle = root.querySelector<HTMLButtonElement>(
+      "[data-list-page-toggle]",
+    );
+    const count = root.querySelector<HTMLElement>("[data-list-page-count]");
+    const chevron = root.querySelector<SVGElement>("[data-list-page-chevron]");
+    const panel = root.querySelector<HTMLElement>("[data-list-page-panel]");
+    const tagList = root.querySelector<HTMLElement>("[data-list-page-tags]");
+    const tagButtons = root.querySelectorAll<HTMLButtonElement>(
+      "[data-list-page-tag]",
+    );
+
+    const applyFilter = createTagFilter(root);
+    const activeTags = new Set<string>();
+
+    const updatePills = () => {
+      tagButtons.forEach((btn) => {
+        const tag = btn.dataset["listPageTag"] ?? "all";
+        const isActive =
+          tag === "all" ? activeTags.size === 0 : activeTags.has(tag);
+        btn.classList.toggle("bg-slate-900", isActive);
+        btn.classList.toggle("text-white", isActive);
+        btn.classList.toggle("border-slate-900", isActive);
+        btn.classList.toggle("bg-white/90", !isActive);
+        btn.classList.toggle("text-slate-600", !isActive);
+        btn.classList.toggle("border-slate-200", !isActive);
+      });
+    };
+
+    const updateCount = () => {
+      if (!count) return;
+      count.textContent = String(activeTags.size);
+      count.classList.toggle("hidden", activeTags.size === 0);
+    };
+
+    toggle?.addEventListener("click", () => {
+      const isOpen = toggle.getAttribute("aria-expanded") === "true";
+      toggle.setAttribute("aria-expanded", String(!isOpen));
+      chevron?.classList.toggle("rotate-180", !isOpen);
+      panel?.classList.toggle("grid-rows-[0fr]");
+      panel?.classList.toggle("grid-rows-[1fr]");
+      tagList?.classList.toggle("opacity-0");
+      tagList?.classList.toggle("opacity-100");
+    });
+
+    tagButtons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const tag = btn.dataset["listPageTag"] ?? "all";
+        if (tag === "all") {
+          activeTags.clear();
+        } else if (activeTags.has(tag)) {
+          activeTags.delete(tag);
+        } else {
+          activeTags.add(tag);
+        }
+        updatePills();
+        updateCount();
+        applyFilter([...activeTags]);
+      });
+    });
+  }
+</script>

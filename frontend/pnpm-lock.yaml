@@ -54,6 +54,9 @@ importers:
       husky:
         specifier: ^9.1.7
         version: 9.1.7
+      jsdom:
+        specifier: ^29.1.1
+        version: 29.1.1
       lint-staged:
         specifier: ^17.0.8
         version: 17.0.8
@@ -74,7 +77,7 @@ importers:
         version: 6.0.3
       vitest:
         specifier: ^4.0.16
-        version: 4.1.9(@types/node@25.5.0)(jsdom@29.0.0)(vite@6.4.1(@types/node@25.5.0)(jiti@2.7.0)(lightningcss@1.32.0)(yaml@2.9.0))
+        version: 4.1.9(@types/node@25.5.0)(jsdom@29.1.1)(vite@6.4.1(@types/node@25.5.0)(jiti@2.7.0)(lightningcss@1.32.0)(yaml@2.9.0))
 
 packages:
 
@@ -2178,8 +2181,8 @@ packages:
     resolution: {integrity: sha512-qQKT4zQxXl8lLwBtHMWwaTcGfFOZviOJet3Oy/xmGk2gZH677CJM9EvtfdSkgWcATZhj/55JZ0rmy3myCT5lsA==}
     hasBin: true
 
-  jsdom@29.0.0:
-    resolution: {integrity: sha512-9FshNB6OepopZ08unmmGpsF7/qCjxGPbo3NbgfJAnPeHXnsODE9WWffXZtRFRFe0ntzaAOcSKNJFz8wiyvF1jQ==}
+  jsdom@29.1.1:
+    resolution: {integrity: sha512-ECi4Fi2f7BdJtUKTflYRTiaMxIB0O6zfR1fX0GXpUrf6flp8QIYn1UT20YQqdSOfk2dfkCwS8LAFoJDEppNK5Q==}
     engines: {node: ^20.19.0 || ^22.13.0 || >=24.0.0}
     peerDependencies:
       canvas: ^3.0.0
@@ -2316,10 +2319,6 @@ packages:
 
   longest-streak@3.1.0:
     resolution: {integrity: sha512-9Ri+o0JYgehTaVBBDoMqIl8GXtbWg711O3srftcHhZ0dqnETqLaoIK0x17fUw9rFSlK/0NlsKe0Ahhyl5pXE2g==}
-
-  lru-cache@11.2.7:
-    resolution: {integrity: sha512-aY/R+aEsRelme17KGQa/1ZSIpLpNYYrhcrepKTZgE+W3WM16YMCaPwOHLHsmopZHELU0Ojin1lPVxKR0MihncA==}
-    engines: {node: 20 || >=22}
 
   lru-cache@11.5.1:
     resolution: {integrity: sha512-RPimw/7aMdv2oqRrxKwvZXcPfwBrn/JZ2xYcY9Hus/6LaS3VOAKVWKWgNLCFSiOm1ESXinjsDlidVU7JlnCN2A==}
@@ -3134,10 +3133,6 @@ packages:
   undici-types@7.18.2:
     resolution: {integrity: sha512-AsuCzffGHJybSaRrmr5eHr81mwJU3kjw6M+uprWvCXiNeN9SOGwQ3Jn8jb8m3Z6izVgknn1R0FTCEAP2QrLY/w==}
 
-  undici@7.24.3:
-    resolution: {integrity: sha512-eJdUmK/Wrx2d+mnWWmwwLRyA7OQCkLap60sk3dOK4ViZR7DKwwptwuIvFBg2HaiP9ESaEdhtpSymQPvytpmkCA==}
-    engines: {node: '>=20.18.1'}
-
   undici@7.28.0:
     resolution: {integrity: sha512-cRZYrTDwWznlnRiPjggAGxZXanty6M8RV1ff8Wm4LWXBp7/IG8v5DnOm74DtUBp9OONpK75YlPnIjQqX0dBDtA==}
     engines: {node: '>=20.18.1'}
@@ -3611,7 +3606,6 @@ snapshots:
       '@csstools/css-color-parser': 4.1.8(@csstools/css-parser-algorithms@4.0.0(@csstools/css-tokenizer@4.0.0))(@csstools/css-tokenizer@4.0.0)
       '@csstools/css-parser-algorithms': 4.0.0(@csstools/css-tokenizer@4.0.0)
       '@csstools/css-tokenizer': 4.0.0
-    optional: true
 
   '@asamuzakjp/dom-selector@7.1.1':
     dependencies:
@@ -3620,13 +3614,10 @@ snapshots:
       bidi-js: 1.0.3
       css-tree: 3.2.1
       is-potential-custom-element-name: 1.0.1
-    optional: true
 
-  '@asamuzakjp/generational-cache@1.0.1':
-    optional: true
+  '@asamuzakjp/generational-cache@1.0.1': {}
 
-  '@asamuzakjp/nwsapi@2.3.9':
-    optional: true
+  '@asamuzakjp/nwsapi@2.3.9': {}
 
   '@astrojs/check@0.9.9(prettier-plugin-astro@0.14.1)(prettier@3.8.4)(typescript@6.0.3)':
     dependencies:
@@ -3778,20 +3769,17 @@ snapshots:
   '@bramus/specificity@2.4.2':
     dependencies:
       css-tree: 3.2.1
-    optional: true
 
   '@capsizecss/unpack@4.0.0':
     dependencies:
       fontkitten: 1.0.3
 
-  '@csstools/color-helpers@6.0.2':
-    optional: true
+  '@csstools/color-helpers@6.0.2': {}
 
   '@csstools/css-calc@3.2.1(@csstools/css-parser-algorithms@4.0.0(@csstools/css-tokenizer@4.0.0))(@csstools/css-tokenizer@4.0.0)':
     dependencies:
       '@csstools/css-parser-algorithms': 4.0.0(@csstools/css-tokenizer@4.0.0)
       '@csstools/css-tokenizer': 4.0.0
-    optional: true
 
   '@csstools/css-color-parser@4.1.8(@csstools/css-parser-algorithms@4.0.0(@csstools/css-tokenizer@4.0.0))(@csstools/css-tokenizer@4.0.0)':
     dependencies:
@@ -3799,20 +3787,16 @@ snapshots:
       '@csstools/css-calc': 3.2.1(@csstools/css-parser-algorithms@4.0.0(@csstools/css-tokenizer@4.0.0))(@csstools/css-tokenizer@4.0.0)
       '@csstools/css-parser-algorithms': 4.0.0(@csstools/css-tokenizer@4.0.0)
       '@csstools/css-tokenizer': 4.0.0
-    optional: true
 
   '@csstools/css-parser-algorithms@4.0.0(@csstools/css-tokenizer@4.0.0)':
     dependencies:
       '@csstools/css-tokenizer': 4.0.0
-    optional: true
 
   '@csstools/css-syntax-patches-for-csstree@1.1.5(css-tree@3.2.1)':
     optionalDependencies:
       css-tree: 3.2.1
-    optional: true
 
-  '@csstools/css-tokenizer@4.0.0':
-    optional: true
+  '@csstools/css-tokenizer@4.0.0': {}
 
   '@emmetio/abbreviation@2.3.3':
     dependencies:
@@ -4033,8 +4017,7 @@ snapshots:
       '@eslint/core': 1.2.1
       levn: 0.4.1
 
-  '@exodus/bytes@1.15.1':
-    optional: true
+  '@exodus/bytes@1.15.1': {}
 
   '@humanfs/core@0.19.2':
     dependencies:
@@ -5006,7 +4989,6 @@ snapshots:
   bidi-js@1.0.3:
     dependencies:
       require-from-string: 2.0.2
-    optional: true
 
   boolbase@1.0.0: {}
 
@@ -5075,7 +5057,7 @@ snapshots:
       parse5: 7.3.0
       parse5-htmlparser2-tree-adapter: 7.1.0
       parse5-parser-stream: 7.1.2
-      undici: 7.24.3
+      undici: 7.28.0
       whatwg-mimetype: 4.0.0
 
   chokidar@4.0.3:
@@ -5182,14 +5164,12 @@ snapshots:
       whatwg-url: 16.0.1
     transitivePeerDependencies:
       - '@noble/hashes'
-    optional: true
 
   debug@4.4.3:
     dependencies:
       ms: 2.1.3
 
-  decimal.js@10.6.0:
-    optional: true
+  decimal.js@10.6.0: {}
 
   decode-named-character-reference@1.3.0:
     dependencies:
@@ -5272,8 +5252,7 @@ snapshots:
 
   entities@7.0.1: {}
 
-  entities@8.0.0:
-    optional: true
+  entities@8.0.0: {}
 
   environment@1.1.0: {}
 
@@ -5666,7 +5645,6 @@ snapshots:
       '@exodus/bytes': 1.15.1
     transitivePeerDependencies:
       - '@noble/hashes'
-    optional: true
 
   html-escaper@3.0.3: {}
 
@@ -5719,8 +5697,7 @@ snapshots:
 
   is-plain-obj@4.1.0: {}
 
-  is-potential-custom-element-name@1.0.1:
-    optional: true
+  is-potential-custom-element-name@1.0.1: {}
 
   is-wsl@3.1.1:
     dependencies:
@@ -5734,7 +5711,7 @@ snapshots:
     dependencies:
       argparse: 2.0.1
 
-  jsdom@29.0.0:
+  jsdom@29.1.1:
     dependencies:
       '@asamuzakjp/css-color': 5.1.11
       '@asamuzakjp/dom-selector': 7.1.1
@@ -5759,7 +5736,6 @@ snapshots:
       xml-name-validator: 5.0.0
     transitivePeerDependencies:
       - '@noble/hashes'
-    optional: true
 
   json-buffer@3.0.1: {}
 
@@ -5874,10 +5850,7 @@ snapshots:
 
   longest-streak@3.1.0: {}
 
-  lru-cache@11.2.7: {}
-
-  lru-cache@11.5.1:
-    optional: true
+  lru-cache@11.5.1: {}
 
   magic-string@0.30.21:
     dependencies:
@@ -6349,7 +6322,6 @@ snapshots:
   parse5@8.0.1:
     dependencies:
       entities: 8.0.0
-    optional: true
 
   path-browserify@1.0.1: {}
 
@@ -6649,7 +6621,6 @@ snapshots:
   saxes@6.0.0:
     dependencies:
       xmlchars: 2.2.0
-    optional: true
 
   semver@7.7.4: {}
 
@@ -6833,8 +6804,7 @@ snapshots:
       picocolors: 1.1.1
       sax: 1.5.0
 
-  symbol-tree@3.2.4:
-    optional: true
+  symbol-tree@3.2.4: {}
 
   synckit@0.11.12:
     dependencies:
@@ -6877,13 +6847,11 @@ snapshots:
 
   tinyrainbow@3.1.0: {}
 
-  tldts-core@7.4.3:
-    optional: true
+  tldts-core@7.4.3: {}
 
   tldts@7.4.3:
     dependencies:
       tldts-core: 7.4.3
-    optional: true
 
   to-regex-range@5.0.1:
     dependencies:
@@ -6892,12 +6860,10 @@ snapshots:
   tough-cookie@6.0.1:
     dependencies:
       tldts: 7.4.3
-    optional: true
 
   tr46@6.0.0:
     dependencies:
       punycode: 2.3.1
-    optional: true
 
   trim-lines@3.0.1: {}
 
@@ -6937,10 +6903,7 @@ snapshots:
 
   undici-types@7.18.2: {}
 
-  undici@7.24.3: {}
-
-  undici@7.28.0:
-    optional: true
+  undici@7.28.0: {}
 
   unified@11.0.5:
     dependencies:
@@ -7006,7 +6969,7 @@ snapshots:
       chokidar: 5.0.0
       destr: 2.0.5
       h3: 1.15.6
-      lru-cache: 11.2.7
+      lru-cache: 11.5.1
       node-fetch-native: 1.6.7
       ofetch: 1.5.1
       ufo: 1.6.3
@@ -7059,7 +7022,7 @@ snapshots:
     optionalDependencies:
       vite: 6.4.1(@types/node@25.5.0)(jiti@2.7.0)(lightningcss@1.32.0)(yaml@2.9.0)
 
-  vitest@4.1.9(@types/node@25.5.0)(jsdom@29.0.0)(vite@6.4.1(@types/node@25.5.0)(jiti@2.7.0)(lightningcss@1.32.0)(yaml@2.9.0)):
+  vitest@4.1.9(@types/node@25.5.0)(jsdom@29.1.1)(vite@6.4.1(@types/node@25.5.0)(jiti@2.7.0)(lightningcss@1.32.0)(yaml@2.9.0)):
     dependencies:
       '@vitest/expect': 4.1.9
       '@vitest/mocker': 4.1.9(vite@6.4.1(@types/node@25.5.0)(jiti@2.7.0)(lightningcss@1.32.0)(yaml@2.9.0))
@@ -7083,7 +7046,7 @@ snapshots:
       why-is-node-running: 2.3.0
     optionalDependencies:
       '@types/node': 25.5.0
-      jsdom: 29.0.0
+      jsdom: 29.1.1
     transitivePeerDependencies:
       - msw
 
@@ -7187,14 +7150,12 @@ snapshots:
   w3c-xmlserializer@5.0.0:
     dependencies:
       xml-name-validator: 5.0.0
-    optional: true
 
   web-namespaces@2.0.1: {}
 
   web-vitals@4.2.4: {}
 
-  webidl-conversions@8.0.1:
-    optional: true
+  webidl-conversions@8.0.1: {}
 
   whatwg-encoding@3.1.1:
     dependencies:
@@ -7202,8 +7163,7 @@ snapshots:
 
   whatwg-mimetype@4.0.0: {}
 
-  whatwg-mimetype@5.0.0:
-    optional: true
+  whatwg-mimetype@5.0.0: {}
 
   whatwg-url@16.0.1:
     dependencies:
@@ -7212,7 +7172,6 @@ snapshots:
       webidl-conversions: 8.0.1
     transitivePeerDependencies:
       - '@noble/hashes'
-    optional: true
 
   which-pm-runs@1.1.0: {}
 
@@ -7251,11 +7210,9 @@ snapshots:
 
   wrappy@1.0.2: {}
 
-  xml-name-validator@5.0.0:
-    optional: true
+  xml-name-validator@5.0.0: {}
 
-  xmlchars@2.2.0:
-    optional: true
+  xmlchars@2.2.0: {}
 
   xxhash-wasm@1.1.0: {}
 
