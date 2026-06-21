@@ -1,0 +1,12 @@
+---
+interface Props {
+  tags: string[];
+  class?: string;
+}
+
+const { tags, class: className } = Astro.props;
+---
+
+<div data-list-item data-tags={JSON.stringify(tags)} class={className}>
+  <slot />
+</div>

@@ -1,0 +1,17 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+type Props = HTMLAttributes<"button">;
+
+const { class: className, ...rest } = Astro.props;
+---
+
+<button
+  class:list={[
+    "cursor-pointer rounded-full border px-4 py-2 text-xs shadow-sm transition-colors",
+    className,
+  ]}
+  {...rest}
+>
+  <slot />
+</button>

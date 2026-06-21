@@ -1,12 +1,13 @@
 ---
+import type { HTMLAttributes } from "astro/types";
+
 import type { Props as HeadingProps } from "../Heading/Heading.astro";
 import Heading from "../Heading/Heading.astro";
 
-interface Props {
+interface Props extends HTMLAttributes<"section"> {
   heading: string;
   headingLevel?: HeadingProps["level"];
   headingVariant?: HeadingProps["variant"];
-  class?: string;
 }
 
 const {
@@ -14,10 +15,11 @@ const {
   headingLevel = 2,
   headingVariant = headingLevel,
   class: className,
+  ...rest
 } = Astro.props;
 ---
 
-<section class={className}>
+<section class={className} {...rest}>
   <Heading level={headingLevel} variant={headingVariant} spacing>
     {heading}
   </Heading>
