@@ -27,6 +27,17 @@ provider "aws" {
   }
 }
 
+provider "aws" {
+  alias  = "us_east_1"
+  region = "us-east-1"
+
+  default_tags {
+    tags = {
+      Project = var.project_name
+    }
+  }
+}
+
 module "cloudfront" {
   source       = "./cloudfront"
   project_name = var.project_name
@@ -44,4 +55,16 @@ module "cloudfront_preview" {
   alert_email                  = var.alert_email
   default_root_object          = null
   enable_asset_cache_behaviors = false
+}
+
+module "monitoring" {
+  source       = "./monitoring"
+  project_name = var.project_name
+  alert_email  = var.alert_email
+  rum_domain   = module.cloudfront.domain_name
+
+  providers = {
+    aws           = aws
+    aws.us_east_1 = aws.us_east_1
+  }
 }
