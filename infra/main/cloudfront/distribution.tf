@@ -59,23 +59,25 @@ resource "aws_cloudfront_distribution" "site" {
       { pattern = "/fonts/*" }
     ] : []
     content {
-      path_pattern           = ordered_cache_behavior.value.pattern
-      allowed_methods        = ["GET", "HEAD"]
-      cached_methods         = ["GET", "HEAD"]
-      target_origin_id       = "s3-${aws_s3_bucket.site.id}"
-      viewer_protocol_policy = "redirect-to-https"
-      cache_policy_id        = "658327ea-f89d-4fab-a63d-7e88639e58f6"
-      compress               = true
+      path_pattern               = ordered_cache_behavior.value.pattern
+      allowed_methods            = ["GET", "HEAD"]
+      cached_methods             = ["GET", "HEAD"]
+      target_origin_id           = "s3-${aws_s3_bucket.site.id}"
+      viewer_protocol_policy     = "redirect-to-https"
+      cache_policy_id            = "658327ea-f89d-4fab-a63d-7e88639e58f6"
+      response_headers_policy_id = aws_cloudfront_response_headers_policy.security.id
+      compress                   = true
     }
   }
 
   default_cache_behavior {
-    allowed_methods        = ["GET", "HEAD"]
-    cached_methods         = ["GET", "HEAD"]
-    target_origin_id       = "s3-${aws_s3_bucket.site.id}"
-    viewer_protocol_policy = "redirect-to-https"
-    cache_policy_id        = aws_cloudfront_cache_policy.html.id
-    compress               = true
+    allowed_methods            = ["GET", "HEAD"]
+    cached_methods             = ["GET", "HEAD"]
+    target_origin_id           = "s3-${aws_s3_bucket.site.id}"
+    viewer_protocol_policy     = "redirect-to-https"
+    cache_policy_id            = aws_cloudfront_cache_policy.html.id
+    response_headers_policy_id = aws_cloudfront_response_headers_policy.security.id
+    compress                   = true
 
     function_association {
       event_type   = "viewer-request"
