@@ -13,8 +13,13 @@ env:
   PREVIEW_BUCKET: zou-minowa-portfolio-previews
 
 jobs:
-  deploy:
+  quality:
     if: github.event.action != 'closed'
+    uses: ./.github/workflows/checks.yml
+
+  deploy:
+    needs: quality
+    if: ${{ github.event.action != 'closed' && needs.quality.result == 'success' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -38,9 +43,9 @@ jobs:
       - name: Post preview URL
         env:
           GH_TOKEN: ${{ github.token }}
+          PREVIEW_URL: ${{ format('https://{0}/pr-{1}/', vars.PREVIEW_DISTRIBUTION_DOMAIN, github.event.number) }}
         run: |
-          gh pr comment ${{ github.event.number }} \
-            --body "${{ format('Preview: https://{0}/pr-{1}/', vars.PREVIEW_DISTRIBUTION_DOMAIN, github.event.number) }}"
+          gh pr comment ${{ github.event.number }} --body "Preview: ${PREVIEW_URL}"
 
   teardown:
     if: github.event.action == 'closed'
