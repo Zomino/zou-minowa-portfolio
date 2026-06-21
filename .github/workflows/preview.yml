@@ -42,7 +42,7 @@ jobs:
 
   deploy:
     needs: [quality, changes]
-    if: ${{ github.event.action != 'closed' && needs.quality.result == 'success' && needs.changes.outputs.frontend == 'true' }}
+    if: ${{ github.event.action != 'closed' && github.actor != 'dependabot[bot]' && needs.quality.result == 'success' && needs.changes.outputs.frontend == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -71,7 +71,7 @@ jobs:
           gh pr comment ${{ github.event.number }} --body "Preview: ${PREVIEW_URL}"
 
   teardown:
-    if: github.event.action == 'closed'
+    if: ${{ github.event.action == 'closed' && github.actor != 'dependabot[bot]' }}
     runs-on: ubuntu-latest
     steps:
       - uses: aws-actions/configure-aws-credentials@v6
