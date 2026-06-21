@@ -39,10 +39,11 @@ provider "aws" {
 }
 
 module "cloudfront" {
-  source       = "./cloudfront"
-  project_name = var.project_name
-  bucket_name  = var.project_name
-  alert_email  = var.alert_email
+  source         = "./cloudfront"
+  project_name   = var.project_name
+  bucket_name    = var.project_name
+  alert_email    = var.alert_email
+  enable_logging = true
 }
 
 # No ordered cache behaviours for /_astro/* or /fonts/* because preview S3 keys
