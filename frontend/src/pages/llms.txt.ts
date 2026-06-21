@@ -13,7 +13,8 @@ export async function GET({
   }
 
   const projects = await getCollection("projects");
-  const body = buildLlmsTxt(site, projects, metadata);
+  const journal = await getCollection("journal");
+  const body = buildLlmsTxt(site, projects, journal, metadata);
 
   return new Response(body, {
     headers: { "Content-Type": "text/plain; charset=utf-8" },

@@ -16,15 +16,20 @@ interface IndexMetadata {
 export const buildLlmsTxt = (
   site: URL,
   projects: IndexProject[],
+  journal: IndexProject[],
   metadata: IndexMetadata,
 ): string => {
-  const sorted = [...projects].sort(
-    (a, b) => b.data.date.getTime() - a.data.date.getTime(),
-  );
+  const byDateDescending = (a: IndexProject, b: IndexProject) =>
+    b.data.date.getTime() - a.data.date.getTime();
 
-  const projectLines = sorted.map((project) => {
+  const projectLines = [...projects].sort(byDateDescending).map((project) => {
     const url = new URL(`projects/${project.id}`, site).href;
     return `- [${project.data.title}](${url}): ${project.data.description}`;
+  });
+
+  const journalLines = [...journal].sort(byDateDescending).map((entry) => {
+    const url = new URL(`journal/${entry.id}`, site).href;
+    return `- [${entry.data.title}](${url}): ${entry.data.description}`;
   });
 
   return `# ${metadata.siteTitle}
@@ -39,6 +44,11 @@ export const buildLlmsTxt = (
 
 - [All projects](${new URL("projects", site).href}): Full project listing.
 ${projectLines.join("\n")}
+
+## Journal
+
+- [All entries](${new URL("journal", site).href}): Full journal listing.
+${journalLines.join("\n")}
 
 ## Optional
 

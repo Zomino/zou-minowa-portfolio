@@ -5,7 +5,8 @@ import metadata from "../metadata.json";
 
 export async function GET(): Promise<Response> {
   const projects = await getCollection("projects");
-  const body = buildLlmsFullTxt(projects, metadata);
+  const journal = await getCollection("journal");
+  const body = buildLlmsFullTxt(projects, journal, metadata);
 
   return new Response(body, {
     headers: { "Content-Type": "text/plain; charset=utf-8" },

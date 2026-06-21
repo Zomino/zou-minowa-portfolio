@@ -26,11 +26,31 @@ const projects = [
   },
 ];
 
+const journal = [
+  {
+    id: "older-entry",
+    data: {
+      title: "Older Entry",
+      description: "An older thought.",
+      date: new Date("2024-06-01"),
+    },
+  },
+  {
+    id: "newer-entry",
+    data: {
+      title: "Newer Entry",
+      description: "A newer thought.",
+      date: new Date("2025-06-01"),
+    },
+  },
+];
+
 describe("buildLlmsTxt", () => {
   it("renders the H1, blockquote with skills, and an Optional section", () => {
     const result = buildLlmsTxt(
       new URL("https://zouminowa.com"),
       projects,
+      journal,
       metadata,
     );
 
@@ -52,6 +72,7 @@ describe("buildLlmsTxt", () => {
     const result = buildLlmsTxt(
       new URL("https://zouminowa.com"),
       projects,
+      journal,
       metadata,
     );
 
@@ -66,5 +87,26 @@ describe("buildLlmsTxt", () => {
     expect(result).toContain(
       "- [All projects](https://zouminowa.com/projects): Full project listing.",
     );
+  });
+
+  it("lists journal entries newest first with absolute URLs and descriptions", () => {
+    const result = buildLlmsTxt(
+      new URL("https://zouminowa.com"),
+      projects,
+      journal,
+      metadata,
+    );
+
+    expect(result).toContain("## Journal");
+    expect(result).toContain(
+      "- [All entries](https://zouminowa.com/journal): Full journal listing.",
+    );
+    expect(result).toContain(
+      "- [Newer Entry](https://zouminowa.com/journal/newer-entry): A newer thought.",
+    );
+
+    const newerIndex = result.indexOf("Newer Entry");
+    const olderIndex = result.indexOf("Older Entry");
+    expect(newerIndex).toBeLessThan(olderIndex);
   });
 });

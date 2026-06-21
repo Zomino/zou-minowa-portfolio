@@ -8,6 +8,8 @@ import Heading from "../../components/common/Heading/Heading.astro";
 import Layout from "../../components/common/Layout/Layout.astro";
 import Text from "../../components/common/Text/Text.astro";
 import { formatDate } from "../../utils/formatDate/formatDate";
+import { buildBlogPostingJsonLd } from "../../utils/buildBlogPostingJsonLd/buildBlogPostingJsonLd";
+import metadata from "../../metadata.json";
 
 export async function getStaticPaths() {
   const entries = await getCollection("journal");
@@ -24,6 +26,13 @@ const { Content } = await render(entry);
 const formattedDate = formatDate(entry.data.date, {
   format: { year: "numeric", month: "short", day: "numeric" },
 });
+
+const siteUrl = Astro.site?.toString() ?? Astro.url.origin;
+const blogPostingJsonLd = buildBlogPostingJsonLd(
+  siteUrl,
+  entry,
+  metadata.siteTitle,
+);
 ---
 
 <Layout
@@ -31,6 +40,12 @@ const formattedDate = formatDate(entry.data.date, {
   description={entry.data.description}
   wordmark={entry.data.titleJa}
 >
+  <script
+    type="application/ld+json"
+    slot="head"
+    is:inline
+    set:html={JSON.stringify(blogPostingJsonLd)}
+  />
   <Group spacing="xl">
     <section>
       <Heading level={1} spacing>
