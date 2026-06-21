@@ -44,6 +44,15 @@ resource "aws_cloudfront_distribution" "site" {
     origin_access_control_id = aws_cloudfront_origin_access_control.site.id
   }
 
+  dynamic "logging_config" {
+    for_each = var.enable_logging ? [1] : []
+    content {
+      bucket          = aws_s3_bucket.logs[0].bucket_domain_name
+      prefix          = "cloudfront/"
+      include_cookies = false
+    }
+  }
+
   dynamic "ordered_cache_behavior" {
     for_each = var.enable_asset_cache_behaviors ? [
       { pattern = "/_astro/*" },
