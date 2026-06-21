@@ -1,6 +1,8 @@
 ---
 import "../../../styles/global.css";
 
+import { Font } from "astro:assets";
+
 import metadata from "../../../metadata.json";
 import { buildPersonJsonLd } from "../../../utils/buildPersonJsonLd/buildPersonJsonLd";
 
@@ -47,6 +49,7 @@ const personJsonLd = buildPersonJsonLd(siteOrigin, metadata);
       image={image}
       twitterImage={twitterImage}
     />
+    <Font cssVariable="--font-noto-jp" />
     <link rel="canonical" href={canonicalUrl} />
     <link rel="sitemap" href="/sitemap-index.xml" />
     <link rel="icon" href="/favicon.ico" />
