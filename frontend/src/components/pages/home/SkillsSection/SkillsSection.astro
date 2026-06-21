@@ -4,6 +4,7 @@ import { getCollection } from "astro:content";
 import Badge from "../../../common/Badge/Badge.astro";
 import BadgeGroup from "../../../common/BadgeGroup/BadgeGroup.astro";
 import Heading from "../../../common/Heading/Heading.astro";
+import metadata from "../../../../metadata.json";
 
 const getTopTags = (tagLists: string[][], limit: number): string[] => {
   const tagCounts = new Map<string, number>();
@@ -20,18 +21,6 @@ const getTopTags = (tagLists: string[][], limit: number): string[] => {
     .map(([tag]) => tag);
 };
 
-const CORE_SKILLS = [
-  "TypeScript",
-  "React",
-  "Node",
-  "MongoDB",
-  "Agentic coding",
-  "AWS",
-  "Terraform",
-  "Accessibility",
-  "Docker",
-];
-
 const MAX_EXTENDED_SKILLS = 4;
 
 const projects = await getCollection("projects");
@@ -44,7 +33,7 @@ const extendedSkills = getTopTags(
 <section>
   <Heading level={2} class="sr-only">Core skills</Heading>
   <BadgeGroup>
-    {CORE_SKILLS.map((skill) => <Badge>{skill}</Badge>)}
+    {metadata.skills.map((skill) => <Badge>{skill}</Badge>)}
     {
       extendedSkills.map((skill) => (
         <Badge class="hidden lg:block">{skill}</Badge>

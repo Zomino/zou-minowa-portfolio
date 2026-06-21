@@ -1,0 +1,13 @@
+import { getCollection } from "astro:content";
+
+import { buildLlmsFullTxt } from "../utils/buildLlmsFullTxt/buildLlmsFullTxt";
+import metadata from "../metadata.json";
+
+export async function GET(): Promise<Response> {
+  const projects = await getCollection("projects");
+  const body = buildLlmsFullTxt(projects, metadata);
+
+  return new Response(body, {
+    headers: { "Content-Type": "text/plain; charset=utf-8" },
+  });
+}

@@ -40,7 +40,7 @@ describe("SkillsSection", () => {
 
     expect(html).toContain("TypeScript");
     expect(html).toContain("React");
-    expect(html).toContain("Node");
+    expect(html).toContain("Node.js");
     expect(html).toContain("MongoDB");
     expect(html).toContain("AWS");
     expect(html).toContain("Terraform");
