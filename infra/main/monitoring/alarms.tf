@@ -49,3 +49,31 @@ resource "aws_cloudwatch_metric_alarm" "cf_4xx" {
 
   alarm_actions = [aws_sns_topic.alerts.arn]
 }
+
+resource "aws_sns_topic" "alerts_eu" {
+  name = "${var.project_name}-alerts"
+}
+
+resource "aws_sns_topic_subscription" "email_eu" {
+  topic_arn = aws_sns_topic.alerts_eu.arn
+  protocol  = "email"
+  endpoint  = var.alert_email
+}
+
+resource "aws_cloudwatch_metric_alarm" "rum_js_errors" {
+  alarm_name          = "${var.project_name}-rum-js-errors"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = 1
+  metric_name         = "JsErrorCount"
+  namespace           = "AWS/RUM"
+  period              = 300
+  statistic           = "Sum"
+  threshold           = 5
+  treat_missing_data  = "notBreaching"
+
+  dimensions = {
+    application_name = var.project_name
+  }
+
+  alarm_actions = [aws_sns_topic.alerts_eu.arn]
+}
