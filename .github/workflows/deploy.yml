@@ -3,6 +3,11 @@ name: Deploy
 on:
   push:
     branches: [main]
+    paths:
+      - "frontend/**"
+      - ".github/actions/build/**"
+      - ".github/workflows/deploy.yml"
+      - "scripts/deploy.sh"
 
 permissions:
   id-token: write
