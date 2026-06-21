@@ -2,7 +2,7 @@ interface FullProject {
   data: {
     title: string;
     description: string;
-    tech: string[];
+    tags: string[];
     link: string;
     github: string;
     date: Date;
@@ -28,7 +28,7 @@ export const buildLlmsFullTxt = (
 
 ${project.data.description}
 
-Tech: ${project.data.tech.join(", ")}
+Tech: ${project.data.tags.join(", ")}
 Live: ${project.data.link}
 Code: ${project.data.github}
 

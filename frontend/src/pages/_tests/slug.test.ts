@@ -34,7 +34,7 @@ const project = {
     link: "https://www.daisukeminowa.com/",
     github: "https://github.com/Zomino/daisuke-minowa-website",
     image: projectImage,
-    tech: ["Next.js", "TypeScript"],
+    tags: ["Next.js", "TypeScript"],
     type: "personal",
     date: new Date("2025-05-31"),
     featured: true,

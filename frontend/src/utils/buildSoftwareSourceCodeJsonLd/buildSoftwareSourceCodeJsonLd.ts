@@ -4,7 +4,7 @@ interface CodeProject {
     description: string;
     link: string;
     github: string;
-    tech: string[];
+    tags: string[];
     date: Date;
   };
 }
@@ -20,7 +20,7 @@ export const buildSoftwareSourceCodeJsonLd = (
   description: project.data.description,
   url: project.data.link,
   codeRepository: project.data.github,
-  programmingLanguage: project.data.tech,
+  programmingLanguage: project.data.tags,
   dateCreated: project.data.date.toISOString().split("T")[0],
   author: {
     "@type": "Person",
