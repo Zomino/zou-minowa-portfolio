@@ -31,9 +31,28 @@ const projects = [
   },
 ];
 
+const journal = [
+  {
+    data: {
+      title: "Older Entry",
+      description: "An older thought.",
+      date: new Date("2024-06-01"),
+    },
+    body: "Older entry body text.",
+  },
+  {
+    data: {
+      title: "Newer Entry",
+      description: "A newer thought.",
+      date: new Date("2025-06-01"),
+    },
+    body: "Newer entry body text.",
+  },
+];
+
 describe("buildLlmsFullTxt", () => {
   it("renders the header blockquote and every project body newest first", () => {
-    const result = buildLlmsFullTxt(projects, metadata);
+    const result = buildLlmsFullTxt(projects, journal, metadata);
 
     expect(result).toContain("# Zou Minowa");
     expect(result).toContain("> London-based software engineer.");
@@ -46,6 +65,19 @@ describe("buildLlmsFullTxt", () => {
 
     const newerIndex = result.indexOf("## Newer Project");
     const olderIndex = result.indexOf("## Older Project");
+    expect(newerIndex).toBeLessThan(olderIndex);
+  });
+
+  it("renders a Journal section with every entry body newest first", () => {
+    const result = buildLlmsFullTxt(projects, journal, metadata);
+
+    expect(result).toContain("# Journal");
+    expect(result).toContain("## Newer Entry");
+    expect(result).toContain("Newer entry body text.");
+    expect(result).toContain("Older entry body text.");
+
+    const newerIndex = result.indexOf("## Newer Entry");
+    const olderIndex = result.indexOf("## Older Entry");
     expect(newerIndex).toBeLessThan(olderIndex);
   });
 });
