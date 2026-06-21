@@ -27,7 +27,7 @@ describe("buildSoftwareSourceCodeJsonLd", () => {
       description: "A portfolio website for my father, a painter.",
       url: "https://www.daisukeminowa.com/",
       codeRepository: "https://github.com/Zomino/daisuke-minowa-website",
-      programmingLanguage: ["Next.js", "TypeScript"],
+      keywords: ["Next.js", "TypeScript"],
       dateCreated: "2025-05-31",
       author: {
         "@type": "Person",
