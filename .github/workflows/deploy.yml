@@ -55,3 +55,15 @@ jobs:
           aws-region: eu-west-2
 
       - run: bash scripts/deploy.sh
+
+  lighthouse:
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Lighthouse report against live site
+        continue-on-error: true
+        uses: treosh/lighthouse-ci-action@v12
+        with:
+          urls: ${{ vars.SITE_URL || format('https://{0}', vars.PRODUCTION_DISTRIBUTION_DOMAIN) }}
+          uploadArtifacts: true
+          temporaryPublicStorage: true
