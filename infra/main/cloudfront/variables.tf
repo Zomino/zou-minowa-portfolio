@@ -24,3 +24,8 @@ variable "enable_asset_cache_behaviors" {
   type    = bool
   default = true
 }
+
+variable "enable_logging" {
+  type    = bool
+  default = false
+}
