@@ -39,11 +39,13 @@ provider "aws" {
 }
 
 module "cloudfront" {
-  source         = "./cloudfront"
-  project_name   = var.project_name
-  bucket_name    = var.project_name
-  alert_email    = var.alert_email
-  enable_logging = true
+  source              = "./cloudfront"
+  project_name        = var.project_name
+  bucket_name         = var.project_name
+  alert_email         = var.alert_email
+  enable_logging      = true
+  aliases             = [aws_route53_zone.site.name, "www.${aws_route53_zone.site.name}"]
+  acm_certificate_arn = aws_acm_certificate_validation.site.certificate_arn
 }
 
 # No ordered cache behaviours for /_astro/* or /fonts/* because preview S3 keys
