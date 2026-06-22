@@ -18,3 +18,27 @@ resource "aws_route53_record" "cert_validation" {
   ttl             = 300
   allow_overwrite = true
 }
+
+resource "aws_route53_record" "apex" {
+  zone_id = aws_route53_zone.site.zone_id
+  name    = aws_route53_zone.site.name
+  type    = "A"
+
+  alias {
+    name                   = module.cloudfront.domain_name
+    zone_id                = module.cloudfront.hosted_zone_id
+    evaluate_target_health = false
+  }
+}
+
+resource "aws_route53_record" "www" {
+  zone_id = aws_route53_zone.site.zone_id
+  name    = "www.${aws_route53_zone.site.name}"
+  type    = "A"
+
+  alias {
+    name                   = module.cloudfront.domain_name
+    zone_id                = module.cloudfront.hosted_zone_id
+    evaluate_target_health = false
+  }
+}
