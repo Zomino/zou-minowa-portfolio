@@ -21,8 +21,16 @@ description: >
    - Omit sections that have no real content for the topic
    - Use tables for structured comparisons
    - End with a sources list (one line per source with URL)
+   - **Solve the reader's problem, not the whole topic.** During scope (step 1), pin down the single task the reader is trying to accomplish, then include only what serves it. A reference doc is a tool for that job, not a complete map of the subject.
 
-4. **Writing rules** (non-negotiable):
+5. **Exclude what confuses more than it helps** (non-negotiable). A correct fact still earns its place only if it advances the reader's understanding of the task. Cut, or push to a single optional "Going deeper" note at the very end, anything that is:
+   - **Trivia the reader never acts on**: internal mechanics, historical reasons, protocol-spec detail, dual representations of the same fact (e.g. a record existing in two places when the reader only ever edits one).
+   - **Edge cases and exceptions** that do not apply to the reader's situation. State the rule plainly; do not immediately qualify it with rare caveats.
+   - **Premature jargon**: never use a term before it is needed or defined. Prefer the simplest word that is still correct.
+   - **Competing explanations**: give the one mental model that works, not three. More framings dilute, they do not reinforce.
+   When unsure whether a detail helps, ask: "does the reader do anything differently because they know this?" If no, cut it.
+
+6. **Writing rules** (non-negotiable):
    - British English (colour, optimise, behaviour)
    - No em dashes or en dashes as punctuation. Use commas or full stops.
    - No evocative language. Facts only.
