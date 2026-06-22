@@ -77,3 +77,21 @@ resource "aws_cloudwatch_metric_alarm" "rum_js_errors" {
 
   alarm_actions = [aws_sns_topic.alerts_eu.arn]
 }
+
+resource "aws_cloudwatch_metric_alarm" "firehose_delivery_failed" {
+  alarm_name          = "${var.project_name}-firehose-delivery-failed"
+  comparison_operator = "LessThanThreshold"
+  evaluation_periods  = 1
+  metric_name         = "DeliveryToS3.Success"
+  namespace           = "AWS/Firehose"
+  period              = 300
+  statistic           = "Average"
+  threshold           = 1
+  treat_missing_data  = "notBreaching"
+
+  dimensions = {
+    DeliveryStreamName = aws_kinesis_firehose_delivery_stream.rum_archive.name
+  }
+
+  alarm_actions = [aws_sns_topic.alerts_eu.arn]
+}
