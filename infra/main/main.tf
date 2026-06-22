@@ -48,9 +48,10 @@ module "cloudfront" {
   acm_certificate_arn = aws_acm_certificate_validation.site.certificate_arn
 }
 
-# No ordered cache behaviours for /_astro/* or /fonts/* because preview S3 keys
-# are prefixed (pr-42/_astro/...), so those path patterns never match. All content
-# is served through the default behaviour at zero TTL.
+# No ordered cache behaviours for /_astro/* or /fonts/* because the host to prefix
+# rewrite function is attached only to the default behaviour. Enabling them would
+# route asset requests around the function, so the pr-N prefix would not be applied
+# and the objects would 404. All requests must flow through the default behaviour.
 module "cloudfront_preview" {
   source                       = "./cloudfront"
   project_name                 = "${var.project_name}-preview"
@@ -58,6 +59,9 @@ module "cloudfront_preview" {
   alert_email                  = var.alert_email
   default_root_object          = null
   enable_asset_cache_behaviors = false
+  aliases                      = ["*.${aws_route53_zone.site.name}"]
+  acm_certificate_arn          = aws_acm_certificate_validation.site.certificate_arn
+  rewrite_function_filename    = "preview-rewrite.js"
 }
 
 module "monitoring" {

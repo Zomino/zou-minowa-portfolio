@@ -10,6 +10,10 @@ output "preview_distribution_domain" {
   value = module.cloudfront_preview.domain_name
 }
 
+output "preview_base_domain" {
+  value = aws_route53_zone.site.name
+}
+
 output "preview_github_actions_role_arn" {
   value = aws_iam_role.github_actions["preview"].arn
 }

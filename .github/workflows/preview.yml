@@ -49,8 +49,7 @@ jobs:
 
       - uses: ./.github/actions/build
         with:
-          base-path: ${{ format('/pr-{0}', github.event.number) }}
-          site-url: ${{ format('https://{0}/pr-{1}', vars.PREVIEW_DISTRIBUTION_DOMAIN, github.event.number) }}
+          site-url: ${{ format('https://pr-{0}.{1}', github.event.number, vars.PREVIEW_BASE_DOMAIN) }}
 
       - uses: aws-actions/configure-aws-credentials@v6
         with:
@@ -66,7 +65,7 @@ jobs:
       - name: Post preview URL
         env:
           GH_TOKEN: ${{ github.token }}
-          PREVIEW_URL: ${{ format('https://{0}/pr-{1}/', vars.PREVIEW_DISTRIBUTION_DOMAIN, github.event.number) }}
+          PREVIEW_URL: ${{ format('https://pr-{0}.{1}/', github.event.number, vars.PREVIEW_BASE_DOMAIN) }}
         run: |
           gh pr comment ${{ github.event.number }} --body "Preview: ${PREVIEW_URL}"
 
