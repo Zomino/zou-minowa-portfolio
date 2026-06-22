@@ -39,3 +39,8 @@ variable "acm_certificate_arn" {
   type    = string
   default = null
 }
+
+variable "rewrite_function_filename" {
+  type    = string
+  default = "rewrite.js"
+}

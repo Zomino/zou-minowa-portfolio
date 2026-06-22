@@ -30,7 +30,7 @@ resource "aws_cloudfront_function" "rewrite" {
   name    = "${var.project_name}-rewrite"
   runtime = "cloudfront-js-2.0"
   publish = true
-  code    = file("${path.module}/resources/rewrite.js")
+  code    = file("${path.module}/resources/${var.rewrite_function_filename}")
 }
 
 resource "aws_cloudfront_distribution" "site" {

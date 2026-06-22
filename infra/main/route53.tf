@@ -42,3 +42,15 @@ resource "aws_route53_record" "www" {
     evaluate_target_health = false
   }
 }
+
+resource "aws_route53_record" "preview_wildcard" {
+  zone_id = aws_route53_zone.site.zone_id
+  name    = "*.${aws_route53_zone.site.name}"
+  type    = "A"
+
+  alias {
+    name                   = module.cloudfront_preview.domain_name
+    zone_id                = module.cloudfront_preview.hosted_zone_id
+    evaluate_target_health = false
+  }
+}
