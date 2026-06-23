@@ -1,0 +1,15 @@
+<script is:inline>
+  document.documentElement.style.visibility = "hidden";
+
+  const revealFonts = () => {
+    document.documentElement.style.visibility = "";
+  };
+
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(revealFonts);
+  } else {
+    revealFonts();
+  }
+
+  window.setTimeout(revealFonts, 3000);
+</script>
