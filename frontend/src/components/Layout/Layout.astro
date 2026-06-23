@@ -8,6 +8,7 @@ import { buildPersonJsonLd } from "./utils/buildPersonJsonLd/buildPersonJsonLd";
 
 import Link from "../Link/Link.astro";
 import Copyright from "./components/Copyright/Copyright.astro";
+import FontGate from "./components/FontGate/FontGate.astro";
 import Meta from "./components/Meta/Meta.astro";
 import NavBar from "../NavBar/NavBar.astro";
 import VerticalWordmark from "./components/VerticalWordmark/VerticalWordmark.astro";
@@ -40,6 +41,7 @@ const personJsonLd = buildPersonJsonLd(siteOrigin, metadata);
 
 <html lang="en">
   <head>
+    <FontGate />
     <title>{documentTitle}</title>
     <Meta
       documentTitle={documentTitle}

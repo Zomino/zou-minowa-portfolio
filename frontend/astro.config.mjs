@@ -33,7 +33,7 @@ export default defineConfig({
         subsets: ["latin", "japanese"],
         fallbacks: ["serif"],
         optimizedFallbacks: false,
-        display: "optional",
+        display: "block",
       },
     ],
   },
