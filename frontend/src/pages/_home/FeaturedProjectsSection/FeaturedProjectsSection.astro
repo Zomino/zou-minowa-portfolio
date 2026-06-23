@@ -1,8 +1,8 @@
 ---
 import { getCollection } from "astro:content";
 
-import ProjectSummary from "../../../common/ProjectSummary/ProjectSummary.astro";
-import Section from "../../../common/Section/Section.astro";
+import ProjectSummary from "../../../components/ProjectSummary/ProjectSummary.astro";
+import Section from "../../../components/Section/Section.astro";
 const MAX_FEATURED = 3;
 
 const projects = (await getCollection("projects"))
