@@ -15,7 +15,7 @@ vi.mock("virtual:astro-icon", () => ({
 }));
 
 import ProjectSummary from "./ProjectSummary.astro";
-import projectImage from "../../../assets/test-fixtures/placeholder.svg";
+import projectImage from "../../assets/test-fixtures/placeholder.svg";
 
 describe("ProjectSummary", () => {
   it("renders the project content and links", async () => {
