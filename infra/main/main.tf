@@ -65,10 +65,12 @@ module "cloudfront_preview" {
 }
 
 module "monitoring" {
-  source       = "./monitoring"
-  project_name = var.project_name
-  alert_email  = var.alert_email
-  rum_domain   = module.cloudfront.domain_name
+  source           = "./monitoring"
+  project_name     = var.project_name
+  alert_email      = var.alert_email
+  rum_domain       = aws_route53_zone.site.name
+  distribution_arn = module.cloudfront.distribution_arn
+  distribution_id  = module.cloudfront.distribution_id
 
   providers = {
     aws           = aws

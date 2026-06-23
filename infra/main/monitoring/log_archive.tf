@@ -4,6 +4,11 @@ resource "aws_s3_bucket" "log_archive" {
   bucket = "${var.project_name}-log-archive"
 }
 
+resource "aws_cloudwatch_log_group" "firehose_rum_archive" {
+  name              = "/aws/kinesisfirehose/${var.project_name}-rum-archive"
+  retention_in_days = 30
+}
+
 resource "aws_s3_bucket_public_access_block" "log_archive" {
   bucket = aws_s3_bucket.log_archive.id
 
@@ -69,7 +74,7 @@ resource "aws_kinesis_firehose_delivery_stream" "rum_archive" {
 
     cloudwatch_logging_options {
       enabled         = true
-      log_group_name  = "/aws/kinesisfirehose/${var.project_name}-rum-archive"
+      log_group_name  = aws_cloudwatch_log_group.firehose_rum_archive.name
       log_stream_name = "DestinationDelivery"
     }
   }
