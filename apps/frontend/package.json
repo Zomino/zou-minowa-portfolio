@@ -1,5 +1,5 @@
 {
-  "name": "zou-minowa-portfolio",
+  "name": "frontend",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -10,7 +10,6 @@
     "format": "prettier --write .",
     "check": "astro check",
     "lint": "eslint .",
-    "prepare": "cd .. && git config core.hooksPath .husky && husky install",
     "test": "vitest"
   },
   "lint-staged": {
@@ -23,13 +22,6 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "packageManager": "pnpm@10.11.0",
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "esbuild",
-      "sharp"
-    ]
-  },
   "devDependencies": {
     "@astrojs/check": "^0.9.9",
     "@tailwindcss/postcss": "^4.1.18",
@@ -40,7 +32,6 @@
     "autoprefixer": "^10.4.23",
     "eslint": "^10.5.0",
     "eslint-plugin-astro": "^1.5.0",
-    "husky": "^9.1.7",
     "jsdom": "^29.1.1",
     "lint-staged": "^17.0.8",
     "prettier": "^3.6.2",

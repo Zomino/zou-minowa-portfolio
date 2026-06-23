@@ -20,21 +20,20 @@ jobs:
         with:
           node-version: 22
           cache: pnpm
-          cache-dependency-path: frontend/pnpm-lock.yaml
+          cache-dependency-path: pnpm-lock.yaml
 
       - run: pnpm install --frozen-lockfile
-        working-directory: frontend
 
       - name: Audit production dependencies
-        working-directory: frontend
+        working-directory: apps/frontend
         continue-on-error: true
         run: pnpm audit --prod --audit-level high
 
       - run: pnpm lint
-        working-directory: frontend
+        working-directory: apps/frontend
 
       - run: pnpm check
-        working-directory: frontend
+        working-directory: apps/frontend
 
       - run: pnpm exec vitest run
-        working-directory: frontend
+        working-directory: apps/frontend

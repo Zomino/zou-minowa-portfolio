@@ -34,7 +34,7 @@ jobs:
         with:
           filters: |
             frontend:
-              - 'frontend/**'
+              - 'apps/frontend/**'
               - '.github/actions/build/**'
               - '.github/workflows/preview.yml'
               - '.github/workflows/checks.yml'

@@ -19,16 +19,18 @@ Open the project in VS Code and use **Dev Containers: Reopen in Container** to s
 All commands — including git, pnpm, and any other CLI tool — must be run inside the dev container. Never run them on the host.
 
 ```bash
-docker exec -u node -w /workspaces/zou-minowa-portfolio/frontend zou-minowa-portfolio-dev <command>
+docker exec -u node -w /workspaces/zou-minowa-portfolio zou-minowa-portfolio-dev <command>
 ```
 
-See `frontend/package.json` scripts for available commands.
+This is a pnpm workspace. Run install at the repo root, and run app scripts with `pnpm -F frontend <script>` (e.g. `pnpm -F frontend build`) or by setting the working directory to `apps/frontend`.
+
+See `apps/frontend/package.json` scripts for available commands.
 
 ## Conventions
 
-- Components live in `frontend/src/components/`.
-- Layouts live in `frontend/src/layouts/`.
-- Pages live in `frontend/src/pages/`.
+- Components live in `apps/frontend/src/components/`.
+- Layouts live in `apps/frontend/src/layouts/`.
+- Pages live in `apps/frontend/src/pages/`.
 - Terraform infrastructure lives in `infra/`.
 
 ## Coding style

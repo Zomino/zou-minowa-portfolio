@@ -26,7 +26,7 @@ sync_html_and_rest() {
 }
 
 main() {
-  local dist_dir="${DEPLOY_DIST_DIR:-frontend/dist}"
+  local dist_dir="${DEPLOY_DIST_DIR:-apps/frontend/dist}"
   local dest
   dest="$(resolve_destination)"
 

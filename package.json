@@ -1,0 +1,22 @@
+{
+  "name": "zou-minowa-portfolio",
+  "version": "1.0.0",
+  "private": true,
+  "packageManager": "pnpm@10.11.0",
+  "scripts": {
+    "build": "pnpm -F frontend build",
+    "test": "pnpm -r exec vitest run",
+    "check": "pnpm -r check",
+    "lint": "pnpm -r lint",
+    "prepare": "git config core.hooksPath .husky && husky install"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "sharp"
+    ]
+  },
+  "devDependencies": {
+    "husky": "^9.1.7"
+  }
+}

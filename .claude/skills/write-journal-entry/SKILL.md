@@ -3,7 +3,7 @@ name: write-journal-entry
 description: >
   Turn a spoken or written stream of consciousness into a structured first draft of a
   Journal entry (a semi professional opinion or thoughts piece), saved to
-  frontend/src/content/journal/. Use when the user says "write a journal entry",
+  apps/frontend/src/content/journal/. Use when the user says "write a journal entry",
   "new journal post", "I want to write up my thoughts on X", or starts talking through
   an opinion they want drafted. The output is a draft for the user to edit, not a finished article.
 ---
@@ -28,7 +28,7 @@ positions, evidence, or experience they did not give you.
    - A very short conclusion (`## In short` or similar), two sentences at most.
 4. **Apply the voice rules** below to every line.
 5. **Write the frontmatter** (see spec) and save to
-   `frontend/src/content/journal/<kebab-case-slug>.md`. Strip any leading `# Title` from the body;
+   `apps/frontend/src/content/journal/<kebab-case-slug>.md`. Strip any leading `# Title` from the body;
    the title comes from frontmatter.
 6. **Hand it back.** Tell the user it is a first draft and expect heavy editing. The dev server does
    not hot reload markdown content, so restart it to preview changes.
