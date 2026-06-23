@@ -1,7 +1,7 @@
 import { experimental_AstroContainer as AstroContainer } from "astro/container";
 import { describe, expect, it, vi } from "vitest";
 
-import projectImage from "../../../../assets/test-fixtures/placeholder.svg";
+import projectImage from "../../../assets/test-fixtures/placeholder.svg";
 
 vi.mock("virtual:astro-icon", () => ({
   default: {

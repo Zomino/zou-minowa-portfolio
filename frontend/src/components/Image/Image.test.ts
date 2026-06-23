@@ -2,7 +2,7 @@ import { experimental_AstroContainer as AstroContainer } from "astro/container";
 import { describe, expect, it } from "vitest";
 
 import Image from "./Image.astro";
-import projectImage from "../../../assets/test-fixtures/placeholder.svg";
+import projectImage from "../../assets/test-fixtures/placeholder.svg";
 
 describe("Image", () => {
   it("renders the image with required alt text", async () => {

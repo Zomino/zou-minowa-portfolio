@@ -1,10 +1,10 @@
 ---
-import "../../../styles/global.css";
+import "../../styles/global.css";
 
 import { Font } from "astro:assets";
 
-import metadata from "../../../metadata.json";
-import { buildPersonJsonLd } from "../../../utils/buildPersonJsonLd/buildPersonJsonLd";
+import metadata from "../../metadata.json";
+import { buildPersonJsonLd } from "./utils/buildPersonJsonLd/buildPersonJsonLd";
 
 import Link from "../Link/Link.astro";
 import Copyright from "./components/Copyright/Copyright.astro";
@@ -59,7 +59,7 @@ const personJsonLd = buildPersonJsonLd(siteOrigin, metadata);
       set:html={JSON.stringify(personJsonLd)}
     />
     <script>
-      import { initRum } from "../../../utils/initRum/initRum";
+      import { initRum } from "./utils/initRum/initRum";
 
       void initRum();
     </script>

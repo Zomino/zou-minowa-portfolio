@@ -1,10 +1,10 @@
 ---
 import { getCollection } from "astro:content";
 
-import Badge from "../../../common/Badge/Badge.astro";
-import BadgeGroup from "../../../common/BadgeGroup/BadgeGroup.astro";
-import Heading from "../../../common/Heading/Heading.astro";
-import metadata from "../../../../metadata.json";
+import Badge from "../../../components/Badge/Badge.astro";
+import BadgeGroup from "../../../components/BadgeGroup/BadgeGroup.astro";
+import Heading from "../../../components/Heading/Heading.astro";
+import metadata from "../../../metadata.json";
 
 const getTopTags = (tagLists: string[][], limit: number): string[] => {
   const tagCounts = new Map<string, number>();

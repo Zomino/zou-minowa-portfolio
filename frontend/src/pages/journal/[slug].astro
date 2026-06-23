@@ -1,14 +1,14 @@
 ---
 import { getCollection, render } from "astro:content";
 
-import Badge from "../../components/common/Badge/Badge.astro";
-import BadgeGroup from "../../components/common/BadgeGroup/BadgeGroup.astro";
-import Group from "../../components/common/Group/Group.astro";
-import Heading from "../../components/common/Heading/Heading.astro";
-import Layout from "../../components/common/Layout/Layout.astro";
-import Text from "../../components/common/Text/Text.astro";
+import Badge from "../../components/Badge/Badge.astro";
+import BadgeGroup from "../../components/BadgeGroup/BadgeGroup.astro";
+import Group from "../../components/Group/Group.astro";
+import Heading from "../../components/Heading/Heading.astro";
+import Layout from "../../components/Layout/Layout.astro";
+import Text from "../../components/Text/Text.astro";
 import { formatDate } from "../../utils/formatDate/formatDate";
-import { buildBlogPostingJsonLd } from "../../utils/buildBlogPostingJsonLd/buildBlogPostingJsonLd";
+import { buildBlogPostingJsonLd } from "./_utils/buildBlogPostingJsonLd/buildBlogPostingJsonLd";
 import metadata from "../../metadata.json";
 
 export async function getStaticPaths() {
