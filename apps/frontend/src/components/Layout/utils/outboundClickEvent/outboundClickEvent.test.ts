@@ -21,7 +21,10 @@ describe("outboundClickEvent", () => {
       label: "  GitHub  ",
     });
 
-    expect(result).toEqual({ href: "https://github.com/Zomino", label: "GitHub" });
+    expect(result).toEqual({
+      href: "https://github.com/Zomino",
+      label: "GitHub",
+    });
   });
 
   it("records mailto links, which report an empty origin", () => {

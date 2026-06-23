@@ -23,15 +23,14 @@ runs:
       with:
         node-version: 22
         cache: pnpm
-        cache-dependency-path: frontend/pnpm-lock.yaml
+        cache-dependency-path: pnpm-lock.yaml
 
     - run: pnpm install --frozen-lockfile
       shell: bash
-      working-directory: frontend
 
     - run: pnpm build
       shell: bash
-      working-directory: frontend
+      working-directory: apps/frontend
       env:
         BASE_PATH: ${{ inputs.base-path }}
         SITE_URL: ${{ inputs.site-url }}

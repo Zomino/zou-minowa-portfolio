@@ -1,2 +1,2 @@
 #!/bin/sh
-cd frontend && pnpm exec lint-staged
+cd apps/frontend && pnpm exec lint-staged

@@ -91,7 +91,7 @@ Splitting the logic on `github.event.action == 'closed'` inside a single workflo
 
 1. Checkout the branch.
 2. Install dependencies and run `pnpm build` with the correct environment variables (see below).
-3. Sync `frontend/dist/` to `s3://zou-minowa-portfolio-previews/pr-${{ github.event.number }}/` using `aws s3 sync --delete`.
+3. Sync `apps/frontend/dist/` to `s3://zou-minowa-portfolio-previews/pr-${{ github.event.number }}/` using `aws s3 sync --delete`.
 4. Invalidate the CloudFront cache for `/pr-${{ github.event.number }}/*`.
 5. Post a comment on the PR with the preview URL.
 
