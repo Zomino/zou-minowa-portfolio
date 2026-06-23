@@ -1,4 +1,4 @@
-import { buildRobotsTxt } from "../utils/buildRobotsTxt/buildRobotsTxt";
+import { buildRobotsTxt } from "./utils/buildRobotsTxt/buildRobotsTxt";
 
 export function GET({ site }: { site: URL | undefined }): Response {
   if (!site) {

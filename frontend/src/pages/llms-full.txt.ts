@@ -1,6 +1,6 @@
 import { getCollection } from "astro:content";
 
-import { buildLlmsFullTxt } from "../utils/buildLlmsFullTxt/buildLlmsFullTxt";
+import { buildLlmsFullTxt } from "./utils/buildLlmsFullTxt/buildLlmsFullTxt";
 import metadata from "../metadata.json";
 
 export async function GET(): Promise<Response> {
