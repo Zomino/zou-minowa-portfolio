@@ -1,7 +1,7 @@
 import { experimental_AstroContainer as AstroContainer } from "astro/container";
 import { describe, expect, it, vi } from "vitest";
 
-import projectImage from "../../assets/test-fixtures/placeholder.svg";
+import projectImage from "../../../assets/test-fixtures/placeholder.svg";
 
 vi.mock("virtual:astro-icon", () => ({
   default: {
@@ -24,7 +24,7 @@ vi.mock("astro:content", async () => {
   };
 });
 
-import Slug from "../projects/[slug].astro";
+import Slug from "../[slug].astro";
 
 const project = {
   id: "painter-portfolio",
