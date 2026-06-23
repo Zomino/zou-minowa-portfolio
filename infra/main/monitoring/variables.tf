@@ -9,3 +9,11 @@ variable "alert_email" {
 variable "rum_domain" {
   type = string
 }
+
+variable "distribution_arn" {
+  type = string
+}
+
+variable "distribution_id" {
+  type = string
+}

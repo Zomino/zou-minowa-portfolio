@@ -8,7 +8,7 @@
       "height": 6,
       "properties": {
         "metrics": [
-          ["AWS/CloudFront", "Requests", "Region", "Global", "DistributionId", "E107EPWOTD58BJ"]
+          ["AWS/CloudFront", "Requests", "Region", "Global", "DistributionId", "${distribution_id}"]
         ],
         "view": "timeSeries",
         "stacked": false,
@@ -26,7 +26,7 @@
       "height": 6,
       "properties": {
         "metrics": [
-          ["AWS/CloudFront", "4xxErrorRate", "Region", "Global", "DistributionId", "E107EPWOTD58BJ"],
+          ["AWS/CloudFront", "4xxErrorRate", "Region", "Global", "DistributionId", "${distribution_id}"],
           [".", "5xxErrorRate", ".", ".", ".", "."]
         ],
         "view": "timeSeries",
@@ -45,7 +45,7 @@
       "height": 6,
       "properties": {
         "metrics": [
-          ["AWS/RUM", "SessionCount", "application_name", "zou-minowa-portfolio"],
+          ["AWS/RUM", "SessionCount", "application_name", "${project_name}"],
           [".", "PageViewCount", ".", "."]
         ],
         "view": "timeSeries",
@@ -64,7 +64,7 @@
       "height": 6,
       "properties": {
         "metrics": [
-          ["AWS/RUM", "WebVitalsLargestContentfulPaint", "application_name", "zou-minowa-portfolio", { "label": "LCP p75" }],
+          ["AWS/RUM", "WebVitalsLargestContentfulPaint", "application_name", "${project_name}", { "label": "LCP p75" }],
           [".", "WebVitalsInteractionToNextPaint", ".", ".", { "label": "INP p75" }]
         ],
         "view": "timeSeries",
@@ -83,7 +83,7 @@
       "height": 6,
       "properties": {
         "metrics": [
-          ["AWS/RUM", "WebVitalsCumulativeLayoutShift", "application_name", "zou-minowa-portfolio"]
+          ["AWS/RUM", "WebVitalsCumulativeLayoutShift", "application_name", "${project_name}"]
         ],
         "view": "timeSeries",
         "stacked": false,
@@ -101,7 +101,7 @@
       "height": 6,
       "properties": {
         "metrics": [
-          ["AWS/RUM", "JsErrorCount", "application_name", "zou-minowa-portfolio"]
+          ["AWS/RUM", "JsErrorCount", "application_name", "${project_name}"]
         ],
         "view": "timeSeries",
         "stacked": false,
@@ -119,7 +119,7 @@
       "height": 6,
       "properties": {
         "metrics": [
-          ["AWS/Firehose", "DeliveryToS3.Success", "DeliveryStreamName", "zou-minowa-portfolio-rum-archive", { "label": "Delivery success" }]
+          ["AWS/Firehose", "DeliveryToS3.Success", "DeliveryStreamName", "${project_name}-rum-archive", { "label": "Delivery success" }]
         ],
         "view": "timeSeries",
         "stacked": false,
@@ -137,8 +137,8 @@
       "height": 6,
       "properties": {
         "metrics": [
-          ["AWS/Firehose", "IncomingRecords", "DeliveryStreamName", "zou-minowa-portfolio-rum-archive", { "label": "In" }],
-          ["AWS/Firehose", "DeliveryToS3.Records", "DeliveryStreamName", "zou-minowa-portfolio-rum-archive", { "label": "Delivered to S3" }]
+          ["AWS/Firehose", "IncomingRecords", "DeliveryStreamName", "${project_name}-rum-archive", { "label": "In" }],
+          ["AWS/Firehose", "DeliveryToS3.Records", "DeliveryStreamName", "${project_name}-rum-archive", { "label": "Delivered to S3" }]
         ],
         "view": "timeSeries",
         "stacked": false,
@@ -146,6 +146,20 @@
         "stat": "Sum",
         "period": 3600,
         "title": "RUM log archive: records in and delivered"
+      }
+    },
+    {
+      "type": "log",
+      "x": 0,
+      "y": 12,
+      "width": 24,
+      "height": 6,
+      "properties": {
+        "query": "SOURCE '/cloudfront/${project_name}/access-logs' | fields @timestamp, `sc-status`, `cs-uri-stem`, `c-ip`, `cs(User-Agent)` | filter `sc-status` >= 400 | sort @timestamp desc | limit 50",
+        "region": "us-east-1",
+        "stacked": false,
+        "view": "table",
+        "title": "CloudFront recent 4xx and 5xx requests"
       }
     }
   ]
