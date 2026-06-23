@@ -23,7 +23,7 @@ resource "aws_cloudwatch_metric_alarm" "cf_5xx" {
   treat_missing_data  = "notBreaching"
 
   dimensions = {
-    DistributionId = "E107EPWOTD58BJ"
+    DistributionId = var.distribution_id
     Region         = "Global"
   }
 
@@ -35,16 +35,42 @@ resource "aws_cloudwatch_metric_alarm" "cf_4xx" {
   alarm_name          = "${var.project_name}-cloudfront-4xx"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 1
-  metric_name         = "4xxErrorRate"
-  namespace           = "AWS/CloudFront"
-  period              = 900
-  statistic           = "Average"
-  threshold           = 25
+  threshold           = 10
   treat_missing_data  = "notBreaching"
 
-  dimensions = {
-    DistributionId = "E107EPWOTD58BJ"
-    Region         = "Global"
+  metric_query {
+    id          = "errors"
+    expression  = "(rate / 100) * requests"
+    label       = "4xx error count"
+    return_data = true
+  }
+
+  metric_query {
+    id = "rate"
+    metric {
+      metric_name = "4xxErrorRate"
+      namespace   = "AWS/CloudFront"
+      period      = 900
+      stat        = "Average"
+      dimensions = {
+        DistributionId = var.distribution_id
+        Region         = "Global"
+      }
+    }
+  }
+
+  metric_query {
+    id = "requests"
+    metric {
+      metric_name = "Requests"
+      namespace   = "AWS/CloudFront"
+      period      = 900
+      stat        = "Sum"
+      dimensions = {
+        DistributionId = var.distribution_id
+        Region         = "Global"
+      }
+    }
   }
 
   alarm_actions = [aws_sns_topic.alerts.arn]
