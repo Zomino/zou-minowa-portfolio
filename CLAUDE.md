@@ -32,6 +32,8 @@ See `apps/frontend/package.json` scripts for available commands.
 - Layouts live in `apps/frontend/src/layouts/`.
 - Pages live in `apps/frontend/src/pages/`.
 - Terraform infrastructure lives in `infra/`.
+- `index.ts` files re-export only. Implementation lives in a named file inside its own folder (`foo/foo.ts` with co-located `foo.test.ts`).
+- When building a shared package or contract, include only what both consumers actually use. Start minimal and let it grow; do not port a whole existing surface or add speculative helpers, fixtures, or constants. Derive types from the schema (one source of truth), and keep the export surface as small as possible.
 
 ## Coding style
 
@@ -43,6 +45,7 @@ See `apps/frontend/package.json` scripts for available commands.
 - Never use `<style>` tags in components; use Tailwind utility classes only.
 - Use `UPPER_SNAKE_CASE` for constants with static literal values (strings, numbers).
 - Always mock external dependencies (e.g. `getCollection`, `getEntry`) in tests instead of skipping them.
+- Run `prettier --write` on newly written or edited files before verifying, so formatting is not a separate round of fixes.
 - Never add code comments or documentation unless explicitly requested.
 
 ## Git
