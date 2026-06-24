@@ -34,7 +34,8 @@ resource "aws_cloudwatch_metric_alarm" "cf_4xx" {
   provider            = aws.us_east_1
   alarm_name          = "${var.project_name}-cloudfront-4xx"
   comparison_operator = "GreaterThanOrEqualToThreshold"
-  evaluation_periods  = 1
+  evaluation_periods  = 3
+  datapoints_to_alarm = 2
   threshold           = 10
   treat_missing_data  = "notBreaching"
 
