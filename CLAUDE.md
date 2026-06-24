@@ -48,7 +48,8 @@ See `apps/frontend/package.json` scripts for available commands.
 ## Git
 
 - Never commit without explicit permission from the user.
-- Never merge a pull request yourself, under any circumstances. The user always merges in the UI. Opening a PR and reporting it is fine; running a merge (gh pr merge, git merge into main, etc.) is not.
+- Never open a pull request without explicit permission from the user. Plan approval does not count as permission to commit or open a PR; ask again at the point of doing it.
+- Never merge a pull request yourself, under any circumstances. The user always merges in the UI. Running a merge (gh pr merge, git merge into main, etc.) is not allowed.
 - fetch and push fail in the container (no SSH key). Run them on the host; local git (branch, commit, status, log) works in the container.
 - Open PRs from the host with `gh`.
 
