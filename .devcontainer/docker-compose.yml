@@ -1,5 +1,6 @@
 services:
   dev:
+    platform: linux/arm64
     build:
       context: ..
       dockerfile: .devcontainer/Dockerfile
@@ -9,6 +10,7 @@ services:
       - ../.env
     ports:
       - "4321:4321"
+      - "8080:8080"
     volumes:
       - ..:/workspaces/zou-minowa-portfolio:cached
       - ../.gitconfig:/home/node/.gitconfig

@@ -47,6 +47,7 @@ See `apps/frontend/package.json` scripts for available commands.
 - Always mock external dependencies (e.g. `getCollection`, `getEntry`) in tests instead of skipping them.
 - Run `prettier --write` on newly written or edited files before verifying, so formatting is not a separate round of fixes.
 - Never add code comments or documentation unless explicitly requested.
+- Always delete temporary or test files (scratch renders, throwaway scripts, debug output) once the task is done. Never leave them lying around.
 
 ## Git
 
@@ -59,6 +60,7 @@ See `apps/frontend/package.json` scripts for available commands.
 ## Writing style
 
 - Never use hyphens or dashes as punctuation in written content (no em dashes, en dashes, or hyphen separators). Use commas or full stops instead.
+- Never use the second person ("you", "your") in written content. Write in the first person or rephrase impersonally.
 
 ## Language
 
