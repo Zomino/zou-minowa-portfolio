@@ -30,49 +30,40 @@ resource "aws_cloudwatch_metric_alarm" "cf_5xx" {
   alarm_actions = [aws_sns_topic.alerts.arn]
 }
 
+resource "aws_cloudwatch_log_metric_filter" "cf_real_4xx" {
+  provider       = aws.us_east_1
+  name           = "${var.project_name}-cf-real-4xx"
+  log_group_name = aws_cloudwatch_log_group.cf_access.name
+
+  pattern = <<-EOT
+    { ($.sc-status = "4*")
+      && ($.cs-uri-stem != "*.php")
+      && ($.cs-uri-stem != "*wp-*")
+      && ($.cs-uri-stem != "*.env*")
+      && ($.cs-uri-stem != "*.git*")
+      && ($.cs-uri-stem != "/admin*") }
+  EOT
+
+  metric_transformation {
+    name          = "RealRoute4xx"
+    namespace     = "Portfolio/CloudFront"
+    value         = "1"
+    default_value = "0"
+  }
+}
+
 resource "aws_cloudwatch_metric_alarm" "cf_4xx" {
   provider            = aws.us_east_1
   alarm_name          = "${var.project_name}-cloudfront-4xx"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 3
   datapoints_to_alarm = 2
-  threshold           = 10
+  metric_name         = "RealRoute4xx"
+  namespace           = "Portfolio/CloudFront"
+  period              = 900
+  statistic           = "Sum"
+  threshold           = 5
   treat_missing_data  = "notBreaching"
-
-  metric_query {
-    id          = "errors"
-    expression  = "(rate / 100) * requests"
-    label       = "4xx error count"
-    return_data = true
-  }
-
-  metric_query {
-    id = "rate"
-    metric {
-      metric_name = "4xxErrorRate"
-      namespace   = "AWS/CloudFront"
-      period      = 900
-      stat        = "Average"
-      dimensions = {
-        DistributionId = var.distribution_id
-        Region         = "Global"
-      }
-    }
-  }
-
-  metric_query {
-    id = "requests"
-    metric {
-      metric_name = "Requests"
-      namespace   = "AWS/CloudFront"
-      period      = 900
-      stat        = "Sum"
-      dimensions = {
-        DistributionId = var.distribution_id
-        Region         = "Global"
-      }
-    }
-  }
 
   alarm_actions = [aws_sns_topic.alerts.arn]
 }
