@@ -2,6 +2,7 @@ import { describe, expect, it, vi } from "vitest";
 
 import type { ChatModel } from "./handleChatRequest";
 import { handleChatRequest } from "./handleChatRequest";
+import { PORTFOLIO } from "./portfolio";
 
 const modelReturning = (reply: string): ChatModel => ({
   generate: vi.fn(async () => ({ reply })),
@@ -22,6 +23,7 @@ describe("handleChatRequest", () => {
       body: { reply: "Zou builds maintainable products." },
     });
     expect(model.generate).toHaveBeenCalledWith({
+      systemPrompt: expect.stringContaining(PORTFOLIO.name),
       messages: [{ role: "user", content: "What does Zou build?" }],
     });
   });

@@ -17,10 +17,11 @@ export const createBedrockChatModel = (config: BedrockChatModelConfig) => {
 
   const client = new AnthropicBedrock({ awsRegion: config.region });
 
-  const generate: ChatModel["generate"] = async ({ messages }) => {
+  const generate: ChatModel["generate"] = async ({ systemPrompt, messages }) => {
     const message = await client.messages.create({
       model: config.modelId,
       max_tokens: config.maxTokens,
+      system: systemPrompt,
       messages,
     });
 

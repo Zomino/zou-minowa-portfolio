@@ -1,5 +1,8 @@
 import { chatRequestSchema, type ChatContract } from "@zou/chat-contract";
 
+import { buildSystemPrompt } from "./buildSystemPrompt";
+import { PORTFOLIO } from "./portfolio";
+
 export interface ChatMessage {
   role: "user" | "assistant";
   content: string;
@@ -10,12 +13,17 @@ export interface ChatReply {
 }
 
 export interface ChatModel {
-  generate(args: { messages: ChatMessage[] }): Promise<ChatReply>;
+  generate(args: {
+    systemPrompt: string;
+    messages: ChatMessage[];
+  }): Promise<ChatReply>;
 }
 
 export interface ChatDeps {
   model: ChatModel;
 }
+
+const systemPrompt = buildSystemPrompt(PORTFOLIO);
 
 const parseJson = (rawBody: string | null) => {
   try {
@@ -43,6 +51,7 @@ export const handleChatRequest = async (
 
   try {
     const { reply } = await deps.model.generate({
+      systemPrompt,
       messages: parsed.data.body.messages,
     });
 

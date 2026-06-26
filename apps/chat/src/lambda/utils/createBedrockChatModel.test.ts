@@ -36,6 +36,7 @@ describe("createBedrockChatModel", () => {
     const createBedrockChatModel = await load();
 
     const { reply } = await createBedrockChatModel(config).generate({
+      systemPrompt: "Be helpful.",
       messages: [{ role: "user", content: "What does Zou build?" }],
     });
 
@@ -50,12 +51,14 @@ describe("createBedrockChatModel", () => {
     const createBedrockChatModel = await load();
 
     await createBedrockChatModel(config).generate({
+      systemPrompt: "Stay on topic.",
       messages: [{ role: "user", content: "hi" }],
     });
 
     expect(create).toHaveBeenCalledWith({
       model: "the-model-id",
       max_tokens: 321,
+      system: "Stay on topic.",
       messages: [{ role: "user", content: "hi" }],
     });
   });
