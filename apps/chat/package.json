@@ -8,14 +8,18 @@
   },
   "scripts": {
     "test": "vitest run",
-    "check": "tsc --noEmit"
+    "check": "tsc --noEmit",
+    "lint": "eslint ."
   },
   "dependencies": {
+    "@anthropic-ai/bedrock-sdk": "^0.31.0",
     "@zou/chat-contract": "workspace:*"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.162",
     "@types/node": "^22.20.0",
+    "@typescript-eslint/eslint-plugin": "^8.62.0",
+    "eslint": "^10.5.0",
     "typescript": "^6.0.3",
     "vitest": "^4.0.16"
   }
