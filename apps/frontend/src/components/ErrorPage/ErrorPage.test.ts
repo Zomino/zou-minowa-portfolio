@@ -1,11 +1,15 @@
+import { getContainerRenderer } from "@astrojs/react";
 import { experimental_AstroContainer as AstroContainer } from "astro/container";
+import { loadRenderers } from "astro:container";
 import { describe, expect, it } from "vitest";
 
 import ErrorPage from "./ErrorPage.astro";
 
+const renderers = await loadRenderers([getContainerRenderer()]);
+const container = await AstroContainer.create({ renderers });
+
 describe("ErrorPage", () => {
   it("renders the title", async () => {
-    const container = await AstroContainer.create();
     const html = await container.renderToString(ErrorPage, {
       props: {
         pageTitle: "Page Not Found",
@@ -18,7 +22,6 @@ describe("ErrorPage", () => {
   });
 
   it("renders the message", async () => {
-    const container = await AstroContainer.create();
     const html = await container.renderToString(ErrorPage, {
       props: {
         pageTitle: "Page Not Found",
@@ -31,7 +34,6 @@ describe("ErrorPage", () => {
   });
 
   it("renders a link to the home page", async () => {
-    const container = await AstroContainer.create();
     const html = await container.renderToString(ErrorPage, {
       props: {
         pageTitle: "Page Not Found",
@@ -44,7 +46,6 @@ describe("ErrorPage", () => {
   });
 
   it("renders the page title in the document title", async () => {
-    const container = await AstroContainer.create();
     const html = await container.renderToString(ErrorPage, {
       props: {
         pageTitle: "Page Not Found",
