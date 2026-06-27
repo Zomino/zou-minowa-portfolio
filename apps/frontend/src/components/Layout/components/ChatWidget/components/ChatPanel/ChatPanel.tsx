@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import { useChat } from "./hooks/useChat/useChat";
-import { ChatInput } from "../ChatInput/ChatInput";
-import { TypingIndicator } from "../TypingIndicator/TypingIndicator";
+import { ChatInput } from "./components/ChatInput/ChatInput";
+import { TypingIndicator } from "./components/TypingIndicator/TypingIndicator";
 import { CloseButton } from "./components/CloseButton/CloseButton";
 import { MessageList } from "./components/MessageList/MessageList";
 import { PanelShell } from "./components/PanelShell/PanelShell";
