@@ -35,12 +35,13 @@ describe("createBedrockChatModel", () => {
     });
     const createBedrockChatModel = await load();
 
-    const { reply } = await createBedrockChatModel(config).generate({
+    const { reply, tokens } = await createBedrockChatModel(config).generate({
       systemPrompt: "Be helpful.",
       messages: [{ role: "user", content: "What does Zou build?" }],
     });
 
     expect(reply).toBe("Zou builds maintainable products.");
+    expect(tokens).toBe(15);
   });
 
   it("calls the model with its id, token cap and messages", async () => {

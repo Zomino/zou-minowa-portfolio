@@ -29,7 +29,9 @@ export const createBedrockChatModel = (config: BedrockChatModelConfig) => {
       .map((block) => (block.type === "text" ? block.text : ""))
       .join("");
 
-    return { reply };
+    const tokens = message.usage.input_tokens + message.usage.output_tokens;
+
+    return { reply, tokens };
   };
 
   const built: ChatModel = { generate };

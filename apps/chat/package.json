@@ -3,9 +3,6 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "exports": {
-    ".": "./src/index.ts"
-  },
   "scripts": {
     "test": "vitest run",
     "check": "tsc --noEmit",
@@ -13,6 +10,8 @@
   },
   "dependencies": {
     "@anthropic-ai/bedrock-sdk": "^0.31.0",
+    "@aws-sdk/client-dynamodb": "^3.1075.0",
+    "@aws-sdk/lib-dynamodb": "^3.1075.0",
     "@zou/chat-contract": "workspace:*"
   },
   "devDependencies": {
