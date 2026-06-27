@@ -60,6 +60,7 @@ See `apps/frontend/package.json` scripts for available commands.
 ## Writing style
 
 - Never use hyphens or dashes as punctuation in written content (no em dashes, en dashes, or hyphen separators). Use commas or full stops instead.
+- Keep explanations brief by default. Only go into line by line or low level specifics when explicitly asked.
 - Never use the second person ("you", "your") in written content. Write in the first person or rephrase impersonally.
 
 ## Language
