@@ -17,7 +17,7 @@ export const chatRequestSchema = z.object({
   }),
 });
 
-const chatResponseSchema = z.discriminatedUnion("status", [
+export const chatResponseSchema = z.discriminatedUnion("status", [
   z.object({
     status: z.literal(200),
     body: z.object({ reply: z.string() }),
