@@ -1,0 +1,48 @@
+---
+import { Icon } from "astro-icon/components";
+
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<button
+  type="button"
+  aria-label="Open chat"
+  aria-haspopup="dialog"
+  aria-expanded="false"
+  class:list={[
+    "text-theme flex h-14 w-14 cursor-pointer items-center justify-center rounded-full bg-slate-900 shadow-lg transition duration-200 ease-out hover:bg-slate-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-900 motion-reduce:transition-none",
+    className,
+  ]}
+  data-chat-launcher
+>
+  <Icon name="chat" class="h-6 w-6" />
+</button>
+
+<script>
+  const launcher = document.querySelector("[data-chat-launcher]");
+
+  init: {
+    if (!(launcher instanceof HTMLButtonElement)) break init;
+
+    const setHidden = (hidden: boolean) => {
+      launcher.classList.toggle("opacity-0", hidden);
+      launcher.classList.toggle("pointer-events-none", hidden);
+      launcher.inert = hidden;
+      launcher.setAttribute("aria-expanded", hidden ? "true" : "false");
+    };
+
+    launcher.addEventListener("click", () => {
+      window.dispatchEvent(new Event("chat:open"));
+      setHidden(true);
+    });
+
+    window.addEventListener("chat:closed", () => {
+      setHidden(false);
+      launcher.focus();
+    });
+  }
+</script>

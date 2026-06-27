@@ -2,6 +2,8 @@ import { defineConfig, envField, fontProviders } from "astro/config";
 import tailwindcss from "@tailwindcss/vite";
 import icon from "astro-icon";
 import sitemap from "@astrojs/sitemap";
+import react from "@astrojs/react";
+import { chatMock } from "./src/integrations/chatMock/chatMock";
 
 export default defineConfig({
   output: "static",
@@ -21,7 +23,7 @@ export default defineConfig({
       }),
     },
   },
-  integrations: [icon(), sitemap()],
+  integrations: [icon(), sitemap(), react()],
   fonts: [
     {
       name: "Noto Serif JP",
@@ -36,7 +38,7 @@ export default defineConfig({
     },
   ],
   vite: {
-    plugins: [tailwindcss()],
+    plugins: [tailwindcss(), chatMock()],
     // Enable polling so Vite detects file changes through Docker volume mounts.
     server: {
       watch: {

@@ -1,7 +1,12 @@
+import { getContainerRenderer } from "@astrojs/react";
 import { experimental_AstroContainer as AstroContainer } from "astro/container";
+import { loadRenderers } from "astro:container";
 import { describe, expect, it } from "vitest";
 
 import ListPage from "./ListPage.astro";
+
+const renderers = await loadRenderers([getContainerRenderer()]);
+const container = await AstroContainer.create({ renderers });
 
 const BASE_PROPS = {
   pageTitle: "Projects",
@@ -17,7 +22,6 @@ function props(overrides: Partial<typeof BASE_PROPS> = {}) {
 
 describe("ListPage", () => {
   it("renders the toggle button with label", async () => {
-    const container = await AstroContainer.create();
     const html = await container.renderToString(ListPage, { props: props() });
 
     expect(html).toContain("Filter by tag");
@@ -25,28 +29,24 @@ describe("ListPage", () => {
   });
 
   it("renders the count badge", async () => {
-    const container = await AstroContainer.create();
     const html = await container.renderToString(ListPage, { props: props() });
 
     expect(html).toContain("data-list-page-count");
   });
 
   it("renders the chevron icon", async () => {
-    const container = await AstroContainer.create();
     const html = await container.renderToString(ListPage, { props: props() });
 
     expect(html).toContain("data-list-page-chevron");
   });
 
   it("sets aria-expanded to false by default", async () => {
-    const container = await AstroContainer.create();
     const html = await container.renderToString(ListPage, { props: props() });
 
     expect(html).toContain('aria-expanded="false"');
   });
 
   it("renders the page heading", async () => {
-    const container = await AstroContainer.create();
     const html = await container.renderToString(ListPage, {
       props: props({ heading: "Journal" }),
     });
@@ -55,7 +55,6 @@ describe("ListPage", () => {
   });
 
   it("renders the filter panel", async () => {
-    const container = await AstroContainer.create();
     const html = await container.renderToString(ListPage, {
       props: props({ tags: ["React", "TypeScript"] }),
     });
@@ -64,7 +63,6 @@ describe("ListPage", () => {
   });
 
   it("renders All and one button per tag", async () => {
-    const container = await AstroContainer.create();
     const html = await container.renderToString(ListPage, {
       props: props({ tags: ["React", "TypeScript", "Node"] }),
     });
@@ -76,7 +74,6 @@ describe("ListPage", () => {
   });
 
   it("sets data-list-page-tag attributes on each button", async () => {
-    const container = await AstroContainer.create();
     const html = await container.renderToString(ListPage, {
       props: props({ tags: ["Astro", "Tailwind"] }),
     });
@@ -87,7 +84,6 @@ describe("ListPage", () => {
   });
 
   it("renders slotted content", async () => {
-    const container = await AstroContainer.create();
     const html = await container.renderToString(ListPage, {
       props: props(),
       slots: { default: "<p>slotted content</p>" },

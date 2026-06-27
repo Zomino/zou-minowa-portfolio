@@ -1,0 +1,13 @@
+---
+import ChatLauncherButton from "./components/ChatLauncherButton/ChatLauncherButton.astro";
+import ChatPanel from "./components/ChatPanel/ChatPanel.tsx";
+
+const pageSlug = Astro.url.pathname;
+---
+
+<ChatPanel
+  client:idle
+  className="fixed inset-x-0 bottom-0 z-50 sm:inset-x-auto sm:right-5 sm:bottom-5"
+  pageSlug={pageSlug}
+/>
+<ChatLauncherButton class="fixed right-5 bottom-5 z-50" />

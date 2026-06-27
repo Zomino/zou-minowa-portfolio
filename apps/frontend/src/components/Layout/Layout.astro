@@ -1,12 +1,13 @@
 ---
-import "../../styles/global.css";
+import "@/styles/global.css";
 
 import { Font } from "astro:assets";
 
-import metadata from "../../metadata.json";
+import metadata from "@/metadata.json";
 import { buildPersonJsonLd } from "./utils/buildPersonJsonLd/buildPersonJsonLd";
 
 import Link from "../Link/Link.astro";
+import ChatWidget from "./components/ChatWidget/ChatWidget.astro";
 import Copyright from "./components/Copyright/Copyright.astro";
 import FontGate from "./components/FontGate/FontGate.astro";
 import Meta from "./components/Meta/Meta.astro";
@@ -90,5 +91,6 @@ const personJsonLd = buildPersonJsonLd(siteOrigin, metadata);
     >
       <Copyright siteTitle={metadata.siteTitle} />
     </footer>
+    <ChatWidget />
   </body>
 </html>

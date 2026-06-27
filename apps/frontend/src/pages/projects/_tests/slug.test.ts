@@ -1,4 +1,6 @@
+import { getContainerRenderer } from "@astrojs/react";
 import { experimental_AstroContainer as AstroContainer } from "astro/container";
+import { loadRenderers } from "astro:container";
 import { describe, expect, it, vi } from "vitest";
 
 import projectImage from "../../../assets/test-fixtures/placeholder.svg";
@@ -10,6 +12,7 @@ vi.mock("virtual:astro-icon", () => ({
       icons: {
         github: { body: '<rect width="16" height="16"/>' },
         globe: { body: '<rect width="16" height="16"/>' },
+        chat: { body: '<rect width="16" height="16"/>' },
       },
     },
   },
@@ -41,9 +44,11 @@ const project = {
   },
 };
 
+const renderers = await loadRenderers([getContainerRenderer()]);
+const container = await AstroContainer.create({ renderers });
+
 describe("project page [slug]", () => {
   it("renders SoftwareSourceCode JSON-LD built from the project", async () => {
-    const container = await AstroContainer.create();
     const html = await container.renderToString(Slug, { props: { project } });
 
     expect(html).toContain('type="application/ld+json"');
