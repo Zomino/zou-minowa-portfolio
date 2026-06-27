@@ -3,6 +3,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { sendChatRequest } from "./sendChatRequest";
 import { apiPost } from "@/utils/apiPost/apiPost";
 
+vi.mock("astro:env/client", () => ({ PUBLIC_CHAT_API_URL: undefined }));
 vi.mock("@/utils/apiPost/apiPost");
 afterEach(() => {
   vi.clearAllMocks();
@@ -21,6 +22,17 @@ describe("sendChatRequest", () => {
     });
 
     expect(await sendChatRequest(body)).toEqual({ ok: true, reply: "Hello" });
+  });
+
+  it("posts to the fallback path when no API URL is configured", async () => {
+    vi.mocked(apiPost).mockResolvedValue({
+      status: 200,
+      body: { reply: "Hello" },
+    });
+
+    await sendChatRequest(body);
+
+    expect(apiPost).toHaveBeenCalledWith("/api/chat", expect.anything());
   });
 
   it("maps a 429 response to a result with a retry delay", async () => {

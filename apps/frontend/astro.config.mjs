@@ -21,6 +21,11 @@ export default defineConfig({
         access: "public",
         optional: true,
       }),
+      PUBLIC_CHAT_API_URL: envField.string({
+        context: "client",
+        access: "public",
+        optional: true,
+      }),
     },
   },
   integrations: [icon(), sitemap(), react()],

@@ -31,6 +31,7 @@ jobs:
           site-url: ${{ vars.SITE_URL || format('https://{0}', vars.PRODUCTION_DISTRIBUTION_DOMAIN) }}
           rum-app-monitor-id: ${{ vars.RUM_APP_MONITOR_ID }}
           rum-identity-pool-id: ${{ vars.RUM_IDENTITY_POOL_ID }}
+          chat-api-url: ${{ vars.CHAT_API_URL }}
 
       - uses: actions/upload-artifact@v7
         with:

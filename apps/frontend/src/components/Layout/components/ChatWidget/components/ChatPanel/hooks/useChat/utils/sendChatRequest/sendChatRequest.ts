@@ -3,6 +3,7 @@ import {
   chatResponseSchema,
   type ChatContract,
 } from "@zou/chat-contract";
+import { PUBLIC_CHAT_API_URL } from "astro:env/client";
 
 import { apiPost } from "@/utils/apiPost/apiPost";
 
@@ -23,7 +24,10 @@ export const sendChatRequest = async (
     };
   }
 
-  const response = await apiPost("/api/chat", request.data.body);
+  const response = await apiPost(
+    PUBLIC_CHAT_API_URL ?? "/api/chat",
+    request.data.body,
+  );
   const parsed = response && chatResponseSchema.safeParse(response);
   if (!parsed || !parsed.success) {
     return { ok: false, message: "Something went wrong. Please try again." };
