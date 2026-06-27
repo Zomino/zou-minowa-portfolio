@@ -4,6 +4,7 @@ import { handleChatRequest } from "./utils/handleChatRequest";
 import { createBedrockChatModel } from "./utils/bedrock/createBedrockChatModel";
 import { createBedrockGuardrail } from "./utils/bedrock/createBedrockGuardrail";
 import { createDynamoProtection } from "./utils/dynamo/createDynamoProtection";
+import { emitMetrics } from "./utils/telemetry/emitMetrics";
 
 const DEFAULT_MODEL_ID = "eu.anthropic.claude-haiku-4-5-20251001-v1:0";
 const DEFAULT_MAX_OUTPUT_TOKENS = 600;
@@ -77,10 +78,19 @@ export const handler = async (event: APIGatewayProxyEventV2) => {
   );
   const decoded = decodeBody(event.body, event.isBase64Encoded);
   const payload = parseJson(decoded);
+
+  const start = Date.now();
   const outcome = await handleChatRequest(payload, clientId, {
     model,
     protection,
     guardrail,
+  });
+  const reason = "reason" in outcome.body ? outcome.body.reason : undefined;
+  emitMetrics({
+    status: outcome.status,
+    reason,
+    latencyMs: Date.now() - start,
+    timestamp: start,
   });
 
   return {
