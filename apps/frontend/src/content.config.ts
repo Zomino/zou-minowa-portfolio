@@ -1,5 +1,6 @@
-import { defineCollection, z } from "astro:content";
+import { defineCollection } from "astro:content";
 import { glob } from "astro/loaders";
+import { z } from "astro/zod";
 
 const baseSchema = z.object({
   title: z.string(),
@@ -13,8 +14,8 @@ const projects = defineCollection({
   loader: glob({ base: "./src/content/projects", pattern: "**/*.md" }),
   schema: ({ image }) =>
     baseSchema.extend({
-      link: z.string().url(),
-      github: z.string().url(),
+      link: z.url(),
+      github: z.url(),
       image: image(),
       type: z.enum(["work", "personal"]),
       featured: z.boolean().default(false),
