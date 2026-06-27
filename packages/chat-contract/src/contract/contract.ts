@@ -25,7 +25,7 @@ export const chatResponseSchema = z.discriminatedUnion("status", [
   z.object({
     status: z.literal(400),
     body: z.object({
-      reason: z.literal("invalid_request"),
+      reason: z.enum(["invalid_request", "blocked"]),
       message: z.string(),
     }),
   }),

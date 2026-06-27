@@ -1,0 +1,95 @@
+style.fill: transparent
+direction: right
+
+visitor: Visitor { shape: person }
+
+gh: "GitHub Actions" {
+  header: "" {
+    icon: https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/githubactions.svg
+    shape: image
+    width: 40
+    height: 40
+  }
+}
+
+dns: Route53 {
+  header: "" {
+    icon: https://icons.terrastruct.com/aws%2FNetworking%20&%20Content%20Delivery%2FAmazon-Route-53_light-bg.svg
+    shape: image
+    width: 40
+    height: 40
+  }
+  apex: "zouminowa.com"
+  pr: "pr-N.zouminowa.com"
+}
+
+acm: "ACM cert" {
+  header: "" {
+    icon: https://icons.terrastruct.com/aws%2FSecurity%2C%20Identity%2C%20&%20Compliance%2FAWS-Certificate-Manager_light-bg.svg
+    shape: image
+    width: 40
+    height: 40
+  }
+}
+
+cf: CloudFront {
+  header: "" {
+    icon: https://icons.terrastruct.com/aws%2FNetworking%20&%20Content%20Delivery%2FAmazon-CloudFront_light-bg.svg
+    shape: image
+    width: 40
+    height: 40
+  }
+  prod: Prod
+  preview: Preview
+}
+
+s3: S3 {
+  header: "" {
+    icon: https://icons.terrastruct.com/aws%2FStorage%2FAmazon-Simple-Storage-Service-S3.svg
+    shape: image
+    width: 40
+    height: 40
+  }
+  origin: "Prod origin"
+  preview: "Preview origin"
+  archive: "Log archive"
+}
+
+cw: CloudWatch {
+  direction: down
+  header: "" {
+    icon: https://icons.terrastruct.com/aws%2FManagement%20&%20Governance%2FAmazon-CloudWatch_light-bg.svg
+    shape: image
+    width: 40
+    height: 40
+  }
+  rum: RUM
+  logs: "Logs + Metrics"
+  dash: "Dashboards & Alarms"
+}
+
+fh: "Data Firehose" {
+  header: "" {
+    icon: https://icons.terrastruct.com/aws%2FAnalytics%2FAmazon-Kinesis-Data-Firehose_light-bg.svg
+    shape: image
+    width: 40
+    height: 40
+  }
+}
+
+visitor -> dns: DNS lookup
+dns.apex -> cf.prod: alias { style.stroke-dash: 4 }
+dns.pr -> cf.preview: alias { style.stroke-dash: 4 }
+visitor -> cf: HTTPS
+acm -> cf
+cf.prod -> s3.origin
+cf.preview -> s3.preview
+
+gh -> s3.origin: deploy
+gh -> s3.preview: preview deploy
+
+visitor -> cw.rum: RUM events
+cw.rum -> cw.logs
+cw.logs -> cw.dash
+cw.logs -> fh: subscription filter
+fh -> s3.archive: date partitioned

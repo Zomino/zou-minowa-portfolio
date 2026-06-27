@@ -32,6 +32,8 @@ See `apps/frontend/package.json` scripts for available commands.
 - Layouts live in `apps/frontend/src/layouts/`.
 - Pages live in `apps/frontend/src/pages/`.
 - Terraform infrastructure lives in `infra/`.
+- `index.ts` files re-export only. Implementation lives in a named file inside its own folder (`foo/foo.ts` with co-located `foo.test.ts`).
+- When building a shared package or contract, include only what both consumers actually use. Start minimal and let it grow; do not port a whole existing surface or add speculative helpers, fixtures, or constants. Derive types from the schema (one source of truth), and keep the export surface as small as possible.
 
 ## File structure
 
@@ -53,7 +55,9 @@ See `apps/frontend/package.json` scripts for available commands.
 - Use `UPPER_SNAKE_CASE` for constants with static literal values (strings, numbers).
 - Always mock external dependencies (e.g. `getCollection`, `getEntry`) in tests instead of skipping them.
 - Never add markup hooks (`data-*` attributes, ids, classes) to a component solely so a test can select an element. Assert on semantics or visible output instead. If a test genuinely must target the root element, give the component a rest-props passthrough (`...rest`) and pass the attribute in from the test file, never bake it into the component.
+- Run `prettier --write` on newly written or edited files before verifying, so formatting is not a separate round of fixes.
 - Never add code comments or documentation unless explicitly requested.
+- Always delete temporary or test files (scratch renders, throwaway scripts, debug output) once the task is done. Never leave them lying around.
 
 ## Git
 
@@ -67,6 +71,8 @@ See `apps/frontend/package.json` scripts for available commands.
 ## Writing style
 
 - Never use hyphens or dashes as punctuation in written content (no em dashes, en dashes, or hyphen separators). Use commas or full stops instead.
+- Keep explanations brief by default. Only go into line by line or low level specifics when explicitly asked.
+- Never use the second person ("you", "your") in written content. Write in the first person or rephrase impersonally.
 
 ## Language
 

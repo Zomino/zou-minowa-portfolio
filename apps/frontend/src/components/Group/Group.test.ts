@@ -105,9 +105,9 @@ describe("Group", () => {
 
     expect(html).toContain("divide-y");
     expect(html).toContain("divide-slate-200");
-    expect(html).toContain("[&#38;>*]:py-8");
-    expect(html).toContain("[&#38;>*:first-child]:pt-0");
-    expect(html).toContain("[&#38;>*:last-child]:pb-0");
+    expect(html).toContain("[&amp;>*]:py-8");
+    expect(html).toContain("[&amp;>*:first-child]:pt-0");
+    expect(html).toContain("[&amp;>*:last-child]:pb-0");
   });
 
   it("applies horizontal divider classes when horizontal and divided", async () => {
@@ -121,9 +121,9 @@ describe("Group", () => {
 
     expect(html).toContain("divide-x");
     expect(html).toContain("divide-slate-200");
-    expect(html).toContain("[&#38;>*]:px-8");
-    expect(html).toContain("[&#38;>*:first-child]:pl-0");
-    expect(html).toContain("[&#38;>*:last-child]:pr-0");
+    expect(html).toContain("[&amp;>*]:px-8");
+    expect(html).toContain("[&amp;>*:first-child]:pl-0");
+    expect(html).toContain("[&amp;>*:last-child]:pr-0");
   });
 
   it("merges custom class names", async () => {
