@@ -16,3 +16,6 @@ pnpm-debug.log*
 *.tfstate
 *.tfstate.backup
 .terraform.lock.hcl
+
+# Terraform archive_file build output
+infra/main/chat/build/
