@@ -3,13 +3,20 @@ description: Install dependencies and build the Astro site.
 
 inputs:
   base-path:
+    description: Base path the site is served from.
     required: false
     default: /
   site-url:
+    description: Absolute URL of the deployed site.
     required: false
   rum-app-monitor-id:
+    description: CloudWatch RUM application monitor id.
     required: false
   rum-identity-pool-id:
+    description: Cognito identity pool id used by CloudWatch RUM.
+    required: false
+  chat-api-url:
+    description: Absolute URL of the chat API endpoint.
     required: false
 
 runs:
@@ -36,3 +43,4 @@ runs:
         SITE_URL: ${{ inputs.site-url }}
         PUBLIC_RUM_APP_MONITOR_ID: ${{ inputs.rum-app-monitor-id }}
         PUBLIC_RUM_IDENTITY_POOL_ID: ${{ inputs.rum-identity-pool-id }}
+        PUBLIC_CHAT_API_URL: ${{ inputs.chat-api-url }}
