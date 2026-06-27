@@ -50,4 +50,8 @@
   .rich-text a {
     @apply link;
   }
+
+  .rich-text img {
+    @apply mx-auto block h-auto max-w-full;
+  }
 }
