@@ -1,63 +1,72 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import axios from "axios";
-import { MAX_INPUT_CHARS } from "@zou/chat-contract";
 
 import { sendChatRequest } from "./sendChatRequest";
+import { apiPost } from "@/utils/apiPost/apiPost";
 
-vi.mock("axios");
+vi.mock("@/utils/apiPost/apiPost");
 afterEach(() => {
   vi.clearAllMocks();
-  vi.restoreAllMocks();
 });
 
-const body = (content: string) => ({
-  messages: [{ role: "user" as const, content }],
+const body = {
+  messages: [{ role: "user" as const, content: "hi" }],
   pageSlug: "/projects",
-});
+};
 
 describe("sendChatRequest", () => {
-  it("returns the reply on success", async () => {
-    vi.mocked(axios.post).mockResolvedValue({ data: { reply: "Hello" } });
-
-    expect(await sendChatRequest(body("hi"))).toEqual({
-      ok: true,
-      reply: "Hello",
+  it("maps a 200 response to an ok result", async () => {
+    vi.mocked(apiPost).mockResolvedValue({
+      status: 200,
+      body: { reply: "Hello" },
     });
+
+    expect(await sendChatRequest(body)).toEqual({ ok: true, reply: "Hello" });
   });
 
-  it("returns the message and retry delay on rate_limited", async () => {
-    vi.mocked(axios.isAxiosError).mockReturnValue(true);
-    vi.mocked(axios.post).mockRejectedValue({
-      response: {
-        data: {
-          reason: "rate_limited",
-          message: "Slow down",
-          retryAfterMs: 5000,
-        },
+  it("maps a 429 response to a result with a retry delay", async () => {
+    vi.mocked(apiPost).mockResolvedValue({
+      status: 429,
+      body: {
+        reason: "rate_limited",
+        message: "Slow down",
+        retryAfterMs: 5000,
       },
     });
 
-    expect(await sendChatRequest(body("hi"))).toEqual({
+    expect(await sendChatRequest(body)).toEqual({
       ok: false,
       message: "Slow down",
       retryAfterMs: 5000,
     });
   });
 
-  it("falls back when the error has no response body", async () => {
-    vi.mocked(axios.isAxiosError).mockReturnValue(false);
-    vi.mocked(axios.post).mockRejectedValue(new Error("network"));
+  it("maps another error response to a result without a retry delay", async () => {
+    vi.mocked(apiPost).mockResolvedValue({
+      status: 503,
+      body: { reason: "unavailable", message: "Down" },
+    });
 
-    const result = await sendChatRequest(body("hi"));
-    expect(result.ok).toBe(false);
+    const result = await sendChatRequest(body);
+    expect(result).toEqual({ ok: false, message: "Down" });
     expect(result).not.toHaveProperty("retryAfterMs");
   });
 
-  it("rejects an over-long message without posting", async () => {
-    const post = vi.mocked(axios.post);
-    const result = await sendChatRequest(body("a".repeat(MAX_INPUT_CHARS + 1)));
+  it("falls back when there is no response", async () => {
+    vi.mocked(apiPost).mockResolvedValue(null);
+
+    expect(await sendChatRequest(body)).toEqual({
+      ok: false,
+      message: "Something went wrong. Please try again.",
+    });
+  });
+
+  it("rejects an unsafe body without calling apiPost", async () => {
+    const result = await sendChatRequest({
+      messages: [{ role: "user" as const, content: "" }],
+      pageSlug: "/projects",
+    });
 
     expect(result.ok).toBe(false);
-    expect(post).not.toHaveBeenCalled();
+    expect(apiPost).not.toHaveBeenCalled();
   });
 });

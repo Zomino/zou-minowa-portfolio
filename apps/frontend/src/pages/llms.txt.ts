@@ -1,7 +1,7 @@
 import { getCollection } from "astro:content";
 
 import { buildLlmsTxt } from "./_utils/buildLlmsTxt/buildLlmsTxt";
-import metadata from "../metadata.json";
+import metadata from "@/metadata.json";
 
 export async function GET({
   site,

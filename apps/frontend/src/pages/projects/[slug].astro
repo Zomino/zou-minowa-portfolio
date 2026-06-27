@@ -10,9 +10,9 @@ import Image from "../../components/Image/Image.astro";
 import Group from "../../components/Group/Group.astro";
 import Text from "../../components/Text/Text.astro";
 import Layout from "../../components/Layout/Layout.astro";
-import { formatDate } from "../../utils/formatDate/formatDate";
+import { formatDate } from "@/utils/formatDate/formatDate";
 import { buildSoftwareSourceCodeJsonLd } from "./_utils/buildSoftwareSourceCodeJsonLd/buildSoftwareSourceCodeJsonLd";
-import metadata from "../../metadata.json";
+import metadata from "@/metadata.json";
 
 export async function getStaticPaths() {
   const projects = await getCollection("projects");
