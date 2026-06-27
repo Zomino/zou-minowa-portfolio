@@ -113,3 +113,21 @@ resource "aws_cloudwatch_metric_alarm" "firehose_delivery_failed" {
 
   alarm_actions = [aws_sns_topic.alerts_eu.arn]
 }
+
+resource "aws_cloudwatch_metric_alarm" "chat_throttled" {
+  alarm_name          = "${var.project_name}-chat-throttled"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = 1
+  metric_name         = "Throttles"
+  namespace           = "AWS/Lambda"
+  period              = 300
+  statistic           = "Sum"
+  threshold           = 20
+  treat_missing_data  = "notBreaching"
+
+  dimensions = {
+    FunctionName = "${var.project_name}-chat"
+  }
+
+  alarm_actions = [aws_sns_topic.alerts_eu.arn]
+}
