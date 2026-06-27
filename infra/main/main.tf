@@ -22,7 +22,8 @@ provider "aws" {
 
   default_tags {
     tags = {
-      Project = var.project_name
+      Project   = var.project_name
+      ManagedBy = "terraform"
     }
   }
 }
@@ -33,7 +34,8 @@ provider "aws" {
 
   default_tags {
     tags = {
-      Project = var.project_name
+      Project   = var.project_name
+      ManagedBy = "terraform"
     }
   }
 }
@@ -77,3 +79,4 @@ module "monitoring" {
     aws.us_east_1 = aws.us_east_1
   }
 }
+
