@@ -1,6 +1,6 @@
 import AnthropicBedrock from "@anthropic-ai/bedrock-sdk";
 
-import type { ChatModel } from "./handleChatRequest";
+import type { ChatModel } from "../handleChatRequest";
 
 export interface BedrockChatModelConfig {
   region: string;

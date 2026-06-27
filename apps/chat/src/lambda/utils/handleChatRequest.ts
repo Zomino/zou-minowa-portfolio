@@ -27,9 +27,17 @@ export interface ChatProtection {
   record(args: { tokens: number }): Promise<void>;
 }
 
+export interface ChatGuardrail {
+  inspect(args: {
+    text: string;
+    source: "input" | "output";
+  }): Promise<{ blocked: boolean }>;
+}
+
 export interface ChatDeps {
   model: ChatModel;
   protection: ChatProtection;
+  guardrail: ChatGuardrail;
 }
 
 const systemPrompt = buildSystemPrompt(PORTFOLIO);
@@ -54,17 +62,7 @@ export const handleChatRequest = async (
   try {
     const verdict = await deps.protection.check(clientId);
 
-    if (verdict.allowed) {
-      const { reply, tokens } = await deps.model.generate({
-        systemPrompt,
-        messages: parsed.data.body.messages,
-      });
-      await deps.protection.record({ tokens });
-
-      return { status: 200, body: { reply } };
-    }
-
-    if (verdict.reason === "rate_limited") {
+    if (!verdict.allowed && verdict.reason === "rate_limited") {
       return {
         status: 429,
         body: {
@@ -75,14 +73,52 @@ export const handleChatRequest = async (
       };
     }
 
-    return {
-      status: 503,
-      body: {
-        reason: "budget_exhausted",
-        message:
-          "The chat has reached its usage limit for today. Please try again tomorrow.",
-      },
-    };
+    if (!verdict.allowed) {
+      return {
+        status: 503,
+        body: {
+          reason: "budget_exhausted",
+          message:
+            "The chat has reached its usage limit for today. Please try again tomorrow.",
+        },
+      };
+    }
+
+    const { messages } = parsed.data.body;
+    const userText = messages.at(-1)?.content ?? "";
+
+    const inputCheck = await deps.guardrail.inspect({
+      text: userText,
+      source: "input",
+    });
+    if (inputCheck.blocked) {
+      return {
+        status: 400,
+        body: {
+          reason: "blocked",
+          message: "Sorry, that request is not something I can help with.",
+        },
+      };
+    }
+
+    const { reply, tokens } = await deps.model.generate({
+      systemPrompt,
+      messages,
+    });
+    await deps.protection.record({ tokens });
+
+    const outputCheck = await deps.guardrail.inspect({
+      text: reply,
+      source: "output",
+    });
+    if (outputCheck.blocked) {
+      return {
+        status: 200,
+        body: { reply: "Sorry, I cannot help with that." },
+      };
+    }
+
+    return { status: 200, body: { reply } };
   } catch {
     return {
       status: 503,

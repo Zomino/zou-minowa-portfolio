@@ -1,7 +1,8 @@
 import type { APIGatewayProxyEventV2 } from "aws-lambda";
 
 import { handleChatRequest } from "./utils/handleChatRequest";
-import { createBedrockChatModel } from "./utils/createBedrockChatModel";
+import { createBedrockChatModel } from "./utils/bedrock/createBedrockChatModel";
+import { createBedrockGuardrail } from "./utils/bedrock/createBedrockGuardrail";
 import { createDynamoProtection } from "./utils/dynamo/createDynamoProtection";
 
 const DEFAULT_MODEL_ID = "eu.anthropic.claude-haiku-4-5-20251001-v1:0";
@@ -64,6 +65,12 @@ export const handler = async (event: APIGatewayProxyEventV2) => {
     dailyTokenBudget: DEFAULT_DAILY_TOKEN_BUDGET,
   });
 
+  const guardrail = createBedrockGuardrail({
+    region,
+    guardrailId: requireEnv("CHAT_GUARDRAIL_ID"),
+    guardrailVersion: requireEnv("CHAT_GUARDRAIL_VERSION"),
+  });
+
   const clientId = clientIdFrom(
     event.headers["x-forwarded-for"],
     event.requestContext.http.sourceIp,
@@ -73,6 +80,7 @@ export const handler = async (event: APIGatewayProxyEventV2) => {
   const outcome = await handleChatRequest(payload, clientId, {
     model,
     protection,
+    guardrail,
   });
 
   return {

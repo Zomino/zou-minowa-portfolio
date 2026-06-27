@@ -26,6 +26,9 @@ importers:
       '@anthropic-ai/bedrock-sdk':
         specifier: ^0.31.0
         version: 0.31.0(zod@4.4.3)
+      '@aws-sdk/client-bedrock-runtime':
+        specifier: ^3.1075.0
+        version: 3.1075.0
       '@aws-sdk/client-dynamodb':
         specifier: ^3.1075.0
         version: 3.1075.0
@@ -4375,7 +4378,7 @@ snapshots:
       '@aws-sdk/middleware-websocket': 3.972.31
       '@aws-sdk/token-providers': 3.1075.0
       '@aws-sdk/types': 3.973.13
-      '@smithy/core': 3.25.1
+      '@smithy/core': 3.26.0
       '@smithy/fetch-http-handler': 5.5.1
       '@smithy/node-http-handler': 4.8.2
       '@smithy/types': 4.15.0

@@ -1,6 +1,10 @@
 import { describe, expect, it, vi } from "vitest";
 
-import type { ChatModel, ChatProtection } from "./handleChatRequest";
+import type {
+  ChatGuardrail,
+  ChatModel,
+  ChatProtection,
+} from "./handleChatRequest";
 import { handleChatRequest } from "./handleChatRequest";
 import { PORTFOLIO } from "./portfolio";
 
@@ -15,6 +19,18 @@ const allowingProtection = (): ChatProtection => ({
   record: vi.fn(async () => {}),
 });
 
+const allowingGuardrail = (): ChatGuardrail => ({
+  inspect: vi.fn(async () => ({ blocked: false })),
+});
+
+const guardrailBlocking = (
+  blockedSource: "input" | "output",
+): ChatGuardrail => ({
+  inspect: vi.fn<ChatGuardrail["inspect"]>(async ({ source }) => ({
+    blocked: source === blockedSource,
+  })),
+});
+
 const validPayload = {
   body: { messages: [{ role: "user", content: "What does Zou build?" }] },
 };
@@ -27,6 +43,7 @@ describe("handleChatRequest", () => {
     const outcome = await handleChatRequest(validPayload, CLIENT_ID, {
       model,
       protection,
+      guardrail: allowingGuardrail(),
     });
 
     expect(outcome).toEqual({
@@ -47,6 +64,7 @@ describe("handleChatRequest", () => {
     const outcome = await handleChatRequest({ body: { messages: [] } }, CLIENT_ID, {
       model,
       protection,
+      guardrail: allowingGuardrail(),
     });
 
     expect(outcome.status).toBe(400);
@@ -64,6 +82,7 @@ describe("handleChatRequest", () => {
     const outcome = await handleChatRequest("not an object", CLIENT_ID, {
       model,
       protection: allowingProtection(),
+      guardrail: allowingGuardrail(),
     });
 
     expect(outcome.status).toBe(400);
@@ -76,10 +95,46 @@ describe("handleChatRequest", () => {
     const outcome = await handleChatRequest(null, CLIENT_ID, {
       model,
       protection: allowingProtection(),
+      guardrail: allowingGuardrail(),
     });
 
     expect(outcome.status).toBe(400);
     expect(model.generate).not.toHaveBeenCalled();
+  });
+
+  it("returns 400 blocked when the guardrail blocks the input", async () => {
+    const model = modelReturning("unused");
+
+    const outcome = await handleChatRequest(validPayload, CLIENT_ID, {
+      model,
+      protection: allowingProtection(),
+      guardrail: guardrailBlocking("input"),
+    });
+
+    expect(outcome.status).toBe(400);
+    expect(outcome.body).toEqual({
+      reason: "blocked",
+      message: expect.any(String),
+    });
+    expect(model.generate).not.toHaveBeenCalled();
+  });
+
+  it("returns a safe 200 fallback when the guardrail blocks the output", async () => {
+    const model = modelReturning("disallowed reply", 42);
+    const protection = allowingProtection();
+
+    const outcome = await handleChatRequest(validPayload, CLIENT_ID, {
+      model,
+      protection,
+      guardrail: guardrailBlocking("output"),
+    });
+
+    expect(outcome.status).toBe(200);
+    if (outcome.status === 200) {
+      expect(outcome.body.reply).not.toBe("disallowed reply");
+      expect(outcome.body.reply).toEqual(expect.any(String));
+    }
+    expect(protection.record).toHaveBeenCalledWith({ tokens: 42 });
   });
 
   it("returns 429 rate_limited with the retry delay when the limit is hit", async () => {
@@ -96,6 +151,7 @@ describe("handleChatRequest", () => {
     const outcome = await handleChatRequest(validPayload, CLIENT_ID, {
       model,
       protection,
+      guardrail: allowingGuardrail(),
     });
 
     expect(outcome).toEqual({
@@ -122,6 +178,7 @@ describe("handleChatRequest", () => {
     const outcome = await handleChatRequest(validPayload, CLIENT_ID, {
       model,
       protection,
+      guardrail: allowingGuardrail(),
     });
 
     expect(outcome.status).toBe(503);
@@ -144,6 +201,7 @@ describe("handleChatRequest", () => {
     const outcome = await handleChatRequest(validPayload, CLIENT_ID, {
       model,
       protection,
+      guardrail: allowingGuardrail(),
     });
 
     expect(outcome.status).toBe(503);
@@ -164,6 +222,7 @@ describe("handleChatRequest", () => {
     const outcome = await handleChatRequest(validPayload, CLIENT_ID, {
       model,
       protection: allowingProtection(),
+      guardrail: allowingGuardrail(),
     });
 
     expect(outcome.status).toBe(503);
