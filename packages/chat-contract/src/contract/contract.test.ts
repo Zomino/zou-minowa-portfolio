@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { MAX_INPUT_CHARS, chatRequestSchema } from "./contract";
+import { MAX_INPUT_CHARS, MAX_REPLY_CHARS, chatRequestSchema } from "./contract";
 
 const parse = (request: unknown) => chatRequestSchema.safeParse(request);
 
@@ -56,11 +56,42 @@ describe("chatRequestSchema", () => {
     ).toBe(false);
   });
 
-  it("rejects a message that exceeds the input cap", () => {
+  it("rejects a user message that exceeds the input cap", () => {
     const content = "a".repeat(MAX_INPUT_CHARS + 1);
 
     expect(
       parse({ body: { messages: [{ role: "user", content }] } }).success,
+    ).toBe(false);
+  });
+
+  it("accepts an assistant message longer than the input cap", () => {
+    const reply = "a".repeat(MAX_INPUT_CHARS + 1);
+
+    expect(
+      parse({
+        body: {
+          messages: [
+            { role: "user", content: "Hi" },
+            { role: "assistant", content: reply },
+            { role: "user", content: "More" },
+          ],
+        },
+      }).success,
+    ).toBe(true);
+  });
+
+  it("rejects an assistant message that exceeds the reply cap", () => {
+    const reply = "a".repeat(MAX_REPLY_CHARS + 1);
+
+    expect(
+      parse({
+        body: {
+          messages: [
+            { role: "assistant", content: reply },
+            { role: "user", content: "More" },
+          ],
+        },
+      }).success,
     ).toBe(false);
   });
 });

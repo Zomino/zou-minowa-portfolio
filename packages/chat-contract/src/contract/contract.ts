@@ -1,11 +1,22 @@
 import { z } from "zod";
 
 export const MAX_INPUT_CHARS = 1000;
+export const MAX_REPLY_CHARS = 4000;
 
-const messageSchema = z.object({
-  role: z.enum(["user", "assistant"]),
+const userMessageSchema = z.object({
+  role: z.literal("user"),
   content: z.string().trim().min(1).max(MAX_INPUT_CHARS),
 });
+
+const assistantMessageSchema = z.object({
+  role: z.literal("assistant"),
+  content: z.string().trim().min(1).max(MAX_REPLY_CHARS),
+});
+
+const messageSchema = z.discriminatedUnion("role", [
+  userMessageSchema,
+  assistantMessageSchema,
+]);
 
 export const chatRequestSchema = z.object({
   body: z.object({
