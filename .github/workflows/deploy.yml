@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - "apps/frontend/**"
+      - "packages/**"
       - ".github/actions/build/**"
       - ".github/workflows/deploy.yml"
       - "scripts/deploy.sh"
