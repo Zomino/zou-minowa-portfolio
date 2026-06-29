@@ -18,6 +18,10 @@ inputs:
   chat-api-url:
     description: Absolute URL of the chat API endpoint.
     required: false
+  chat-enabled:
+    description: Whether the chat widget is rendered into the static build.
+    required: false
+    default: "true"
 
 runs:
   using: composite
@@ -44,3 +48,4 @@ runs:
         PUBLIC_RUM_APP_MONITOR_ID: ${{ inputs.rum-app-monitor-id }}
         PUBLIC_RUM_IDENTITY_POOL_ID: ${{ inputs.rum-identity-pool-id }}
         PUBLIC_CHAT_API_URL: ${{ inputs.chat-api-url }}
+        PUBLIC_CHAT_ENABLED: ${{ inputs.chat-enabled }}
