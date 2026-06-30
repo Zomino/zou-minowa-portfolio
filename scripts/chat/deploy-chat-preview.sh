@@ -22,11 +22,14 @@ create_function() {
     --role "$CHAT_PREVIEW_ROLE_ARN" \
     --memory-size 512 \
     --timeout 30 \
-    --reserved-concurrent-executions 2 \
     --zip-file "fileb://${zip_path}" \
     --environment "Variables={CHAT_TABLE_NAME=${CHAT_PREVIEW_TABLE_NAME},CHAT_MODEL_ID=${CHAT_MODEL_ID},CHAT_GUARDRAIL_ID=${CHAT_GUARDRAIL_ID},CHAT_GUARDRAIL_VERSION=${CHAT_GUARDRAIL_VERSION}}" \
     >/dev/null
   aws lambda wait function-active --function-name "$name"
+  aws lambda put-function-concurrency \
+    --function-name "$name" \
+    --reserved-concurrent-executions 2 \
+    >/dev/null
 }
 
 update_function_config() {

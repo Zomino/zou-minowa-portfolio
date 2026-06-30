@@ -101,6 +101,7 @@ resource "aws_iam_role_policy" "github_actions_chat_preview" {
           "lambda:CreateFunction",
           "lambda:UpdateFunctionCode",
           "lambda:UpdateFunctionConfiguration",
+          "lambda:PutFunctionConcurrency",
           "lambda:DeleteFunction",
           "lambda:GetFunction",
           "lambda:AddPermission",
