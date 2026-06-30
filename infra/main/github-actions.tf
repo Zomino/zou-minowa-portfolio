@@ -62,3 +62,72 @@ resource "aws_iam_role_policy" "github_actions" {
     ]
   })
 }
+
+data "aws_caller_identity" "current" {}
+
+data "aws_region" "current" {}
+
+resource "aws_iam_role_policy" "github_actions_chat_prod" {
+  name = "chat-prod"
+  role = aws_iam_role.github_actions["deploy"].id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Sid    = "DeployProdFunction"
+        Effect = "Allow"
+        Action = [
+          "lambda:UpdateFunctionCode",
+          "lambda:GetFunction",
+        ]
+        Resource = module.chat.function_arn
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy" "github_actions_chat_preview" {
+  name = "chat-preview"
+  role = aws_iam_role.github_actions["preview"].id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Sid    = "ManagePreviewFunctions"
+        Effect = "Allow"
+        Action = [
+          "lambda:CreateFunction",
+          "lambda:UpdateFunctionCode",
+          "lambda:UpdateFunctionConfiguration",
+          "lambda:DeleteFunction",
+          "lambda:GetFunction",
+          "lambda:AddPermission",
+          "lambda:RemovePermission",
+        ]
+        Resource = "arn:aws:lambda:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:function:${var.project_name}-chat-preview-pr-*"
+      },
+      {
+        Sid    = "ManagePreviewStages"
+        Effect = "Allow"
+        Action = [
+          "apigateway:POST",
+          "apigateway:DELETE",
+          "apigateway:GET",
+          "apigateway:PATCH",
+        ]
+        Resource = [
+          "arn:aws:apigateway:${data.aws_region.current.name}::/apis/${module.chat_preview.api_id}/stages",
+          "arn:aws:apigateway:${data.aws_region.current.name}::/apis/${module.chat_preview.api_id}/stages/*",
+        ]
+      },
+      {
+        Sid      = "PassExecutionRole"
+        Effect   = "Allow"
+        Action   = "iam:PassRole"
+        Resource = module.chat_preview.execution_role_arn
+      }
+    ]
+  })
+}

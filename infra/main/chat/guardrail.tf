@@ -1,5 +1,5 @@
 resource "aws_bedrock_guardrail" "chat" {
-  name                      = "${var.project_name}-chat"
+  name                      = local.name
   description               = "Topic restriction and prompt injection protection for the portfolio chat."
   blocked_input_messaging   = "I can only help with questions about Zou Minowa and his work as a software engineer."
   blocked_outputs_messaging = "I can only help with questions about Zou Minowa and his work as a software engineer."

@@ -1,13 +1,5 @@
-data "aws_caller_identity" "current" {}
-
-data "aws_region" "current" {}
-
-locals {
-  geo                  = substr(data.aws_region.current.name, 0, 2)
-  inference_profile_id = "${local.geo}.${var.model_id}"
-}
-
 data "archive_file" "lambda" {
+  count       = local.has_function ? 1 : 0
   type        = "zip"
   source_file = "${path.module}/../../../apps/chat/dist/index.mjs"
   output_path = "${path.module}/build/chat-lambda.zip"
@@ -25,7 +17,7 @@ data "aws_iam_policy_document" "assume" {
 }
 
 resource "aws_iam_role" "chat" {
-  name               = "${var.project_name}-chat"
+  name               = local.name
   assume_role_policy = data.aws_iam_policy_document.assume.json
 }
 
@@ -62,19 +54,20 @@ data "aws_iam_policy_document" "chat" {
 }
 
 resource "aws_iam_role_policy" "chat" {
-  name   = "${var.project_name}-chat"
+  name   = local.name
   role   = aws_iam_role.chat.id
   policy = data.aws_iam_policy_document.chat.json
 }
 
 resource "aws_lambda_function" "chat" {
-  function_name                  = "${var.project_name}-chat"
+  count                          = local.has_function ? 1 : 0
+  function_name                  = local.name
   role                           = aws_iam_role.chat.arn
   runtime                        = "nodejs22.x"
   handler                        = "index.handler"
   architectures                  = ["arm64"]
-  filename                       = data.archive_file.lambda.output_path
-  source_code_hash               = data.archive_file.lambda.output_base64sha256
+  filename                       = data.archive_file.lambda[0].output_path
+  source_code_hash               = data.archive_file.lambda[0].output_base64sha256
   memory_size                    = var.memory_size
   timeout                        = var.timeout_seconds
   reserved_concurrent_executions = var.reserved_concurrency
@@ -87,9 +80,14 @@ resource "aws_lambda_function" "chat" {
       CHAT_GUARDRAIL_VERSION = aws_bedrock_guardrail_version.chat.version
     }
   }
+
+  lifecycle {
+    ignore_changes = [filename, source_code_hash]
+  }
 }
 
 resource "aws_cloudwatch_log_group" "chat" {
-  name              = "/aws/lambda/${aws_lambda_function.chat.function_name}"
+  count             = local.has_function ? 1 : 0
+  name              = "/aws/lambda/${local.name}"
   retention_in_days = 30
 }

@@ -28,6 +28,7 @@ jobs:
       pull-requests: read
     outputs:
       frontend: ${{ steps.filter.outputs.frontend }}
+      chat: ${{ steps.filter.outputs.chat }}
     steps:
       - uses: dorny/paths-filter@v4
         id: filter
@@ -36,13 +37,50 @@ jobs:
             frontend:
               - 'apps/frontend/**'
               - '.github/actions/build/**'
+              - '.github/actions/setup/**'
               - '.github/workflows/preview.yml'
               - '.github/workflows/checks.yml'
-              - 'scripts/deploy.sh'
+              - 'scripts/deploy-frontend.sh'
+            chat:
+              - 'apps/chat/**'
+              - 'packages/**'
+              - '.github/actions/setup/**'
+              - '.github/workflows/preview.yml'
+              - 'scripts/chat/**'
 
-  deploy:
+  deploy-chat:
     needs: [quality, changes]
-    if: ${{ github.event.action != 'closed' && github.actor != 'dependabot[bot]' && needs.quality.result == 'success' && needs.changes.outputs.frontend == 'true' }}
+    if: ${{ github.event.action != 'closed' && github.actor != 'dependabot[bot]' && needs.quality.result == 'success' && (needs.changes.outputs.frontend == 'true' || needs.changes.outputs.chat == 'true') }}
+    runs-on: ubuntu-latest
+    outputs:
+      chat_api_url: ${{ steps.deploy.outputs.chat_api_url }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: ./.github/actions/setup
+
+      - run: pnpm -F @zou/chat build
+
+      - uses: aws-actions/configure-aws-credentials@v6
+        with:
+          role-to-assume: ${{ secrets.PREVIEW_ROLE_ARN }}
+          aws-region: eu-west-2
+
+      - name: Deploy preview Lambda
+        id: deploy
+        env:
+          PREVIEW_ID: pr-${{ github.event.number }}
+          CHAT_PREVIEW_API_ID: ${{ vars.CHAT_PREVIEW_API_ID }}
+          CHAT_PREVIEW_ROLE_ARN: ${{ vars.CHAT_PREVIEW_ROLE_ARN }}
+          CHAT_PREVIEW_TABLE_NAME: ${{ vars.CHAT_PREVIEW_TABLE_NAME }}
+          CHAT_MODEL_ID: ${{ vars.CHAT_PREVIEW_MODEL_ID }}
+          CHAT_GUARDRAIL_ID: ${{ vars.CHAT_GUARDRAIL_ID }}
+          CHAT_GUARDRAIL_VERSION: ${{ vars.CHAT_GUARDRAIL_VERSION }}
+        run: bash scripts/chat/deploy-chat-preview.sh
+
+  deploy-frontend:
+    needs: [quality, changes, deploy-chat]
+    if: ${{ github.event.action != 'closed' && github.actor != 'dependabot[bot]' && needs.quality.result == 'success' && (needs.changes.outputs.frontend == 'true' || needs.changes.outputs.chat == 'true') }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -50,6 +88,7 @@ jobs:
       - uses: ./.github/actions/build
         with:
           site-url: ${{ format('https://pr-{0}.{1}', github.event.number, vars.PREVIEW_BASE_DOMAIN) }}
+          chat-api-url: ${{ needs.deploy-chat.outputs.chat_api_url }}
 
       - uses: aws-actions/configure-aws-credentials@v6
         with:
@@ -57,7 +96,7 @@ jobs:
           aws-region: eu-west-2
 
       - name: Deploy to preview prefix
-        run: bash scripts/deploy.sh
+        run: bash scripts/deploy-frontend.sh
         env:
           DEPLOY_BUCKET: ${{ env.PREVIEW_BUCKET }}
           DEPLOY_PREFIX: ${{ format('pr-{0}', github.event.number) }}
@@ -69,7 +108,7 @@ jobs:
         run: |
           gh pr comment ${{ github.event.number }} --edit-last --create-if-none --body "Preview: ${PREVIEW_URL}"
 
-  teardown:
+  teardown-frontend:
     if: ${{ github.event.action == 'closed' && github.actor != 'dependabot[bot]' }}
     runs-on: ubuntu-latest
     steps:
@@ -83,3 +122,20 @@ jobs:
           DEPLOY_PREFIX: ${{ format('pr-{0}', github.event.number) }}
         run: |
           aws s3 rm "s3://${PREVIEW_BUCKET}/${DEPLOY_PREFIX}/" --recursive
+
+  teardown-chat:
+    if: ${{ github.event.action == 'closed' && github.actor != 'dependabot[bot]' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: aws-actions/configure-aws-credentials@v6
+        with:
+          role-to-assume: ${{ secrets.PREVIEW_ROLE_ARN }}
+          aws-region: eu-west-2
+
+      - name: Delete preview Lambda
+        env:
+          PREVIEW_ID: pr-${{ github.event.number }}
+          CHAT_PREVIEW_API_ID: ${{ vars.CHAT_PREVIEW_API_ID }}
+        run: bash scripts/chat/teardown-chat-preview.sh
