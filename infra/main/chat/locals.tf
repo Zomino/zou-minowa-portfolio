@@ -11,5 +11,9 @@ locals {
   has_default_stage = !var.preview
   has_custom_domain = var.api_domain_name != null
 
+  guardrail_id      = var.preview ? var.guardrail_id : one(aws_bedrock_guardrail.chat[*].guardrail_id)
+  guardrail_arn     = var.preview ? var.guardrail_arn : one(aws_bedrock_guardrail.chat[*].guardrail_arn)
+  guardrail_version = var.preview ? var.guardrail_version : one(aws_bedrock_guardrail_version.chat[*].version)
+
   function_arn_template = "arn:aws:lambda:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:function:${local.name}-$${stageVariables.previewId}"
 }

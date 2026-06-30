@@ -38,12 +38,12 @@ output "chat_preview_model_id" {
   value = module.chat_preview.model_id
 }
 
-output "chat_preview_guardrail_id" {
-  value = module.chat_preview.guardrail_id
+output "chat_guardrail_id" {
+  value = module.chat.guardrail_id
 }
 
-output "chat_preview_guardrail_version" {
-  value = module.chat_preview.guardrail_version
+output "chat_guardrail_version" {
+  value = module.chat.guardrail_version
 }
 
 output "nameservers" {
