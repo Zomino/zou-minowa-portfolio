@@ -80,7 +80,7 @@ export const handler = async (event: APIGatewayProxyEventV2) => {
   const payload = parseJson(decoded);
 
   const start = Date.now();
-  const outcome = await handleChatRequest(payload, clientId, {
+  const outcome = await handleChatRequest({ body: payload }, clientId, {
     model,
     protection,
     guardrail,
