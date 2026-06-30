@@ -92,6 +92,9 @@ module "chat_preview" {
   source             = "./modules/chat"
   project_name       = var.project_name
   preview            = true
+  guardrail_id       = module.chat.guardrail_id
+  guardrail_arn      = module.chat.guardrail_arn
+  guardrail_version  = module.chat.guardrail_version
   cors_allow_origins = ["*"]
 }
 

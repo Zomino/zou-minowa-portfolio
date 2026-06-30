@@ -19,9 +19,13 @@ output "model_id" {
 }
 
 output "guardrail_id" {
-  value = aws_bedrock_guardrail.chat.guardrail_id
+  value = local.guardrail_id
+}
+
+output "guardrail_arn" {
+  value = local.guardrail_arn
 }
 
 output "guardrail_version" {
-  value = aws_bedrock_guardrail_version.chat.version
+  value = local.guardrail_version
 }

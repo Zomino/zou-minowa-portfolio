@@ -39,7 +39,7 @@ data "aws_iam_policy_document" "chat" {
   statement {
     sid       = "ApplyGuardrail"
     actions   = ["bedrock:ApplyGuardrail"]
-    resources = [aws_bedrock_guardrail.chat.guardrail_arn]
+    resources = [local.guardrail_arn]
   }
 
   statement {
@@ -76,8 +76,8 @@ resource "aws_lambda_function" "chat" {
     variables = {
       CHAT_TABLE_NAME        = aws_dynamodb_table.chat.name
       CHAT_MODEL_ID          = local.inference_profile_id
-      CHAT_GUARDRAIL_ID      = aws_bedrock_guardrail.chat.guardrail_id
-      CHAT_GUARDRAIL_VERSION = aws_bedrock_guardrail_version.chat.version
+      CHAT_GUARDRAIL_ID      = local.guardrail_id
+      CHAT_GUARDRAIL_VERSION = local.guardrail_version
     }
   }
 

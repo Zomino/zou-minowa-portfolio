@@ -7,6 +7,21 @@ variable "preview" {
   default = false
 }
 
+variable "guardrail_id" {
+  type    = string
+  default = null
+}
+
+variable "guardrail_arn" {
+  type    = string
+  default = null
+}
+
+variable "guardrail_version" {
+  type    = string
+  default = null
+}
+
 variable "model_id" {
   type    = string
   default = "anthropic.claude-haiku-4-5-20251001-v1:0"
