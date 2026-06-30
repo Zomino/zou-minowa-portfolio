@@ -1,5 +1,5 @@
 resource "aws_apigatewayv2_api" "chat" {
-  name          = "${var.project_name}-chat"
+  name          = local.name
   protocol_type = "HTTP"
 
   cors_configuration {
@@ -13,7 +13,7 @@ resource "aws_apigatewayv2_api" "chat" {
 resource "aws_apigatewayv2_integration" "chat" {
   api_id                 = aws_apigatewayv2_api.chat.id
   integration_type       = "AWS_PROXY"
-  integration_uri        = aws_lambda_function.chat.invoke_arn
+  integration_uri        = local.has_function ? aws_lambda_function.chat[0].invoke_arn : local.function_arn_template
   integration_method     = "POST"
   payload_format_version = "2.0"
 }
@@ -25,11 +25,13 @@ resource "aws_apigatewayv2_route" "chat" {
 }
 
 resource "aws_cloudwatch_log_group" "chat_api" {
-  name              = "/aws/apigateway/${var.project_name}-chat"
+  count             = local.has_default_stage ? 1 : 0
+  name              = "/aws/apigateway/${local.name}"
   retention_in_days = 30
 }
 
 resource "aws_apigatewayv2_stage" "default" {
+  count       = local.has_default_stage ? 1 : 0
   api_id      = aws_apigatewayv2_api.chat.id
   name        = "$default"
   auto_deploy = true
@@ -40,7 +42,7 @@ resource "aws_apigatewayv2_stage" "default" {
   }
 
   access_log_settings {
-    destination_arn = aws_cloudwatch_log_group.chat_api.arn
+    destination_arn = aws_cloudwatch_log_group.chat_api[0].arn
     format = jsonencode({
       requestId = "$context.requestId"
       ip        = "$context.identity.sourceIp"
@@ -53,14 +55,16 @@ resource "aws_apigatewayv2_stage" "default" {
 }
 
 resource "aws_lambda_permission" "chat_apigw" {
+  count         = local.has_function ? 1 : 0
   statement_id  = "AllowAPIGatewayInvoke"
   action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.chat.function_name
+  function_name = aws_lambda_function.chat[0].function_name
   principal     = "apigateway.amazonaws.com"
   source_arn    = "${aws_apigatewayv2_api.chat.execution_arn}/*/*"
 }
 
 resource "aws_apigatewayv2_domain_name" "chat" {
+  count       = local.has_custom_domain ? 1 : 0
   domain_name = var.api_domain_name
 
   domain_name_configuration {
@@ -71,7 +75,8 @@ resource "aws_apigatewayv2_domain_name" "chat" {
 }
 
 resource "aws_apigatewayv2_api_mapping" "chat" {
+  count       = local.has_custom_domain ? 1 : 0
   api_id      = aws_apigatewayv2_api.chat.id
-  domain_name = aws_apigatewayv2_domain_name.chat.id
-  stage       = aws_apigatewayv2_stage.default.id
+  domain_name = aws_apigatewayv2_domain_name.chat[0].id
+  stage       = aws_apigatewayv2_stage.default[0].id
 }

@@ -26,18 +26,7 @@ inputs:
 runs:
   using: composite
   steps:
-    - uses: pnpm/action-setup@v6
-      with:
-        version: 10.11.0
-
-    - uses: actions/setup-node@v6
-      with:
-        node-version: 22
-        cache: pnpm
-        cache-dependency-path: pnpm-lock.yaml
-
-    - run: pnpm install --frozen-lockfile
-      shell: bash
+    - uses: ./.github/actions/setup
 
     - run: pnpm build
       shell: bash

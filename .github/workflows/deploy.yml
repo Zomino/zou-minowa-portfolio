@@ -5,10 +5,12 @@ on:
     branches: [main]
     paths:
       - "apps/frontend/**"
+      - "apps/chat/**"
       - "packages/**"
       - ".github/actions/build/**"
       - ".github/workflows/deploy.yml"
-      - "scripts/deploy.sh"
+      - "scripts/deploy-frontend.sh"
+      - "scripts/chat/**"
 
 permissions:
   contents: read
@@ -21,7 +23,7 @@ jobs:
   quality:
     uses: ./.github/workflows/checks.yml
 
-  build:
+  build-frontend:
     needs: quality
     runs-on: ubuntu-latest
     steps:
@@ -40,8 +42,8 @@ jobs:
           name: dist
           path: apps/frontend/dist
 
-  deploy:
-    needs: build
+  deploy-frontend:
+    needs: [build-frontend, deploy-chat]
     runs-on: ubuntu-latest
     permissions:
       id-token: write
@@ -59,10 +61,46 @@ jobs:
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           aws-region: eu-west-2
 
-      - run: bash scripts/deploy.sh
+      - run: bash scripts/deploy-frontend.sh
+
+  build-chat:
+    needs: quality
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: ./.github/actions/setup
+
+      - run: pnpm -F @zou/chat build
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: chat-dist
+          path: apps/chat/dist
+
+  deploy-chat:
+    needs: build-chat
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/download-artifact@v8
+        with:
+          name: chat-dist
+          path: apps/chat/dist
+
+      - uses: aws-actions/configure-aws-credentials@v6
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: eu-west-2
+
+      - run: bash scripts/chat/deploy-chat.sh
 
   lighthouse:
-    needs: deploy
+    needs: deploy-frontend
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7

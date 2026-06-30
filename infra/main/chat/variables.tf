@@ -2,6 +2,11 @@ variable "project_name" {
   type = string
 }
 
+variable "preview" {
+  type    = bool
+  default = false
+}
+
 variable "model_id" {
   type    = string
   default = "anthropic.claude-haiku-4-5-20251001-v1:0"
@@ -23,11 +28,13 @@ variable "reserved_concurrency" {
 }
 
 variable "api_domain_name" {
-  type = string
+  type    = string
+  default = null
 }
 
 variable "api_certificate_arn" {
-  type = string
+  type    = string
+  default = null
 }
 
 variable "cors_allow_origins" {
