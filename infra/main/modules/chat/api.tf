@@ -24,12 +24,6 @@ resource "aws_apigatewayv2_route" "chat" {
   target    = "integrations/${aws_apigatewayv2_integration.chat.id}"
 }
 
-resource "aws_cloudwatch_log_group" "chat_api" {
-  count             = local.has_default_stage ? 1 : 0
-  name              = "/aws/apigateway/${local.name}"
-  retention_in_days = 30
-}
-
 resource "aws_apigatewayv2_stage" "default" {
   count       = local.has_default_stage ? 1 : 0
   api_id      = aws_apigatewayv2_api.chat.id
@@ -37,8 +31,8 @@ resource "aws_apigatewayv2_stage" "default" {
   auto_deploy = true
 
   default_route_settings {
-    throttling_rate_limit  = var.api_throttle_rate
-    throttling_burst_limit = var.api_throttle_burst
+    throttling_rate_limit  = 10
+    throttling_burst_limit = 20
   }
 
   access_log_settings {
@@ -68,7 +62,7 @@ resource "aws_apigatewayv2_domain_name" "chat" {
   domain_name = var.api_domain_name
 
   domain_name_configuration {
-    certificate_arn = var.api_certificate_arn
+    certificate_arn = aws_acm_certificate_validation.api[0].certificate_arn
     endpoint_type   = "REGIONAL"
     security_policy = "TLS_1_2"
   }

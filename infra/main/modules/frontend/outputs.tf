@@ -2,8 +2,8 @@ output "domain_name" {
   value = aws_cloudfront_distribution.site.domain_name
 }
 
-output "hosted_zone_id" {
-  value = aws_cloudfront_distribution.site.hosted_zone_id
+output "acm_certificate_arn" {
+  value = var.manage_certificate ? aws_acm_certificate_validation.site[0].certificate_arn : null
 }
 
 output "bucket_arn" {

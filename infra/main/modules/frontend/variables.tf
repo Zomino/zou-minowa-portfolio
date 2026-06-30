@@ -3,21 +3,12 @@ variable "project_name" {
 }
 
 variable "bucket_name" {
-  type = string
+  type    = string
+  default = null
 }
 
 variable "alert_email" {
   type = string
-}
-
-variable "monthly_budget_limit" {
-  type    = string
-  default = "5"
-}
-
-variable "default_root_object" {
-  type    = string
-  default = null
 }
 
 variable "enable_asset_cache_behaviors" {
@@ -30,7 +21,7 @@ variable "enable_logging" {
   default = false
 }
 
-variable "aliases" {
+variable "domain_names" {
   type    = list(string)
   default = []
 }
@@ -40,7 +31,22 @@ variable "acm_certificate_arn" {
   default = null
 }
 
+variable "manage_certificate" {
+  type    = bool
+  default = false
+}
+
+variable "certificate_domain_name" {
+  type    = string
+  default = null
+}
+
 variable "rewrite_function_filename" {
   type    = string
   default = "rewrite.js"
+}
+
+variable "zone_id" {
+  type    = string
+  default = null
 }

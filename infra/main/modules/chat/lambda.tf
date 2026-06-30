@@ -1,7 +1,7 @@
 data "archive_file" "lambda" {
   count       = local.has_function ? 1 : 0
   type        = "zip"
-  source_file = "${path.module}/../../../apps/chat/dist/index.mjs"
+  source_file = "${path.module}/../../../../apps/chat/dist/index.mjs"
   output_path = "${path.module}/build/chat-lambda.zip"
 }
 
@@ -68,9 +68,9 @@ resource "aws_lambda_function" "chat" {
   architectures                  = ["arm64"]
   filename                       = data.archive_file.lambda[0].output_path
   source_code_hash               = data.archive_file.lambda[0].output_base64sha256
-  memory_size                    = var.memory_size
-  timeout                        = var.timeout_seconds
-  reserved_concurrent_executions = var.reserved_concurrency
+  memory_size                    = 512
+  timeout                        = 30
+  reserved_concurrent_executions = 5
 
   environment {
     variables = {
@@ -84,10 +84,4 @@ resource "aws_lambda_function" "chat" {
   lifecycle {
     ignore_changes = [filename, source_code_hash]
   }
-}
-
-resource "aws_cloudwatch_log_group" "chat" {
-  count             = local.has_function ? 1 : 0
-  name              = "/aws/lambda/${local.name}"
-  retention_in_days = 30
 }
