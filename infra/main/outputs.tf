@@ -1,13 +1,13 @@
 output "production_distribution_domain" {
-  value = module.cloudfront.domain_name
+  value = module.frontend.domain_name
 }
 
 output "production_github_actions_role_arn" {
-  value = aws_iam_role.github_actions["deploy"].arn
+  value = aws_iam_role.oidc["deploy"].arn
 }
 
 output "preview_distribution_domain" {
-  value = module.cloudfront_preview.domain_name
+  value = module.frontend_preview.domain_name
 }
 
 output "preview_base_domain" {
@@ -15,15 +15,11 @@ output "preview_base_domain" {
 }
 
 output "preview_github_actions_role_arn" {
-  value = aws_iam_role.github_actions["preview"].arn
+  value = aws_iam_role.oidc["preview"].arn
 }
 
 output "chat_preview_api_id" {
   value = module.chat_preview.api_id
-}
-
-output "chat_preview_api_endpoint" {
-  value = module.chat_preview.api_endpoint
 }
 
 output "chat_preview_table_name" {
@@ -48,8 +44,4 @@ output "chat_guardrail_version" {
 
 output "nameservers" {
   value = aws_route53_zone.site.name_servers
-}
-
-output "acm_validation_records" {
-  value = aws_acm_certificate.site.domain_validation_options
 }

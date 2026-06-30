@@ -1,3 +1,30 @@
+resource "aws_cloudfront_response_headers_policy" "security" {
+  name = "${var.project_name}-security-headers"
+
+  security_headers_config {
+    strict_transport_security {
+      access_control_max_age_sec = 63072000
+      include_subdomains         = true
+      preload                    = false
+      override                   = true
+    }
+
+    content_type_options {
+      override = true
+    }
+
+    frame_options {
+      frame_option = "DENY"
+      override     = true
+    }
+
+    referrer_policy {
+      referrer_policy = "strict-origin-when-cross-origin"
+      override        = true
+    }
+  }
+}
+
 resource "aws_cloudfront_cache_policy" "html" {
   name        = "${var.project_name}-html"
   min_ttl     = 0
@@ -34,10 +61,9 @@ resource "aws_cloudfront_function" "rewrite" {
 }
 
 resource "aws_cloudfront_distribution" "site" {
-  enabled             = true
-  default_root_object = var.default_root_object
-  price_class         = "PriceClass_100"
-  aliases             = var.aliases
+  enabled     = true
+  price_class = "PriceClass_100"
+  aliases     = var.domain_names
 
   origin {
     domain_name              = aws_s3_bucket.site.bucket_regional_domain_name
@@ -136,9 +162,9 @@ resource "aws_cloudfront_distribution" "site" {
   }
 
   viewer_certificate {
-    cloudfront_default_certificate = var.acm_certificate_arn == null ? true : null
-    acm_certificate_arn            = var.acm_certificate_arn
-    ssl_support_method             = var.acm_certificate_arn == null ? null : "sni-only"
-    minimum_protocol_version       = var.acm_certificate_arn == null ? null : "TLSv1.2_2021"
+    cloudfront_default_certificate = local.certificate_arn == null ? true : null
+    acm_certificate_arn            = local.certificate_arn
+    ssl_support_method             = local.certificate_arn == null ? null : "sni-only"
+    minimum_protocol_version       = local.certificate_arn == null ? null : "TLSv1.2_2021"
   }
 }

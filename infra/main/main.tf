@@ -18,7 +18,7 @@ terraform {
 }
 
 provider "aws" {
-  region = var.aws_region
+  region = "eu-west-2"
 
   default_tags {
     tags = {
@@ -40,39 +40,71 @@ provider "aws" {
   }
 }
 
-module "cloudfront" {
-  source              = "./cloudfront"
-  project_name        = var.project_name
-  bucket_name         = var.project_name
-  alert_email         = var.alert_email
-  enable_logging      = true
-  aliases             = [aws_route53_zone.site.name, "www.${aws_route53_zone.site.name}"]
-  acm_certificate_arn = aws_acm_certificate_validation.site.certificate_arn
+resource "aws_route53_zone" "site" {
+  name = "zouminowa.com"
 }
 
-# No ordered cache behaviours for /_astro/* or /fonts/* because the host to prefix
-# rewrite function is attached only to the default behaviour. Enabling them would
-# route asset requests around the function, so the pr-N prefix would not be applied
-# and the objects would 404. All requests must flow through the default behaviour.
-module "cloudfront_preview" {
-  source                       = "./cloudfront"
+module "frontend" {
+  source                  = "./modules/frontend"
+  project_name            = var.project_name
+  alert_email             = var.alert_email
+  enable_logging          = true
+  domain_names            = [aws_route53_zone.site.name, "www.${aws_route53_zone.site.name}"]
+  zone_id                 = aws_route53_zone.site.zone_id
+  manage_certificate      = true
+  certificate_domain_name = aws_route53_zone.site.name
+
+  providers = {
+    aws           = aws
+    aws.us_east_1 = aws.us_east_1
+  }
+}
+
+module "frontend_preview" {
+  source                       = "./modules/frontend"
   project_name                 = "${var.project_name}-preview"
   bucket_name                  = "${var.project_name}-previews"
   alert_email                  = var.alert_email
-  default_root_object          = null
   enable_asset_cache_behaviors = false
-  aliases                      = ["*.${aws_route53_zone.site.name}"]
-  acm_certificate_arn          = aws_acm_certificate_validation.site.certificate_arn
+  domain_names                 = ["*.${aws_route53_zone.site.name}"]
+  acm_certificate_arn          = module.frontend.acm_certificate_arn
   rewrite_function_filename    = "preview-rewrite.js"
+  zone_id                      = aws_route53_zone.site.zone_id
+
+  providers = {
+    aws           = aws
+    aws.us_east_1 = aws.us_east_1
+  }
+}
+
+module "chat" {
+  source          = "./modules/chat"
+  project_name    = var.project_name
+  api_domain_name = "api.${aws_route53_zone.site.name}"
+  zone_id         = aws_route53_zone.site.zone_id
+  cors_allow_origins = [
+    "https://${aws_route53_zone.site.name}",
+    "https://www.${aws_route53_zone.site.name}",
+  ]
+}
+
+module "chat_preview" {
+  source             = "./modules/chat"
+  project_name       = var.project_name
+  preview            = true
+  guardrail_id       = module.chat.guardrail_id
+  guardrail_arn      = module.chat.guardrail_arn
+  guardrail_version  = module.chat.guardrail_version
+  cors_allow_origins = ["*"]
 }
 
 module "monitoring" {
-  source           = "./monitoring"
+  source           = "./modules/monitoring"
   project_name     = var.project_name
   alert_email      = var.alert_email
   rum_domain       = aws_route53_zone.site.name
-  distribution_arn = module.cloudfront.distribution_arn
-  distribution_id  = module.cloudfront.distribution_id
+  distribution_arn = module.frontend.distribution_arn
+  distribution_id  = module.frontend.distribution_id
 
   providers = {
     aws           = aws

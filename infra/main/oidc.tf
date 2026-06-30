@@ -2,14 +2,18 @@ locals {
   pipeline_roles = {
     deploy = {
       sub_claim  = "repo:Zomino/zou-minowa-portfolio:ref:refs/heads/main"
-      bucket_arn = module.cloudfront.bucket_arn
+      bucket_arn = module.frontend.bucket_arn
     }
     preview = {
       sub_claim  = "repo:Zomino/zou-minowa-portfolio:pull_request"
-      bucket_arn = module.cloudfront_preview.bucket_arn
+      bucket_arn = module.frontend_preview.bucket_arn
     }
   }
 }
+
+data "aws_caller_identity" "current" {}
+
+data "aws_region" "current" {}
 
 resource "aws_iam_openid_connect_provider" "github" {
   url             = "https://token.actions.githubusercontent.com"
@@ -17,7 +21,7 @@ resource "aws_iam_openid_connect_provider" "github" {
   thumbprint_list = ["6938fd4d98bab03faadb97b34396831e3780aea1"]
 }
 
-resource "aws_iam_role" "github_actions" {
+resource "aws_iam_role" "oidc" {
   for_each = local.pipeline_roles
   name     = "${var.project_name}-github-actions-${each.key}"
 
@@ -44,7 +48,7 @@ resource "aws_iam_role" "github_actions" {
 resource "aws_iam_role_policy" "github_actions" {
   for_each = local.pipeline_roles
   name     = each.key
-  role     = aws_iam_role.github_actions[each.key].id
+  role     = aws_iam_role.oidc[each.key].id
 
   policy = jsonencode({
     Version = "2012-10-17"
@@ -63,13 +67,9 @@ resource "aws_iam_role_policy" "github_actions" {
   })
 }
 
-data "aws_caller_identity" "current" {}
-
-data "aws_region" "current" {}
-
 resource "aws_iam_role_policy" "github_actions_chat_prod" {
   name = "chat-prod"
-  role = aws_iam_role.github_actions["deploy"].id
+  role = aws_iam_role.oidc["deploy"].id
 
   policy = jsonencode({
     Version = "2012-10-17"
@@ -89,7 +89,7 @@ resource "aws_iam_role_policy" "github_actions_chat_prod" {
 
 resource "aws_iam_role_policy" "github_actions_chat_preview" {
   name = "chat-preview"
-  role = aws_iam_role.github_actions["preview"].id
+  role = aws_iam_role.oidc["preview"].id
 
   policy = jsonencode({
     Version = "2012-10-17"
