@@ -26,6 +26,10 @@ create_function() {
     --environment "Variables={CHAT_TABLE_NAME=${CHAT_PREVIEW_TABLE_NAME},CHAT_MODEL_ID=${CHAT_MODEL_ID},CHAT_GUARDRAIL_ID=${CHAT_GUARDRAIL_ID},CHAT_GUARDRAIL_VERSION=${CHAT_GUARDRAIL_VERSION}}" \
     >/dev/null
   aws lambda wait function-active --function-name "$name"
+}
+
+reserve_concurrency() {
+  local name="$1"
   aws lambda put-function-concurrency \
     --function-name "$name" \
     --reserved-concurrent-executions 2 \
@@ -103,6 +107,7 @@ main() {
     grant_invoke "$name" "$account"
   fi
 
+  reserve_concurrency "$name"
   ensure_stage "$stage"
   emit_url "$stage"
 }
