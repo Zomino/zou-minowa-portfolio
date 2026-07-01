@@ -3,7 +3,7 @@ output "function_arn" {
 }
 
 output "api_id" {
-  value = aws_apigatewayv2_api.chat.id
+  value = module.api.api_id
 }
 
 output "table_name" {
