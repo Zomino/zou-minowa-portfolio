@@ -102,3 +102,26 @@ module "chat_preview" {
   cors_allow_origins = ["*"]
 }
 
+module "alerts_us" {
+  source        = "./modules/sns"
+  name          = "${var.project_name}-alerts"
+  subscriptions = [{ protocol = "email", endpoint = var.alert_email }]
+
+  providers = {
+    aws = aws.us_east_1
+  }
+}
+
+module "alerts_eu" {
+  source        = "./modules/sns"
+  name          = "${var.project_name}-alerts"
+  subscriptions = [{ protocol = "email", endpoint = var.alert_email }]
+}
+
+module "budget" {
+  source            = "./modules/budget"
+  name              = "${var.project_name}-monthly"
+  limit_amount      = "5"
+  subscriber_emails = [var.alert_email]
+}
+
