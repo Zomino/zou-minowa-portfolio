@@ -3,7 +3,7 @@ output "domain_name" {
 }
 
 output "acm_certificate_arn" {
-  value = var.manage_certificate ? aws_acm_certificate_validation.site[0].certificate_arn : null
+  value = var.manage_certificate ? module.certificate[0].certificate_arn : null
 }
 
 output "bucket_arn" {
