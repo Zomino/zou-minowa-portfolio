@@ -1,31 +1,3 @@
-data "archive_file" "lambda" {
-  count       = local.has_function ? 1 : 0
-  type        = "zip"
-  source_file = "${path.module}/../../../../apps/chat/dist/index.mjs"
-  output_path = "${path.module}/build/chat-lambda.zip"
-}
-
-data "aws_iam_policy_document" "assume" {
-  statement {
-    actions = ["sts:AssumeRole"]
-
-    principals {
-      type        = "Service"
-      identifiers = ["lambda.amazonaws.com"]
-    }
-  }
-}
-
-resource "aws_iam_role" "chat" {
-  name               = local.name
-  assume_role_policy = data.aws_iam_policy_document.assume.json
-}
-
-resource "aws_iam_role_policy_attachment" "logs" {
-  role       = aws_iam_role.chat.name
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-}
-
 data "aws_iam_policy_document" "chat" {
   statement {
     sid     = "InvokeModel"
@@ -53,44 +25,11 @@ data "aws_iam_policy_document" "chat" {
   }
 }
 
-resource "aws_iam_role_policy" "chat" {
-  name   = local.name
-  role   = aws_iam_role.chat.id
-  policy = data.aws_iam_policy_document.chat.json
-}
-
-resource "aws_lambda_function" "chat" {
-  count                          = local.has_function ? 1 : 0
-  function_name                  = local.name
-  role                           = aws_iam_role.chat.arn
-  runtime                        = "nodejs22.x"
-  handler                        = "index.handler"
-  architectures                  = ["arm64"]
-  filename                       = data.archive_file.lambda[0].output_path
-  source_code_hash               = data.archive_file.lambda[0].output_base64sha256
-  memory_size                    = 512
-  timeout                        = 30
-  reserved_concurrent_executions = 5
-
-  environment {
-    variables = {
-      CHAT_TABLE_NAME        = aws_dynamodb_table.chat.name
-      CHAT_MODEL_ID          = local.inference_profile_id
-      CHAT_GUARDRAIL_ID      = local.guardrail_id
-      CHAT_GUARDRAIL_VERSION = local.guardrail_version
-    }
-  }
-
-  lifecycle {
-    ignore_changes = [filename, source_code_hash]
-  }
-}
-
 resource "aws_lambda_permission" "chat_apigw" {
   count         = local.has_function ? 1 : 0
   statement_id  = "AllowAPIGatewayInvoke"
   action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.chat[0].function_name
+  function_name = module.lambda.function_name
   principal     = "apigateway.amazonaws.com"
   source_arn    = "${module.api.execution_arn}/*/*"
 }
