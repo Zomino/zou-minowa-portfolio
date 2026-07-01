@@ -1,4 +1,5 @@
 resource "aws_budgets_budget" "bedrock" {
+  count        = var.preview ? 0 : 1
   name         = "${var.project_name}-bedrock-monthly"
   budget_type  = "COST"
   limit_amount = "10"

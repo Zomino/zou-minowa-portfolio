@@ -161,62 +161,6 @@
         "view": "table",
         "title": "CloudFront recent 4xx and 5xx requests"
       }
-    },
-    {
-      "type": "metric",
-      "x": 0,
-      "y": 18,
-      "width": 6,
-      "height": 6,
-      "properties": {
-        "metrics": [
-          [ { "expression": "SEARCH('{ZouChat,Outcome} MetricName=\"Requests\"', 'Sum', 300)", "label": "Requests", "id": "e1" } ]
-        ],
-        "view": "timeSeries",
-        "stacked": true,
-        "region": "eu-west-2",
-        "period": 300,
-        "stat": "Sum",
-        "title": "Chat requests by outcome"
-      }
-    },
-    {
-      "type": "metric",
-      "x": 6,
-      "y": 18,
-      "width": 6,
-      "height": 6,
-      "properties": {
-        "metrics": [
-          [ { "expression": "SEARCH('{ZouChat,Outcome} MetricName=\"Latency\"', 'Average', 300)", "label": "Latency avg", "id": "e2" } ]
-        ],
-        "view": "timeSeries",
-        "stacked": false,
-        "region": "eu-west-2",
-        "period": 300,
-        "stat": "Average",
-        "title": "Chat latency ms"
-      }
-    },
-    {
-      "type": "metric",
-      "x": 12,
-      "y": 18,
-      "width": 6,
-      "height": 6,
-      "properties": {
-        "metrics": [
-          ["AWS/Lambda", "Invocations", "FunctionName", "${project_name}-chat"],
-          [".", "Errors", ".", "."],
-          [".", "Throttles", ".", "."]
-        ],
-        "view": "timeSeries",
-        "stacked": false,
-        "region": "eu-west-2",
-        "period": 300,
-        "stat": "Sum",
-        "title": "Chat Lambda: invocations / errors / throttles"
-      }
     }
   ]
 }

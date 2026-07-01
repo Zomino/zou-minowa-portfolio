@@ -1,16 +1,19 @@
 data "aws_region" "current" {}
 
 resource "aws_s3_bucket" "log_archive" {
+  count  = var.enable_monitoring ? 1 : 0
   bucket = "${var.project_name}-log-archive"
 }
 
 resource "aws_cloudwatch_log_group" "firehose_rum_archive" {
+  count             = var.enable_monitoring ? 1 : 0
   name              = "/aws/kinesisfirehose/${var.project_name}-rum-archive"
   retention_in_days = 30
 }
 
 resource "aws_s3_bucket_public_access_block" "log_archive" {
-  bucket = aws_s3_bucket.log_archive.id
+  count  = var.enable_monitoring ? 1 : 0
+  bucket = aws_s3_bucket.log_archive[0].id
 
   block_public_acls       = true
   block_public_policy     = true
@@ -19,7 +22,8 @@ resource "aws_s3_bucket_public_access_block" "log_archive" {
 }
 
 resource "aws_iam_role" "firehose_delivery" {
-  name = "${var.project_name}-firehose-delivery"
+  count = var.enable_monitoring ? 1 : 0
+  name  = "${var.project_name}-firehose-delivery"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -34,8 +38,9 @@ resource "aws_iam_role" "firehose_delivery" {
 }
 
 resource "aws_iam_role_policy" "firehose_delivery" {
-  name = "write-to-s3"
-  role = aws_iam_role.firehose_delivery.id
+  count = var.enable_monitoring ? 1 : 0
+  name  = "write-to-s3"
+  role  = aws_iam_role.firehose_delivery[0].id
 
   policy = jsonencode({
     Version = "2012-10-17"
@@ -51,8 +56,8 @@ resource "aws_iam_role_policy" "firehose_delivery" {
           "s3:PutObject"
         ]
         Resource = [
-          aws_s3_bucket.log_archive.arn,
-          "${aws_s3_bucket.log_archive.arn}/*"
+          aws_s3_bucket.log_archive[0].arn,
+          "${aws_s3_bucket.log_archive[0].arn}/*"
         ]
       }
     ]
@@ -60,12 +65,13 @@ resource "aws_iam_role_policy" "firehose_delivery" {
 }
 
 resource "aws_kinesis_firehose_delivery_stream" "rum_archive" {
+  count       = var.enable_monitoring ? 1 : 0
   name        = "${var.project_name}-rum-archive"
   destination = "extended_s3"
 
   extended_s3_configuration {
-    role_arn            = aws_iam_role.firehose_delivery.arn
-    bucket_arn          = aws_s3_bucket.log_archive.arn
+    role_arn            = aws_iam_role.firehose_delivery[0].arn
+    bucket_arn          = aws_s3_bucket.log_archive[0].arn
     prefix              = "rum/year=!{timestamp:yyyy}/month=!{timestamp:MM}/day=!{timestamp:dd}/"
     error_output_prefix = "rum-errors/"
     compression_format  = "GZIP"
@@ -74,14 +80,15 @@ resource "aws_kinesis_firehose_delivery_stream" "rum_archive" {
 
     cloudwatch_logging_options {
       enabled         = true
-      log_group_name  = aws_cloudwatch_log_group.firehose_rum_archive.name
+      log_group_name  = aws_cloudwatch_log_group.firehose_rum_archive[0].name
       log_stream_name = "DestinationDelivery"
     }
   }
 }
 
 resource "aws_iam_role" "cwl_to_firehose" {
-  name = "${var.project_name}-cwl-to-firehose"
+  count = var.enable_monitoring ? 1 : 0
+  name  = "${var.project_name}-cwl-to-firehose"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -96,8 +103,9 @@ resource "aws_iam_role" "cwl_to_firehose" {
 }
 
 resource "aws_iam_role_policy" "cwl_to_firehose" {
-  name = "put-to-firehose"
-  role = aws_iam_role.cwl_to_firehose.id
+  count = var.enable_monitoring ? 1 : 0
+  name  = "put-to-firehose"
+  role  = aws_iam_role.cwl_to_firehose[0].id
 
   policy = jsonencode({
     Version = "2012-10-17"
@@ -105,16 +113,17 @@ resource "aws_iam_role_policy" "cwl_to_firehose" {
       {
         Effect   = "Allow"
         Action   = ["firehose:PutRecord", "firehose:PutRecordBatch"]
-        Resource = aws_kinesis_firehose_delivery_stream.rum_archive.arn
+        Resource = aws_kinesis_firehose_delivery_stream.rum_archive[0].arn
       }
     ]
   })
 }
 
 resource "aws_cloudwatch_log_subscription_filter" "rum_to_s3" {
+  count           = var.enable_monitoring ? 1 : 0
   name            = "rum-to-s3"
-  log_group_name  = aws_rum_app_monitor.portfolio.cw_log_group
+  log_group_name  = aws_rum_app_monitor.portfolio[0].cw_log_group
   filter_pattern  = ""
-  destination_arn = aws_kinesis_firehose_delivery_stream.rum_archive.arn
-  role_arn        = aws_iam_role.cwl_to_firehose.arn
+  destination_arn = aws_kinesis_firehose_delivery_stream.rum_archive[0].arn
+  role_arn        = aws_iam_role.cwl_to_firehose[0].arn
 }

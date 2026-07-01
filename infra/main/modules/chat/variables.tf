@@ -7,6 +7,16 @@ variable "preview" {
   default = false
 }
 
+variable "alert_email" {
+  type    = string
+  default = null
+}
+
+variable "sns_topic_eu_arn" {
+  type    = string
+  default = null
+}
+
 variable "guardrail_id" {
   type    = string
   default = null
