@@ -47,7 +47,6 @@ resource "aws_route53_zone" "site" {
 module "frontend" {
   source                  = "./modules/frontend"
   project_name            = var.project_name
-  alert_email             = var.alert_email
   enable_logging          = true
   domain_names            = [aws_route53_zone.site.name, "www.${aws_route53_zone.site.name}"]
   zone_id                 = aws_route53_zone.site.zone_id
@@ -68,7 +67,6 @@ module "frontend_preview" {
   source                       = "./modules/frontend"
   project_name                 = "${var.project_name}-preview"
   bucket_name                  = "${var.project_name}-previews"
-  alert_email                  = var.alert_email
   enable_asset_cache_behaviors = false
   domain_names                 = ["*.${aws_route53_zone.site.name}"]
   acm_certificate_arn          = module.frontend.acm_certificate_arn

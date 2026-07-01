@@ -7,10 +7,6 @@ variable "bucket_name" {
   default = null
 }
 
-variable "alert_email" {
-  type = string
-}
-
 variable "enable_asset_cache_behaviors" {
   type    = bool
   default = true
