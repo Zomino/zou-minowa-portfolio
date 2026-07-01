@@ -1,9 +1,11 @@
 resource "aws_cognito_identity_pool" "rum" {
+  count                            = var.enable_monitoring ? 1 : 0
   identity_pool_name               = "${var.project_name}-rum"
   allow_unauthenticated_identities = true
 }
 
 resource "aws_iam_role" "rum_unauth" {
+  count                = var.enable_monitoring ? 1 : 0
   name                 = "${var.project_name}-rum-unauth"
   path                 = "/service-role/"
   description          = "CloudWatch Put RUM events for application monitors"
@@ -18,7 +20,7 @@ resource "aws_iam_role" "rum_unauth" {
         Action    = "sts:AssumeRoleWithWebIdentity"
         Condition = {
           StringEquals = {
-            "cognito-identity.amazonaws.com:aud" = aws_cognito_identity_pool.rum.id
+            "cognito-identity.amazonaws.com:aud" = aws_cognito_identity_pool.rum[0].id
           }
           "ForAnyValue:StringLike" = {
             "cognito-identity.amazonaws.com:amr" = "unauthenticated"
@@ -30,8 +32,9 @@ resource "aws_iam_role" "rum_unauth" {
 }
 
 resource "aws_iam_policy" "rum_put" {
-  name = "${var.project_name}-rum-put"
-  path = "/service-role/"
+  count = var.enable_monitoring ? 1 : 0
+  name  = "${var.project_name}-rum-put"
+  path  = "/service-role/"
 
   policy = jsonencode({
     Version = "2012-10-17"
@@ -39,26 +42,29 @@ resource "aws_iam_policy" "rum_put" {
       {
         Effect   = "Allow"
         Action   = "rum:PutRumEvents"
-        Resource = aws_rum_app_monitor.portfolio.arn
+        Resource = aws_rum_app_monitor.portfolio[0].arn
       }
     ]
   })
 }
 
 resource "aws_iam_role_policy_attachment" "rum" {
-  role       = aws_iam_role.rum_unauth.name
-  policy_arn = aws_iam_policy.rum_put.arn
+  count      = var.enable_monitoring ? 1 : 0
+  role       = aws_iam_role.rum_unauth[0].name
+  policy_arn = aws_iam_policy.rum_put[0].arn
 }
 
 resource "aws_cognito_identity_pool_roles_attachment" "rum" {
-  identity_pool_id = aws_cognito_identity_pool.rum.id
+  count            = var.enable_monitoring ? 1 : 0
+  identity_pool_id = aws_cognito_identity_pool.rum[0].id
 
   roles = {
-    unauthenticated = aws_iam_role.rum_unauth.arn
+    unauthenticated = aws_iam_role.rum_unauth[0].arn
   }
 }
 
 resource "aws_rum_app_monitor" "portfolio" {
+  count          = var.enable_monitoring ? 1 : 0
   name           = var.project_name
   domain_list    = [var.rum_domain]
   cw_log_enabled = true
@@ -68,7 +74,7 @@ resource "aws_rum_app_monitor" "portfolio" {
     enable_xray         = false
     session_sample_rate = 1
     telemetries         = ["performance", "errors", "http"]
-    identity_pool_id    = aws_cognito_identity_pool.rum.id
+    identity_pool_id    = aws_cognito_identity_pool.rum[0].id
   }
 
   custom_events {

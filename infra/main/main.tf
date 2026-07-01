@@ -53,6 +53,10 @@ module "frontend" {
   zone_id                 = aws_route53_zone.site.zone_id
   manage_certificate      = true
   certificate_domain_name = aws_route53_zone.site.name
+  enable_monitoring       = true
+  rum_domain              = aws_route53_zone.site.name
+  sns_topic_arn           = module.alerts_us.arn
+  sns_topic_eu_arn        = module.alerts_eu.arn
 
   providers = {
     aws           = aws
@@ -78,10 +82,12 @@ module "frontend_preview" {
 }
 
 module "chat" {
-  source          = "./modules/chat"
-  project_name    = var.project_name
-  api_domain_name = "api.${aws_route53_zone.site.name}"
-  zone_id         = aws_route53_zone.site.zone_id
+  source           = "./modules/chat"
+  project_name     = var.project_name
+  alert_email      = var.alert_email
+  api_domain_name  = "api.${aws_route53_zone.site.name}"
+  zone_id          = aws_route53_zone.site.zone_id
+  sns_topic_eu_arn = module.alerts_eu.arn
   cors_allow_origins = [
     "https://${aws_route53_zone.site.name}",
     "https://www.${aws_route53_zone.site.name}",
@@ -96,19 +102,5 @@ module "chat_preview" {
   guardrail_arn      = module.chat.guardrail_arn
   guardrail_version  = module.chat.guardrail_version
   cors_allow_origins = ["*"]
-}
-
-module "monitoring" {
-  source           = "./modules/monitoring"
-  project_name     = var.project_name
-  alert_email      = var.alert_email
-  rum_domain       = aws_route53_zone.site.name
-  distribution_arn = module.frontend.distribution_arn
-  distribution_id  = module.frontend.distribution_id
-
-  providers = {
-    aws           = aws
-    aws.us_east_1 = aws.us_east_1
-  }
 }
 

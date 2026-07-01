@@ -50,3 +50,23 @@ variable "zone_id" {
   type    = string
   default = null
 }
+
+variable "enable_monitoring" {
+  type    = bool
+  default = false
+}
+
+variable "rum_domain" {
+  type    = string
+  default = null
+}
+
+variable "sns_topic_arn" {
+  type    = string
+  default = null
+}
+
+variable "sns_topic_eu_arn" {
+  type    = string
+  default = null
+}
