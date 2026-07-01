@@ -5,8 +5,8 @@ resource "aws_route53_record" "api" {
   type    = "A"
 
   alias {
-    name                   = aws_apigatewayv2_domain_name.chat[0].domain_name_configuration[0].target_domain_name
-    zone_id                = aws_apigatewayv2_domain_name.chat[0].domain_name_configuration[0].hosted_zone_id
+    name                   = module.api.domain_target
+    zone_id                = module.api.domain_hosted_zone_id
     evaluate_target_health = false
   }
 }
@@ -18,8 +18,8 @@ resource "aws_route53_record" "api_aaaa" {
   type    = "AAAA"
 
   alias {
-    name                   = aws_apigatewayv2_domain_name.chat[0].domain_name_configuration[0].target_domain_name
-    zone_id                = aws_apigatewayv2_domain_name.chat[0].domain_name_configuration[0].hosted_zone_id
+    name                   = module.api.domain_target
+    zone_id                = module.api.domain_hosted_zone_id
     evaluate_target_health = false
   }
 }

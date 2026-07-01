@@ -85,3 +85,12 @@ resource "aws_lambda_function" "chat" {
     ignore_changes = [filename, source_code_hash]
   }
 }
+
+resource "aws_lambda_permission" "chat_apigw" {
+  count         = local.has_function ? 1 : 0
+  statement_id  = "AllowAPIGatewayInvoke"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.chat[0].function_name
+  principal     = "apigateway.amazonaws.com"
+  source_arn    = "${module.api.execution_arn}/*/*"
+}
