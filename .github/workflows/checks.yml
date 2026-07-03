@@ -8,22 +8,25 @@ permissions:
 
 jobs:
   checks:
+    strategy:
+      fail-fast: false
+      matrix:
+        app: [apps/frontend, apps/chat]
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ matrix.app }}
     steps:
       - uses: actions/checkout@v7
 
       - uses: ./.github/actions/setup
 
       - name: Audit production dependencies
-        working-directory: apps/frontend
         continue-on-error: true
         run: pnpm audit --prod --audit-level high
 
       - run: pnpm lint
-        working-directory: apps/frontend
 
       - run: pnpm check
-        working-directory: apps/frontend
 
       - run: pnpm exec vitest run
-        working-directory: apps/frontend
