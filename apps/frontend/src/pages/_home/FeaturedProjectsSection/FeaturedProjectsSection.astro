@@ -1,7 +1,9 @@
 ---
 import { getCollection } from "astro:content";
 
+import Heading from "../../../components/Heading/Heading.astro";
 import ProjectSummary from "../../../components/ProjectSummary/ProjectSummary.astro";
+import Reveal from "../../../components/Reveal/Reveal.astro";
 import Section from "../../../components/Section/Section.astro";
 const MAX_FEATURED = 3;
 
@@ -11,21 +13,26 @@ const projects = (await getCollection("projects"))
   .slice(0, MAX_FEATURED);
 ---
 
-<Section heading="Featured projects">
+<Section>
+  <Reveal slot="heading">
+    <Heading level={2} spacing>Featured projects</Heading>
+  </Reveal>
   <div class="mt-9 grid grid-cols-1 gap-10 lg:grid-cols-3">
     {
       projects.map((project) => (
-        <ProjectSummary
-          title={project.data.title}
-          description={project.data.description}
-          link={project.data.link}
-          github={project.data.github}
-          image={project.data.image}
-          tags={project.data.tags}
-          type={project.data.type}
-          slug={project.id}
-          headingVariant={4}
-        />
+        <Reveal class="h-full">
+          <ProjectSummary
+            title={project.data.title}
+            description={project.data.description}
+            link={project.data.link}
+            github={project.data.github}
+            image={project.data.image}
+            tags={project.data.tags}
+            type={project.data.type}
+            slug={project.id}
+            headingVariant={4}
+          />
+        </Reveal>
       ))
     }
   </div>

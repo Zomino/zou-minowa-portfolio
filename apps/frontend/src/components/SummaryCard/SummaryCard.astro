@@ -1,0 +1,25 @@
+---
+import clsx from "clsx";
+
+import Link from "../Link/Link.astro";
+
+interface Props {
+  href: string;
+  label: string;
+  class?: string;
+}
+
+const { href, label, class: className = "" } = Astro.props;
+
+const classes = clsx(
+  "group relative flex h-full cursor-pointer flex-col transition duration-200 ease-out motion-reduce:transition-none",
+  className,
+);
+---
+
+<article class={classes}>
+  <Link href={href} class="absolute inset-0 z-10">
+    <span class="sr-only">{label}</span>
+  </Link>
+  <slot />
+</article>

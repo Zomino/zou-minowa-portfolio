@@ -25,7 +25,7 @@ describe("FontGate", () => {
     const container = await AstroContainer.create();
     const html = await container.renderToString(FontGate);
 
-    expect(html).toContain("document.fonts.ready");
+    expect(html).toContain("document.fonts?.ready");
     expect(html).toContain('document.documentElement.style.visibility = ""');
   });
 
@@ -33,7 +33,7 @@ describe("FontGate", () => {
     const container = await AstroContainer.create();
     const html = await container.renderToString(FontGate);
 
-    expect(html).toContain("setTimeout");
+    expect(html).toContain("Promise.race");
     expect(html).toContain("3000");
   });
 });

@@ -1,6 +1,7 @@
 ---
 import EyebrowText from "../../../components/EyebrowText/EyebrowText.astro";
 import Heading from "../../../components/Heading/Heading.astro";
+import Reveal from "../../../components/Reveal/Reveal.astro";
 import SocialLinks from "../../../components/SocialLinks/SocialLinks.astro";
 import Text from "../../../components/Text/Text.astro";
 import metadata from "@/metadata.json";
@@ -9,12 +10,18 @@ const nameLines = metadata.siteTitle.split(" ");
 ---
 
 <section class="lg:shrink-0">
-  <EyebrowText>Fullstack software engineer</EyebrowText>
-  <div data-brand-target>
+  <Reveal>
+    <EyebrowText>Fullstack software engineer</EyebrowText>
+  </Reveal>
+  <Reveal data-brand-target>
     <Heading level={1} class="text-6xl md:text-7xl">
       {nameLines.map((line) => <span class="block">{line}</span>)}
     </Heading>
-  </div>
-  <Text class="mt-6">London-based. Generalist. AI enthusiast.</Text>
-  <SocialLinks class="mt-6 justify-start" />
+  </Reveal>
+  <Reveal class="mt-6">
+    <Text>London-based. Generalist. AI enthusiast.</Text>
+  </Reveal>
+  <Reveal class="mt-6">
+    <SocialLinks class="justify-start" />
+  </Reveal>
 </section>

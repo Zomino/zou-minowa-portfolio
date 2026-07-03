@@ -86,3 +86,9 @@
 @utility list-item {
   @apply text-slate-600 marker:text-slate-400;
 }
+
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+  }
+}

@@ -5,11 +5,10 @@
     document.documentElement.style.visibility = "";
   };
 
-  if (document.fonts && document.fonts.ready) {
-    document.fonts.ready.then(revealFonts);
-  } else {
-    revealFonts();
-  }
+  const fontsReady = document.fonts?.ready || Promise.resolve();
+  const timeout = new Promise((resolve) => {
+    window.setTimeout(resolve, 3000);
+  });
 
-  window.setTimeout(revealFonts, 3000);
+  Promise.race([fontsReady, timeout]).then(revealFonts);
 </script>

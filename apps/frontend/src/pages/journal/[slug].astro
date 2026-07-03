@@ -6,6 +6,7 @@ import BadgeGroup from "../../components/BadgeGroup/BadgeGroup.astro";
 import Group from "../../components/Group/Group.astro";
 import Heading from "../../components/Heading/Heading.astro";
 import Layout from "../../components/Layout/Layout.astro";
+import Reveal from "../../components/Reveal/Reveal.astro";
 import Text from "../../components/Text/Text.astro";
 import { formatDate } from "@/utils/formatDate/formatDate";
 import { buildBlogPostingJsonLd } from "./_utils/buildBlogPostingJsonLd/buildBlogPostingJsonLd";
@@ -48,24 +49,28 @@ const blogPostingJsonLd = buildBlogPostingJsonLd(
   />
   <Group spacing="xl">
     <section>
-      <Heading level={1} spacing>
-        {entry.data.title}
-      </Heading>
-      <div class="flex flex-wrap items-center justify-between gap-4">
-        <Text variant="small">{formattedDate}</Text>
-        {
-          entry.data.tags.length > 0 && (
-            <BadgeGroup>
-              {entry.data.tags.map((tag) => (
-                <Badge>{tag}</Badge>
-              ))}
-            </BadgeGroup>
-          )
-        }
-      </div>
+      <Reveal>
+        <Heading level={1} spacing>
+          {entry.data.title}
+        </Heading>
+        <div class="flex flex-wrap items-center justify-between gap-4">
+          <Text variant="small">{formattedDate}</Text>
+          {
+            entry.data.tags.length > 0 && (
+              <BadgeGroup>
+                {entry.data.tags.map((tag) => (
+                  <Badge>{tag}</Badge>
+                ))}
+              </BadgeGroup>
+            )
+          }
+        </div>
+      </Reveal>
     </section>
     <section class="rich-text">
-      <Content />
+      <Reveal>
+        <Content />
+      </Reveal>
     </section>
   </Group>
 </Layout>
