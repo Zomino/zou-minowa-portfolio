@@ -29,10 +29,25 @@ resource "aws_iam_role" "this" {
         Condition = {
           StringEquals = {
             "token.actions.githubusercontent.com:aud" = "sts.amazonaws.com"
-            "token.actions.githubusercontent.com:sub" = format("repo:%s:%s", var.repository, each.value)
+            "token.actions.githubusercontent.com:sub" = format("repo:%s:%s", var.repository, each.value.subject)
           }
         }
       }
     ]
   })
+}
+
+locals {
+  policy_attachments = merge([
+    for name, cfg in var.subjects : {
+      for arn in cfg.managed_policy_arns : format("%s:%s", name, arn) => { role = name, arn = arn }
+    }
+  ]...)
+}
+
+resource "aws_iam_role_policy_attachment" "this" {
+  for_each = local.policy_attachments
+
+  role       = aws_iam_role.this[each.value.role].name
+  policy_arn = each.value.arn
 }
