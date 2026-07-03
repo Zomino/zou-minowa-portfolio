@@ -1,9 +1,9 @@
-resource "aws_s3_bucket" "site" {
+resource "aws_s3_bucket" "origin" {
   bucket = coalesce(var.bucket_name, var.project_name)
 }
 
-resource "aws_s3_bucket_public_access_block" "site" {
-  bucket = aws_s3_bucket.site.id
+resource "aws_s3_bucket_public_access_block" "origin" {
+  bucket = aws_s3_bucket.origin.id
 
   block_public_acls       = true
   block_public_policy     = true
@@ -11,8 +11,8 @@ resource "aws_s3_bucket_public_access_block" "site" {
   restrict_public_buckets = true
 }
 
-resource "aws_s3_bucket_policy" "site" {
-  bucket = aws_s3_bucket.site.id
+resource "aws_s3_bucket_policy" "origin" {
+  bucket = aws_s3_bucket.origin.id
 
   policy = jsonencode({
     Version = "2012-10-17"
@@ -22,10 +22,10 @@ resource "aws_s3_bucket_policy" "site" {
         Effect    = "Allow"
         Principal = { Service = "cloudfront.amazonaws.com" }
         Action    = "s3:GetObject"
-        Resource  = format("%s/*", aws_s3_bucket.site.arn)
+        Resource  = format("%s/*", aws_s3_bucket.origin.arn)
         Condition = {
           StringEquals = {
-            "AWS:SourceArn" = aws_cloudfront_distribution.site.arn
+            "AWS:SourceArn" = aws_cloudfront_distribution.this.arn
           }
         }
       }

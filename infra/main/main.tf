@@ -45,33 +45,14 @@ resource "aws_route53_zone" "site" {
 }
 
 module "frontend" {
-  source                  = "./modules/frontend"
-  project_name            = var.project_name
-  enable_logging          = true
-  domain_names            = [aws_route53_zone.site.name, format("www.%s", aws_route53_zone.site.name)]
-  zone_id                 = aws_route53_zone.site.zone_id
-  manage_certificate      = true
-  certificate_domain_name = aws_route53_zone.site.name
-  enable_monitoring       = true
-  rum_domain              = aws_route53_zone.site.name
-  sns_topic_arn           = module.alerts_us.arn
-  sns_topic_eu_arn        = module.alerts_eu.arn
-
-  providers = {
-    aws           = aws
-    aws.us_east_1 = aws.us_east_1
-  }
-}
-
-module "frontend_preview" {
-  source                       = "./modules/frontend"
-  project_name                 = format("%s-preview", var.project_name)
-  bucket_name                  = format("%s-previews", var.project_name)
-  enable_asset_cache_behaviors = false
-  domain_names                 = [format("*.%s", aws_route53_zone.site.name)]
-  acm_certificate_arn          = module.frontend.acm_certificate_arn
-  rewrite_function_filename    = "preview-rewrite.js"
-  zone_id                      = aws_route53_zone.site.zone_id
+  source           = "./services/frontend"
+  project_name     = var.project_name
+  zone_id          = aws_route53_zone.site.zone_id
+  zone_name        = aws_route53_zone.site.name
+  sns_topic_arn    = module.alerts_us.arn
+  sns_topic_eu_arn = module.alerts_eu.arn
+  deploy_role_id   = module.github_oidc.role_ids["deploy"]
+  preview_role_id  = module.github_oidc.role_ids["preview"]
 
   providers = {
     aws           = aws
@@ -80,26 +61,14 @@ module "frontend_preview" {
 }
 
 module "chat" {
-  source           = "./modules/chat"
+  source           = "./services/chat"
   project_name     = var.project_name
   alert_email      = var.alert_email
-  api_domain_name  = format("api.%s", aws_route53_zone.site.name)
   zone_id          = aws_route53_zone.site.zone_id
+  zone_name        = aws_route53_zone.site.name
   sns_topic_eu_arn = module.alerts_eu.arn
-  cors_allow_origins = [
-    format("https://%s", aws_route53_zone.site.name),
-    format("https://www.%s", aws_route53_zone.site.name),
-  ]
-}
-
-module "chat_preview" {
-  source             = "./modules/chat"
-  project_name       = var.project_name
-  preview            = true
-  guardrail_id       = module.chat.guardrail_id
-  guardrail_arn      = module.chat.guardrail_arn
-  guardrail_version  = module.chat.guardrail_version
-  cors_allow_origins = ["*"]
+  deploy_role_id   = module.github_oidc.role_ids["deploy"]
+  preview_role_id  = module.github_oidc.role_ids["preview"]
 }
 
 module "alerts_us" {
@@ -123,5 +92,16 @@ module "budget" {
   name              = format("%s-monthly", var.project_name)
   limit_amount      = "5"
   subscriber_emails = [var.alert_email]
+}
+
+module "github_oidc" {
+  source      = "./modules/github_oidc"
+  repository  = "Zomino/zou-minowa-portfolio"
+  name_prefix = var.project_name
+
+  subjects = {
+    deploy  = "ref:refs/heads/main"
+    preview = "pull_request"
+  }
 }
 
