@@ -1,10 +1,10 @@
 import type { APIGatewayProxyEventV2 } from "aws-lambda";
 
-import { handleChatRequest } from "./utils/handleChatRequest";
-import { createBedrockChatModel } from "./utils/bedrock/createBedrockChatModel";
-import { createBedrockGuardrail } from "./utils/bedrock/createBedrockGuardrail";
-import { createDynamoProtection } from "./utils/dynamo/createDynamoProtection";
-import { emitMetrics } from "./utils/telemetry/emitMetrics";
+import { handleChatRequest } from "./utils/handleChatRequest/handleChatRequest";
+import { createBedrockChatModel } from "./utils/createBedrockChatModel/createBedrockChatModel";
+import { createBedrockGuardrail } from "./utils/createBedrockGuardrail/createBedrockGuardrail";
+import { createDynamoProtection } from "./utils/createDynamoProtection/createDynamoProtection";
+import { emitMetrics } from "./utils/emitMetrics/emitMetrics";
 
 const DEFAULT_MODEL_ID = "eu.anthropic.claude-haiku-4-5-20251001-v1:0";
 const DEFAULT_MAX_OUTPUT_TOKENS = 600;
@@ -31,14 +31,15 @@ export const clientIdFrom = (
   return lastHop ?? sourceIp;
 };
 
-export const decodeBody = (body: string | undefined, isBase64Encoded = false) => {
+export const decodeBody = (
+  body: string | undefined,
+  isBase64Encoded = false,
+) => {
   if (body === undefined) {
     return null;
   }
 
-  return isBase64Encoded
-    ? Buffer.from(body, "base64").toString("utf8")
-    : body;
+  return isBase64Encoded ? Buffer.from(body, "base64").toString("utf8") : body;
 };
 
 export const parseJson = (body: string | null) => {

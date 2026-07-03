@@ -3,10 +3,13 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
+  "engines": {
+    "node": ">=22.18"
+  },
   "scripts": {
-    "generate": "node generate.mjs",
-    "prepare": "node generate.mjs",
-    "build": "node build.mjs",
+    "generate": "node build/utils/generate/generate.ts",
+    "prepare": "node build/utils/generate/generate.ts",
+    "build": "node build/build.ts",
     "test": "vitest run",
     "check": "tsc --noEmit",
     "lint": "eslint ."

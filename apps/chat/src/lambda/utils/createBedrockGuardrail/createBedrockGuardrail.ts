@@ -3,7 +3,7 @@ import {
   BedrockRuntimeClient,
 } from "@aws-sdk/client-bedrock-runtime";
 
-import type { ChatGuardrail } from "../handleChatRequest";
+import type { ChatGuardrail } from "../handleChatRequest/handleChatRequest";
 
 export interface BedrockGuardrailConfig {
   region: string;

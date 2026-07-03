@@ -1,7 +1,12 @@
 import { chatRequestSchema, type ChatContract } from "@zou/chat-contract";
 
-import { buildSystemPrompt } from "./buildSystemPrompt";
-import { PORTFOLIO } from "./portfolio";
+import {
+  buildSystemPrompt,
+  type Portfolio,
+} from "../buildSystemPrompt/buildSystemPrompt";
+import portfolio from "../portfolio.generated.json";
+
+const PORTFOLIO: Portfolio = portfolio;
 
 export type ChatMessage = ChatContract["request"]["body"]["messages"][number];
 
