@@ -1,14 +1,28 @@
 <script is:inline>
-  document.documentElement.style.visibility = "hidden";
+  (() => {
+    let visited = null;
+    try {
+      visited = sessionStorage.getItem("visited");
+      sessionStorage.setItem("visited", "true");
+    } catch {
+      visited = null;
+    }
 
-  const revealFonts = () => {
-    document.documentElement.style.visibility = "";
-  };
+    if (visited) return;
 
-  const fontsReady = document.fonts?.ready || Promise.resolve();
-  const timeout = new Promise((resolve) => {
-    window.setTimeout(resolve, 3000);
-  });
+    const gate = document.createElement("style");
+    gate.textContent = "body > :not(header) { visibility: hidden; }";
+    document.head.appendChild(gate);
 
-  Promise.race([fontsReady, timeout]).then(revealFonts);
+    const revealFonts = () => {
+      gate.remove();
+    };
+
+    const fontsReady = document.fonts?.ready || Promise.resolve();
+    const timeout = new Promise((resolve) => {
+      window.setTimeout(resolve, 3000);
+    });
+
+    Promise.race([fontsReady, timeout]).then(revealFonts);
+  })();
 </script>
