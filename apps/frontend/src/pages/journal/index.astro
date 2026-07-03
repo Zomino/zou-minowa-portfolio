@@ -4,6 +4,7 @@ import { getCollection } from "astro:content";
 import JournalSummary from "../../components/JournalSummary/JournalSummary.astro";
 import ListPage from "../../components/ListPage/ListPage.astro";
 import ListPageItem from "../../components/ListPage/components/ListPageItem/ListPageItem.astro";
+import Reveal from "../../components/Reveal/Reveal.astro";
 
 const TITLE = "Journal";
 const DESCRIPTION = "Things I have written.";
@@ -27,14 +28,16 @@ const allTags = [...new Set(entries.flatMap((e) => e.data.tags))].sort();
     {
       entries.map((entry) => (
         <ListPageItem tags={entry.data.tags} class="py-8 first:pt-0 last:pb-0">
-          <JournalSummary
-            title={entry.data.title}
-            description={entry.data.description}
-            date={entry.data.date}
-            tags={entry.data.tags}
-            slug={entry.id}
-            headingVariant={4}
-          />
+          <Reveal>
+            <JournalSummary
+              title={entry.data.title}
+              description={entry.data.description}
+              date={entry.data.date}
+              tags={entry.data.tags}
+              slug={entry.id}
+              headingVariant={4}
+            />
+          </Reveal>
         </ListPageItem>
       ))
     }

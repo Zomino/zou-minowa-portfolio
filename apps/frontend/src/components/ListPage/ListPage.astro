@@ -1,7 +1,9 @@
 ---
 import { Icon } from "astro-icon/components";
 
+import Heading from "../Heading/Heading.astro";
 import Layout from "../Layout/Layout.astro";
+import Reveal from "../Reveal/Reveal.astro";
 import Section from "../Section/Section.astro";
 import Collapsible from "./components/Collapsible/Collapsible.astro";
 import CountBadge from "./components/CountBadge/CountBadge.astro";
@@ -24,21 +26,26 @@ const PILL_ACTIVE = "border-slate-900 bg-slate-900 text-white";
 ---
 
 <Layout pageTitle={pageTitle} description={description} wordmark={wordmark}>
-  <Section heading={heading} headingLevel={1} data-list-page>
-    <Pill
-      data-list-page-toggle
-      class={`inline-flex items-center gap-2 ${PILL_INACTIVE}`}
-      aria-expanded="false"
-    >
-      Filter by tag
-      <CountBadge data-list-page-count />
-      <Icon
-        name="chevron"
-        data-list-page-chevron
-        class="h-3 w-3 transition-transform"
-        aria-hidden="true"
-      />
-    </Pill>
+  <Section data-list-page>
+    <Reveal slot="heading">
+      <Heading level={1} spacing>{heading}</Heading>
+    </Reveal>
+    <Reveal>
+      <Pill
+        data-list-page-toggle
+        class={`inline-flex items-center gap-2 ${PILL_INACTIVE}`}
+        aria-expanded="false"
+      >
+        Filter by tag
+        <CountBadge data-list-page-count />
+        <Icon
+          name="chevron"
+          data-list-page-chevron
+          class="h-3 w-3 transition-transform"
+          aria-hidden="true"
+        />
+      </Pill>
+    </Reveal>
 
     <Collapsible data-list-page-panel>
       <PillGroup data-list-page-tags class="mt-3">

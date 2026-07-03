@@ -22,6 +22,22 @@ describe("JournalSummary", () => {
     expect(html).toContain("2026");
   });
 
+  it("lifts on hover with a reduced motion guard", async () => {
+    const container = await AstroContainer.create();
+    const html = await container.renderToString(JournalSummary, {
+      props: {
+        title: "On building portfolios",
+        description: "Why I rebuilt this site from scratch.",
+        date: new Date("2026-06-20"),
+        tags: ["engineering", "thoughts"],
+        slug: "on-building-portfolios",
+      },
+    });
+
+    expect(html).toContain("hover:-translate-y-0.5");
+    expect(html).toContain("motion-reduce:transition-none");
+  });
+
   it("links to the entry page", async () => {
     const container = await AstroContainer.create();
     const html = await container.renderToString(JournalSummary, {
