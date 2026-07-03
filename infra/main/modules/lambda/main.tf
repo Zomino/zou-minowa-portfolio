@@ -39,7 +39,7 @@ data "archive_file" "this" {
   count       = var.create_function ? 1 : 0
   type        = "zip"
   source_file = var.source_file
-  output_path = "${path.module}/build/${var.name}.zip"
+  output_path = format("%s/build/%s.zip", path.module, var.name)
 }
 
 resource "aws_lambda_function" "this" {
@@ -66,6 +66,6 @@ resource "aws_lambda_function" "this" {
 
 resource "aws_cloudwatch_log_group" "this" {
   count             = var.create_function ? 1 : 0
-  name              = "/aws/lambda/${var.name}"
+  name              = format("/aws/lambda/%s", var.name)
   retention_in_days = var.log_retention_days
 }

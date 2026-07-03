@@ -30,12 +30,12 @@ resource "aws_apigatewayv2_integration" "this" {
 resource "aws_apigatewayv2_route" "this" {
   api_id    = aws_apigatewayv2_api.this.id
   route_key = var.route_key
-  target    = "integrations/${aws_apigatewayv2_integration.this.id}"
+  target    = format("integrations/%s", aws_apigatewayv2_integration.this.id)
 }
 
 resource "aws_cloudwatch_log_group" "access" {
   count             = var.create_default_stage ? 1 : 0
-  name              = "/aws/apigateway/${var.name}"
+  name              = format("/aws/apigateway/%s", var.name)
   retention_in_days = var.log_retention_days
 }
 

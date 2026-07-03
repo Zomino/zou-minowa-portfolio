@@ -2,12 +2,12 @@ data "aws_region" "current" {}
 
 resource "aws_s3_bucket" "log_archive" {
   count  = var.enable_monitoring ? 1 : 0
-  bucket = "${var.project_name}-log-archive"
+  bucket = format("%s-log-archive", var.project_name)
 }
 
 resource "aws_cloudwatch_log_group" "firehose_rum_archive" {
   count             = var.enable_monitoring ? 1 : 0
-  name              = "/aws/kinesisfirehose/${var.project_name}-rum-archive"
+  name              = format("/aws/kinesisfirehose/%s-rum-archive", var.project_name)
   retention_in_days = 30
 }
 
@@ -23,7 +23,7 @@ resource "aws_s3_bucket_public_access_block" "log_archive" {
 
 resource "aws_iam_role" "firehose_delivery" {
   count = var.enable_monitoring ? 1 : 0
-  name  = "${var.project_name}-firehose-delivery"
+  name  = format("%s-firehose-delivery", var.project_name)
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -57,7 +57,7 @@ resource "aws_iam_role_policy" "firehose_delivery" {
         ]
         Resource = [
           aws_s3_bucket.log_archive[0].arn,
-          "${aws_s3_bucket.log_archive[0].arn}/*"
+          format("%s/*", aws_s3_bucket.log_archive[0].arn)
         ]
       }
     ]
@@ -66,7 +66,7 @@ resource "aws_iam_role_policy" "firehose_delivery" {
 
 resource "aws_kinesis_firehose_delivery_stream" "rum_archive" {
   count       = var.enable_monitoring ? 1 : 0
-  name        = "${var.project_name}-rum-archive"
+  name        = format("%s-rum-archive", var.project_name)
   destination = "extended_s3"
 
   extended_s3_configuration {
@@ -88,14 +88,14 @@ resource "aws_kinesis_firehose_delivery_stream" "rum_archive" {
 
 resource "aws_iam_role" "cwl_to_firehose" {
   count = var.enable_monitoring ? 1 : 0
-  name  = "${var.project_name}-cwl-to-firehose"
+  name  = format("%s-cwl-to-firehose", var.project_name)
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
       {
         Effect    = "Allow"
-        Principal = { Service = "logs.${data.aws_region.current.name}.amazonaws.com" }
+        Principal = { Service = format("logs.%s.amazonaws.com", data.aws_region.current.name) }
         Action    = "sts:AssumeRole"
       }
     ]

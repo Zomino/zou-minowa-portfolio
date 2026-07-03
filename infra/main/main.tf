@@ -48,7 +48,7 @@ module "frontend" {
   source                  = "./modules/frontend"
   project_name            = var.project_name
   enable_logging          = true
-  domain_names            = [aws_route53_zone.site.name, "www.${aws_route53_zone.site.name}"]
+  domain_names            = [aws_route53_zone.site.name, format("www.%s", aws_route53_zone.site.name)]
   zone_id                 = aws_route53_zone.site.zone_id
   manage_certificate      = true
   certificate_domain_name = aws_route53_zone.site.name
@@ -65,10 +65,10 @@ module "frontend" {
 
 module "frontend_preview" {
   source                       = "./modules/frontend"
-  project_name                 = "${var.project_name}-preview"
-  bucket_name                  = "${var.project_name}-previews"
+  project_name                 = format("%s-preview", var.project_name)
+  bucket_name                  = format("%s-previews", var.project_name)
   enable_asset_cache_behaviors = false
-  domain_names                 = ["*.${aws_route53_zone.site.name}"]
+  domain_names                 = [format("*.%s", aws_route53_zone.site.name)]
   acm_certificate_arn          = module.frontend.acm_certificate_arn
   rewrite_function_filename    = "preview-rewrite.js"
   zone_id                      = aws_route53_zone.site.zone_id
@@ -83,12 +83,12 @@ module "chat" {
   source           = "./modules/chat"
   project_name     = var.project_name
   alert_email      = var.alert_email
-  api_domain_name  = "api.${aws_route53_zone.site.name}"
+  api_domain_name  = format("api.%s", aws_route53_zone.site.name)
   zone_id          = aws_route53_zone.site.zone_id
   sns_topic_eu_arn = module.alerts_eu.arn
   cors_allow_origins = [
-    "https://${aws_route53_zone.site.name}",
-    "https://www.${aws_route53_zone.site.name}",
+    format("https://%s", aws_route53_zone.site.name),
+    format("https://www.%s", aws_route53_zone.site.name),
   ]
 }
 
@@ -104,7 +104,7 @@ module "chat_preview" {
 
 module "alerts_us" {
   source        = "./modules/sns"
-  name          = "${var.project_name}-alerts"
+  name          = format("%s-alerts", var.project_name)
   subscriptions = [{ protocol = "email", endpoint = var.alert_email }]
 
   providers = {
@@ -114,13 +114,13 @@ module "alerts_us" {
 
 module "alerts_eu" {
   source        = "./modules/sns"
-  name          = "${var.project_name}-alerts"
+  name          = format("%s-alerts", var.project_name)
   subscriptions = [{ protocol = "email", endpoint = var.alert_email }]
 }
 
 module "budget" {
   source            = "./modules/budget"
-  name              = "${var.project_name}-monthly"
+  name              = format("%s-monthly", var.project_name)
   limit_amount      = "5"
   subscriber_emails = [var.alert_email]
 }

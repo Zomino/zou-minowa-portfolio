@@ -3,8 +3,8 @@ data "aws_iam_policy_document" "chat" {
     sid     = "InvokeModel"
     actions = ["bedrock:InvokeModel"]
     resources = [
-      "arn:aws:bedrock:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:inference-profile/${local.inference_profile_id}",
-      "arn:aws:bedrock:*::foundation-model/${var.model_id}",
+      format("arn:aws:bedrock:%s:%s:inference-profile/%s", data.aws_region.current.name, data.aws_caller_identity.current.account_id, local.inference_profile_id),
+      format("arn:aws:bedrock:*::foundation-model/%s", var.model_id),
     ]
   }
 
@@ -31,5 +31,5 @@ resource "aws_lambda_permission" "chat_apigw" {
   action        = "lambda:InvokeFunction"
   function_name = module.lambda.function_name
   principal     = "apigateway.amazonaws.com"
-  source_arn    = "${module.api.execution_arn}/*/*"
+  source_arn    = format("%s/*/*", module.api.execution_arn)
 }
