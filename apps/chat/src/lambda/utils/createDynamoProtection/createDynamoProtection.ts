@@ -5,7 +5,10 @@ import {
   UpdateCommand,
 } from "@aws-sdk/lib-dynamodb";
 
-import type { ChatProtection, ProtectionVerdict } from "../handleChatRequest";
+import type {
+  ChatProtection,
+  ProtectionVerdict,
+} from "../handleChatRequest/handleChatRequest";
 
 export interface DynamoProtectionConfig {
   region: string;

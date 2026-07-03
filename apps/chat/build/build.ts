@@ -1,8 +1,8 @@
-import { execFileSync } from "node:child_process";
-
 import { build } from "esbuild";
 
-execFileSync("node", ["generate.mjs"], { stdio: "inherit" });
+import { generate } from "./utils/generate/generate.ts";
+
+generate();
 
 await build({
   entryPoints: ["src/lambda/lambda.ts"],

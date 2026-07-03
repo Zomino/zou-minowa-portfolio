@@ -6,7 +6,7 @@ import type {
   ChatProtection,
 } from "./handleChatRequest";
 import { handleChatRequest } from "./handleChatRequest";
-import { PORTFOLIO } from "./portfolio";
+import portfolio from "../portfolio.generated.json";
 
 const CLIENT_ID = "203.0.113.5";
 
@@ -51,7 +51,7 @@ describe("handleChatRequest", () => {
       body: { reply: "Zou builds maintainable products." },
     });
     expect(model.generate).toHaveBeenCalledWith({
-      systemPrompt: expect.stringContaining(PORTFOLIO.name),
+      systemPrompt: expect.stringContaining(portfolio.name),
       messages: [{ role: "user", content: "What does Zou build?" }],
     });
     expect(protection.record).toHaveBeenCalledWith({ tokens: 42 });
@@ -61,11 +61,15 @@ describe("handleChatRequest", () => {
     const model = modelReturning("unused");
     const protection = allowingProtection();
 
-    const outcome = await handleChatRequest({ body: { messages: [] } }, CLIENT_ID, {
-      model,
-      protection,
-      guardrail: allowingGuardrail(),
-    });
+    const outcome = await handleChatRequest(
+      { body: { messages: [] } },
+      CLIENT_ID,
+      {
+        model,
+        protection,
+        guardrail: allowingGuardrail(),
+      },
+    );
 
     expect(outcome.status).toBe(400);
     expect(outcome.body).toEqual({
