@@ -12,7 +12,7 @@ resource "aws_cloudwatch_metric_alarm" "cf_5xx" {
   treat_missing_data  = "notBreaching"
 
   dimensions = {
-    DistributionId = aws_cloudfront_distribution.site.id
+    DistributionId = module.cloudfront_prod.distribution_id
     Region         = "Global"
   }
 
@@ -97,11 +97,11 @@ resource "aws_cloudwatch_metric_alarm" "rum_js_errors" {
   alarm_actions = [var.sns_topic_eu_arn]
 }
 
-resource "aws_cloudwatch_dashboard" "frontend" {
+resource "aws_cloudwatch_dashboard" "this" {
   count          = var.enable_monitoring ? 1 : 0
   dashboard_name = format("%s-frontend", var.project_name)
   dashboard_body = templatefile(format("%s/resources/dashboard.json", path.module), {
     project_name    = var.project_name
-    distribution_id = aws_cloudfront_distribution.site.id
+    distribution_id = module.cloudfront_prod.distribution_id
   })
 }

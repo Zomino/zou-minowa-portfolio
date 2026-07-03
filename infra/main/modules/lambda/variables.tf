@@ -2,11 +2,6 @@ variable "name" {
   type = string
 }
 
-variable "create_function" {
-  type    = bool
-  default = true
-}
-
 variable "source_file" {
   type    = string
   default = null

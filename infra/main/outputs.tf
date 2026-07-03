@@ -1,13 +1,13 @@
 output "production_distribution_domain" {
-  value = module.frontend.domain_name
+  value = module.frontend.production_domain_name
 }
 
 output "production_github_actions_role_arn" {
-  value = aws_iam_role.oidc["deploy"].arn
+  value = module.github_oidc.role_arns["deploy"]
 }
 
 output "preview_distribution_domain" {
-  value = module.frontend_preview.domain_name
+  value = module.frontend.preview_domain_name
 }
 
 output "preview_base_domain" {
@@ -15,23 +15,23 @@ output "preview_base_domain" {
 }
 
 output "preview_github_actions_role_arn" {
-  value = aws_iam_role.oidc["preview"].arn
+  value = module.github_oidc.role_arns["preview"]
 }
 
 output "chat_preview_api_id" {
-  value = module.chat_preview.api_id
+  value = module.chat.preview_api_id
 }
 
 output "chat_preview_table_name" {
-  value = module.chat_preview.table_name
+  value = module.chat.preview_table_name
 }
 
 output "chat_preview_execution_role_arn" {
-  value = module.chat_preview.execution_role_arn
+  value = module.chat.preview_execution_role_arn
 }
 
 output "chat_preview_model_id" {
-  value = module.chat_preview.model_id
+  value = module.chat.preview_model_id
 }
 
 output "chat_guardrail_id" {

@@ -66,7 +66,7 @@ resource "aws_cognito_identity_pool_roles_attachment" "rum" {
 resource "aws_rum_app_monitor" "portfolio" {
   count          = var.enable_monitoring ? 1 : 0
   name           = var.project_name
-  domain_list    = [var.rum_domain]
+  domain_list    = [var.zone_name]
   cw_log_enabled = true
 
   app_monitor_configuration {

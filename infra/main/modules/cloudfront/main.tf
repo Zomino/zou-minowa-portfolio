@@ -1,5 +1,10 @@
-locals {
-  certificate_arn = var.manage_certificate ? module.certificate[0].certificate_arn : var.acm_certificate_arn
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
+  }
 }
 
 resource "aws_cloudfront_response_headers_policy" "security" {
@@ -50,7 +55,7 @@ resource "aws_cloudfront_cache_policy" "html" {
   }
 }
 
-resource "aws_cloudfront_origin_access_control" "site" {
+resource "aws_cloudfront_origin_access_control" "this" {
   name                              = var.project_name
   origin_access_control_origin_type = "s3"
   signing_behavior                  = "always"
@@ -64,15 +69,15 @@ resource "aws_cloudfront_function" "rewrite" {
   code    = file(format("%s/resources/%s", path.module, var.rewrite_function_filename))
 }
 
-resource "aws_cloudfront_distribution" "site" {
+resource "aws_cloudfront_distribution" "this" {
   enabled     = true
   price_class = "PriceClass_100"
   aliases     = var.domain_names
 
   origin {
-    domain_name              = aws_s3_bucket.site.bucket_regional_domain_name
-    origin_id                = format("s3-%s", aws_s3_bucket.site.id)
-    origin_access_control_id = aws_cloudfront_origin_access_control.site.id
+    domain_name              = aws_s3_bucket.origin.bucket_regional_domain_name
+    origin_id                = format("s3-%s", aws_s3_bucket.origin.id)
+    origin_access_control_id = aws_cloudfront_origin_access_control.this.id
   }
 
   dynamic "logging_config" {
@@ -93,7 +98,7 @@ resource "aws_cloudfront_distribution" "site" {
       path_pattern               = ordered_cache_behavior.value.pattern
       allowed_methods            = ["GET", "HEAD"]
       cached_methods             = ["GET", "HEAD"]
-      target_origin_id           = format("s3-%s", aws_s3_bucket.site.id)
+      target_origin_id           = format("s3-%s", aws_s3_bucket.origin.id)
       viewer_protocol_policy     = "redirect-to-https"
       cache_policy_id            = "658327ea-f89d-4fab-a63d-7e88639e58f6"
       response_headers_policy_id = aws_cloudfront_response_headers_policy.security.id
@@ -104,7 +109,7 @@ resource "aws_cloudfront_distribution" "site" {
   default_cache_behavior {
     allowed_methods            = ["GET", "HEAD"]
     cached_methods             = ["GET", "HEAD"]
-    target_origin_id           = format("s3-%s", aws_s3_bucket.site.id)
+    target_origin_id           = format("s3-%s", aws_s3_bucket.origin.id)
     viewer_protocol_policy     = "redirect-to-https"
     cache_policy_id            = aws_cloudfront_cache_policy.html.id
     response_headers_policy_id = aws_cloudfront_response_headers_policy.security.id
@@ -117,46 +122,21 @@ resource "aws_cloudfront_distribution" "site" {
   }
 
   # S3 with OAC returns 403 (not 404) for missing objects — map to the custom 404 page
-  custom_error_response {
-    error_code            = 403
-    response_code         = 404
-    response_page_path    = "/404.html"
-    error_caching_min_ttl = 10
-  }
-
-  custom_error_response {
-    error_code            = 404
-    response_code         = 404
-    response_page_path    = "/404.html"
-    error_caching_min_ttl = 10
-  }
-
-  custom_error_response {
-    error_code            = 500
-    response_code         = 500
-    response_page_path    = "/500.html"
-    error_caching_min_ttl = 0
-  }
-
-  custom_error_response {
-    error_code            = 502
-    response_code         = 502
-    response_page_path    = "/500.html"
-    error_caching_min_ttl = 0
-  }
-
-  custom_error_response {
-    error_code            = 503
-    response_code         = 503
-    response_page_path    = "/500.html"
-    error_caching_min_ttl = 0
-  }
-
-  custom_error_response {
-    error_code            = 504
-    response_code         = 504
-    response_page_path    = "/500.html"
-    error_caching_min_ttl = 0
+  dynamic "custom_error_response" {
+    for_each = [
+      { error_code = 403, response_code = 404, response_page_path = "/404.html", error_caching_min_ttl = 10 },
+      { error_code = 404, response_code = 404, response_page_path = "/404.html", error_caching_min_ttl = 10 },
+      { error_code = 500, response_code = 500, response_page_path = "/500.html", error_caching_min_ttl = 0 },
+      { error_code = 502, response_code = 502, response_page_path = "/500.html", error_caching_min_ttl = 0 },
+      { error_code = 503, response_code = 503, response_page_path = "/500.html", error_caching_min_ttl = 0 },
+      { error_code = 504, response_code = 504, response_page_path = "/500.html", error_caching_min_ttl = 0 },
+    ]
+    content {
+      error_code            = custom_error_response.value.error_code
+      response_code         = custom_error_response.value.response_code
+      response_page_path    = custom_error_response.value.response_page_path
+      error_caching_min_ttl = custom_error_response.value.error_caching_min_ttl
+    }
   }
 
   restrictions {
@@ -166,9 +146,9 @@ resource "aws_cloudfront_distribution" "site" {
   }
 
   viewer_certificate {
-    cloudfront_default_certificate = local.certificate_arn == null ? true : null
-    acm_certificate_arn            = local.certificate_arn
-    ssl_support_method             = local.certificate_arn == null ? null : "sni-only"
-    minimum_protocol_version       = local.certificate_arn == null ? null : "TLSv1.2_2021"
+    cloudfront_default_certificate = var.acm_certificate_arn == null ? true : null
+    acm_certificate_arn            = var.acm_certificate_arn
+    ssl_support_method             = var.acm_certificate_arn == null ? null : "sni-only"
+    minimum_protocol_version       = var.acm_certificate_arn == null ? null : "TLSv1.2_2021"
   }
 }

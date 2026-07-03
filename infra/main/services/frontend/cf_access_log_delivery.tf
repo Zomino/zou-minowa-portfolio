@@ -38,7 +38,7 @@ resource "aws_cloudwatch_log_delivery_source" "cf_access" {
   provider     = aws.us_east_1
   name         = format("%s-cf-access-logs", var.project_name)
   log_type     = "ACCESS_LOGS"
-  resource_arn = aws_cloudfront_distribution.site.arn
+  resource_arn = module.cloudfront_prod.distribution_arn
 }
 
 resource "aws_cloudwatch_log_delivery_destination" "cf_access" {

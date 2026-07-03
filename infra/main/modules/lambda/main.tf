@@ -7,6 +7,10 @@ terraform {
   }
 }
 
+locals {
+  create_function = var.source_file != null
+}
+
 data "aws_iam_policy_document" "assume" {
   statement {
     actions = ["sts:AssumeRole"]
@@ -36,14 +40,14 @@ resource "aws_iam_role_policy" "this" {
 }
 
 data "archive_file" "this" {
-  count       = var.create_function ? 1 : 0
+  count       = local.create_function ? 1 : 0
   type        = "zip"
   source_file = var.source_file
   output_path = format("%s/build/%s.zip", path.module, var.name)
 }
 
 resource "aws_lambda_function" "this" {
-  count                          = var.create_function ? 1 : 0
+  count                          = local.create_function ? 1 : 0
   function_name                  = var.name
   role                           = aws_iam_role.this.arn
   runtime                        = var.runtime
@@ -65,7 +69,7 @@ resource "aws_lambda_function" "this" {
 }
 
 resource "aws_cloudwatch_log_group" "this" {
-  count             = var.create_function ? 1 : 0
+  count             = local.create_function ? 1 : 0
   name              = format("/aws/lambda/%s", var.name)
   retention_in_days = var.log_retention_days
 }
