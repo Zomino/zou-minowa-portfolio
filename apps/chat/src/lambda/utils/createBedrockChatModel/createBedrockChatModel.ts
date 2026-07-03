@@ -1,6 +1,6 @@
 import AnthropicBedrock from "@anthropic-ai/bedrock-sdk";
 
-import type { ChatModel } from "../handleChatRequest";
+import type { ChatModel } from "../handleChatRequest/handleChatRequest";
 
 export interface BedrockChatModelConfig {
   region: string;
@@ -17,7 +17,10 @@ export const createBedrockChatModel = (config: BedrockChatModelConfig) => {
 
   const client = new AnthropicBedrock({ awsRegion: config.region });
 
-  const generate: ChatModel["generate"] = async ({ systemPrompt, messages }) => {
+  const generate: ChatModel["generate"] = async ({
+    systemPrompt,
+    messages,
+  }) => {
     const message = await client.messages.create({
       model: config.modelId,
       max_tokens: config.maxTokens,

@@ -37,7 +37,9 @@ describe("buildSystemPrompt", () => {
     const prompt = buildSystemPrompt(portfolio);
 
     expect(prompt).toContain("Zou Minowa");
-    expect(prompt).toContain("Software engineer building maintainable products.");
+    expect(prompt).toContain(
+      "Software engineer building maintainable products.",
+    );
   });
 
   it("includes every project title, description, tags and body", () => {
@@ -57,7 +59,9 @@ describe("buildSystemPrompt", () => {
     const prompt = buildSystemPrompt(portfolio);
 
     expect(prompt).toContain("https://www.daisukeminowa.com/");
-    expect(prompt).toContain("https://github.com/Zomino/daisuke-minowa-website");
+    expect(prompt).toContain(
+      "https://github.com/Zomino/daisuke-minowa-website",
+    );
   });
 
   it("includes every journal entry title, date and body", () => {
