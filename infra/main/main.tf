@@ -18,7 +18,7 @@ terraform {
 }
 
 provider "aws" {
-  region = var.aws_region
+  region = "eu-west-2"
 
   default_tags {
     tags = {
@@ -40,43 +40,68 @@ provider "aws" {
   }
 }
 
-module "cloudfront" {
-  source              = "./cloudfront"
-  project_name        = var.project_name
-  bucket_name         = var.project_name
-  alert_email         = var.alert_email
-  enable_logging      = true
-  aliases             = [aws_route53_zone.site.name, "www.${aws_route53_zone.site.name}"]
-  acm_certificate_arn = aws_acm_certificate_validation.site.certificate_arn
+resource "aws_route53_zone" "site" {
+  name = "zouminowa.com"
 }
 
-# No ordered cache behaviours for /_astro/* or /fonts/* because the host to prefix
-# rewrite function is attached only to the default behaviour. Enabling them would
-# route asset requests around the function, so the pr-N prefix would not be applied
-# and the objects would 404. All requests must flow through the default behaviour.
-module "cloudfront_preview" {
-  source                       = "./cloudfront"
-  project_name                 = "${var.project_name}-preview"
-  bucket_name                  = "${var.project_name}-previews"
-  alert_email                  = var.alert_email
-  default_root_object          = null
-  enable_asset_cache_behaviors = false
-  aliases                      = ["*.${aws_route53_zone.site.name}"]
-  acm_certificate_arn          = aws_acm_certificate_validation.site.certificate_arn
-  rewrite_function_filename    = "preview-rewrite.js"
-}
-
-module "monitoring" {
-  source           = "./monitoring"
+module "frontend" {
+  source           = "./services/frontend"
   project_name     = var.project_name
-  alert_email      = var.alert_email
-  rum_domain       = aws_route53_zone.site.name
-  distribution_arn = module.cloudfront.distribution_arn
-  distribution_id  = module.cloudfront.distribution_id
+  zone_id          = aws_route53_zone.site.zone_id
+  zone_name        = aws_route53_zone.site.name
+  sns_topic_arn    = module.alerts_us.arn
+  sns_topic_eu_arn = module.alerts_eu.arn
+  deploy_role_id   = module.github_oidc.role_ids["deploy"]
+  preview_role_id  = module.github_oidc.role_ids["preview"]
 
   providers = {
     aws           = aws
     aws.us_east_1 = aws.us_east_1
+  }
+}
+
+module "chat" {
+  source           = "./services/chat"
+  project_name     = var.project_name
+  alert_email      = var.alert_email
+  zone_id          = aws_route53_zone.site.zone_id
+  zone_name        = aws_route53_zone.site.name
+  sns_topic_eu_arn = module.alerts_eu.arn
+  deploy_role_id   = module.github_oidc.role_ids["deploy"]
+  preview_role_id  = module.github_oidc.role_ids["preview"]
+}
+
+module "alerts_us" {
+  source        = "./modules/sns"
+  name          = format("%s-alerts", var.project_name)
+  subscriptions = [{ protocol = "email", endpoint = var.alert_email }]
+
+  providers = {
+    aws = aws.us_east_1
+  }
+}
+
+module "alerts_eu" {
+  source        = "./modules/sns"
+  name          = format("%s-alerts", var.project_name)
+  subscriptions = [{ protocol = "email", endpoint = var.alert_email }]
+}
+
+module "budget" {
+  source            = "./modules/budget"
+  name              = format("%s-monthly", var.project_name)
+  limit_amount      = "5"
+  subscriber_emails = [var.alert_email]
+}
+
+module "github_oidc" {
+  source      = "./modules/github_oidc"
+  repository  = "Zomino/zou-minowa-portfolio"
+  name_prefix = var.project_name
+
+  subjects = {
+    deploy  = "ref:refs/heads/main"
+    preview = "pull_request"
   }
 }
 

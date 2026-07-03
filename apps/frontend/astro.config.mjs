@@ -26,6 +26,12 @@ export default defineConfig({
         access: "public",
         optional: true,
       }),
+      PUBLIC_CHAT_ENABLED: envField.boolean({
+        context: "client",
+        access: "public",
+        optional: true,
+        default: true,
+      }),
     },
   },
   integrations: [icon(), sitemap(), react()],
