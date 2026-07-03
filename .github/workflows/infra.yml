@@ -1,0 +1,95 @@
+name: Infra
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - "infra/**"
+      - ".github/workflows/infra.yml"
+  push:
+    branches: [main]
+    paths:
+      - "infra/**"
+      - ".github/workflows/infra.yml"
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    working-directory: infra/main
+
+jobs:
+  plan:
+    if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.9.8
+          terraform_wrapper: false
+
+      - uses: aws-actions/configure-aws-credentials@v6
+        with:
+          role-to-assume: ${{ secrets.TERRAFORM_PLAN_ROLE_ARN }}
+          aws-region: eu-west-2
+
+      - run: terraform fmt -check -recursive
+
+      - run: terraform init
+
+      - run: terraform validate
+
+      - name: Plan
+        run: terraform plan -lock=false -no-color -out=tfplan
+
+      - name: Comment plan on PR
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ github.event.number }}
+        run: |
+          plan="$(terraform show -no-color tfplan)"
+          limit=60000
+          if [ "${#plan}" -gt "$limit" ]; then
+            plan="$(printf '%s' "$plan" | tail -c "$limit")"
+            note=$'> Plan truncated. See the Actions logs for the full output.\n\n'
+          else
+            note=""
+          fi
+          {
+            printf '### Terraform plan\n\n%s' "$note"
+            printf '```diff\n%s\n```\n' "$plan"
+          } > plan-comment.md
+          gh pr comment "$PR_NUMBER" --edit-last --create-if-none --body-file plan-comment.md
+
+  apply:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    concurrency:
+      group: infra-apply
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.9.8
+          terraform_wrapper: false
+
+      - uses: aws-actions/configure-aws-credentials@v6
+        with:
+          role-to-assume: ${{ secrets.TERRAFORM_APPLY_ROLE_ARN }}
+          aws-region: eu-west-2
+
+      - run: terraform init
+
+      - run: terraform apply -auto-approve

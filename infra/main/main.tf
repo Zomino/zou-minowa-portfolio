@@ -100,8 +100,16 @@ module "github_oidc" {
   name_prefix = var.project_name
 
   subjects = {
-    deploy  = "ref:refs/heads/main"
-    preview = "pull_request"
+    deploy  = { subject = "ref:refs/heads/main" }
+    preview = { subject = "pull_request" }
+    terraform_plan = {
+      subject             = "pull_request"
+      managed_policy_arns = ["arn:aws:iam::aws:policy/ReadOnlyAccess"]
+    }
+    terraform_apply = {
+      subject             = "ref:refs/heads/main"
+      managed_policy_arns = ["arn:aws:iam::aws:policy/AdministratorAccess"]
+    }
   }
 }
 

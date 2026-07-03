@@ -7,5 +7,8 @@ variable "name_prefix" {
 }
 
 variable "subjects" {
-  type = map(string)
+  type = map(object({
+    subject             = string
+    managed_policy_arns = optional(list(string), [])
+  }))
 }
