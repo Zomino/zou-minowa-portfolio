@@ -1,5 +1,5 @@
 output "function_arn" {
-  value = one(aws_lambda_function.chat[*].arn)
+  value = module.lambda.function_arn
 }
 
 output "api_id" {
@@ -11,7 +11,7 @@ output "table_name" {
 }
 
 output "execution_role_arn" {
-  value = aws_iam_role.chat.arn
+  value = module.lambda.role_arn
 }
 
 output "model_id" {
