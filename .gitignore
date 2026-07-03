@@ -18,4 +18,4 @@ pnpm-debug.log*
 .terraform.lock.hcl
 
 # Terraform archive_file build output
-infra/main/chat/build/
+infra/main/modules/lambda/build/
