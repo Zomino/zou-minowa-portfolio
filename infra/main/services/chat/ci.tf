@@ -12,6 +12,7 @@ resource "aws_iam_role_policy" "deploy" {
         Action = [
           "lambda:UpdateFunctionCode",
           "lambda:GetFunction",
+          "lambda:GetFunctionConfiguration",
         ]
         Resource = module.lambda_prod.function_arn
       }
