@@ -1,7 +1,7 @@
 resource "aws_cloudwatch_metric_alarm" "cf_5xx" {
   count               = var.enable_monitoring ? 1 : 0
   provider            = aws.us_east_1
-  alarm_name          = "${var.project_name}-cloudfront-5xx"
+  alarm_name          = format("%s-cloudfront-5xx", var.project_name)
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 1
   metric_name         = "5xxErrorRate"
@@ -22,7 +22,7 @@ resource "aws_cloudwatch_metric_alarm" "cf_5xx" {
 resource "aws_cloudwatch_log_metric_filter" "cf_real_4xx" {
   count          = var.enable_monitoring ? 1 : 0
   provider       = aws.us_east_1
-  name           = "${var.project_name}-cf-real-4xx"
+  name           = format("%s-cf-real-4xx", var.project_name)
   log_group_name = aws_cloudwatch_log_group.cf_access[0].name
 
   pattern = <<-EOT
@@ -45,7 +45,7 @@ resource "aws_cloudwatch_log_metric_filter" "cf_real_4xx" {
 resource "aws_cloudwatch_metric_alarm" "cf_4xx" {
   count               = var.enable_monitoring ? 1 : 0
   provider            = aws.us_east_1
-  alarm_name          = "${var.project_name}-cloudfront-4xx"
+  alarm_name          = format("%s-cloudfront-4xx", var.project_name)
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 3
   datapoints_to_alarm = 2
@@ -61,7 +61,7 @@ resource "aws_cloudwatch_metric_alarm" "cf_4xx" {
 
 resource "aws_cloudwatch_metric_alarm" "firehose_delivery_failed" {
   count               = var.enable_monitoring ? 1 : 0
-  alarm_name          = "${var.project_name}-firehose-delivery-failed"
+  alarm_name          = format("%s-firehose-delivery-failed", var.project_name)
   comparison_operator = "LessThanThreshold"
   evaluation_periods  = 1
   metric_name         = "DeliveryToS3.Success"
@@ -80,7 +80,7 @@ resource "aws_cloudwatch_metric_alarm" "firehose_delivery_failed" {
 
 resource "aws_cloudwatch_metric_alarm" "rum_js_errors" {
   count               = var.enable_monitoring ? 1 : 0
-  alarm_name          = "${var.project_name}-rum-js-errors"
+  alarm_name          = format("%s-rum-js-errors", var.project_name)
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 1
   metric_name         = "JsErrorCount"
@@ -95,4 +95,13 @@ resource "aws_cloudwatch_metric_alarm" "rum_js_errors" {
   }
 
   alarm_actions = [var.sns_topic_eu_arn]
+}
+
+resource "aws_cloudwatch_dashboard" "frontend" {
+  count          = var.enable_monitoring ? 1 : 0
+  dashboard_name = format("%s-frontend", var.project_name)
+  dashboard_body = templatefile(format("%s/resources/dashboard.json", path.module), {
+    project_name    = var.project_name
+    distribution_id = aws_cloudfront_distribution.site.id
+  })
 }

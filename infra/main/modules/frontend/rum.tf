@@ -1,12 +1,12 @@
 resource "aws_cognito_identity_pool" "rum" {
   count                            = var.enable_monitoring ? 1 : 0
-  identity_pool_name               = "${var.project_name}-rum"
+  identity_pool_name               = format("%s-rum", var.project_name)
   allow_unauthenticated_identities = true
 }
 
 resource "aws_iam_role" "rum_unauth" {
   count                = var.enable_monitoring ? 1 : 0
-  name                 = "${var.project_name}-rum-unauth"
+  name                 = format("%s-rum-unauth", var.project_name)
   path                 = "/service-role/"
   description          = "CloudWatch Put RUM events for application monitors"
   max_session_duration = 3600
@@ -33,7 +33,7 @@ resource "aws_iam_role" "rum_unauth" {
 
 resource "aws_iam_policy" "rum_put" {
   count = var.enable_monitoring ? 1 : 0
-  name  = "${var.project_name}-rum-put"
+  name  = format("%s-rum-put", var.project_name)
   path  = "/service-role/"
 
   policy = jsonencode({

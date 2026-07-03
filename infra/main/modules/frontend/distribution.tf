@@ -1,5 +1,9 @@
+locals {
+  certificate_arn = var.manage_certificate ? module.certificate[0].certificate_arn : var.acm_certificate_arn
+}
+
 resource "aws_cloudfront_response_headers_policy" "security" {
-  name = "${var.project_name}-security-headers"
+  name = format("%s-security-headers", var.project_name)
 
   security_headers_config {
     strict_transport_security {
@@ -26,7 +30,7 @@ resource "aws_cloudfront_response_headers_policy" "security" {
 }
 
 resource "aws_cloudfront_cache_policy" "html" {
-  name        = "${var.project_name}-html"
+  name        = format("%s-html", var.project_name)
   min_ttl     = 0
   default_ttl = 0
   max_ttl     = 0
@@ -54,10 +58,10 @@ resource "aws_cloudfront_origin_access_control" "site" {
 }
 
 resource "aws_cloudfront_function" "rewrite" {
-  name    = "${var.project_name}-rewrite"
+  name    = format("%s-rewrite", var.project_name)
   runtime = "cloudfront-js-2.0"
   publish = true
-  code    = file("${path.module}/resources/${var.rewrite_function_filename}")
+  code    = file(format("%s/resources/%s", path.module, var.rewrite_function_filename))
 }
 
 resource "aws_cloudfront_distribution" "site" {
@@ -67,7 +71,7 @@ resource "aws_cloudfront_distribution" "site" {
 
   origin {
     domain_name              = aws_s3_bucket.site.bucket_regional_domain_name
-    origin_id                = "s3-${aws_s3_bucket.site.id}"
+    origin_id                = format("s3-%s", aws_s3_bucket.site.id)
     origin_access_control_id = aws_cloudfront_origin_access_control.site.id
   }
 
@@ -89,7 +93,7 @@ resource "aws_cloudfront_distribution" "site" {
       path_pattern               = ordered_cache_behavior.value.pattern
       allowed_methods            = ["GET", "HEAD"]
       cached_methods             = ["GET", "HEAD"]
-      target_origin_id           = "s3-${aws_s3_bucket.site.id}"
+      target_origin_id           = format("s3-%s", aws_s3_bucket.site.id)
       viewer_protocol_policy     = "redirect-to-https"
       cache_policy_id            = "658327ea-f89d-4fab-a63d-7e88639e58f6"
       response_headers_policy_id = aws_cloudfront_response_headers_policy.security.id
@@ -100,7 +104,7 @@ resource "aws_cloudfront_distribution" "site" {
   default_cache_behavior {
     allowed_methods            = ["GET", "HEAD"]
     cached_methods             = ["GET", "HEAD"]
-    target_origin_id           = "s3-${aws_s3_bucket.site.id}"
+    target_origin_id           = format("s3-%s", aws_s3_bucket.site.id)
     viewer_protocol_policy     = "redirect-to-https"
     cache_policy_id            = aws_cloudfront_cache_policy.html.id
     response_headers_policy_id = aws_cloudfront_response_headers_policy.security.id

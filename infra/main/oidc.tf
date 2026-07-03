@@ -23,7 +23,7 @@ resource "aws_iam_openid_connect_provider" "github" {
 
 resource "aws_iam_role" "oidc" {
   for_each = local.pipeline_roles
-  name     = "${var.project_name}-github-actions-${each.key}"
+  name     = format("%s-github-actions-%s", var.project_name, each.key)
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -56,7 +56,7 @@ resource "aws_iam_role_policy" "github_actions" {
       {
         Effect   = "Allow"
         Action   = ["s3:PutObject", "s3:DeleteObject"]
-        Resource = "${each.value.bucket_arn}/*"
+        Resource = format("%s/*", each.value.bucket_arn)
       },
       {
         Effect   = "Allow"
@@ -108,7 +108,7 @@ resource "aws_iam_role_policy" "github_actions_chat_preview" {
           "lambda:AddPermission",
           "lambda:RemovePermission",
         ]
-        Resource = "arn:aws:lambda:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:function:${var.project_name}-chat-preview-pr-*"
+        Resource = format("arn:aws:lambda:%s:%s:function:%s-chat-preview-pr-*", data.aws_region.current.name, data.aws_caller_identity.current.account_id, var.project_name)
       },
       {
         Sid    = "ManagePreviewStages"
@@ -120,8 +120,8 @@ resource "aws_iam_role_policy" "github_actions_chat_preview" {
           "apigateway:PATCH",
         ]
         Resource = [
-          "arn:aws:apigateway:${data.aws_region.current.name}::/apis/${module.chat_preview.api_id}/stages",
-          "arn:aws:apigateway:${data.aws_region.current.name}::/apis/${module.chat_preview.api_id}/stages/*",
+          format("arn:aws:apigateway:%s::/apis/%s/stages", data.aws_region.current.name, module.chat_preview.api_id),
+          format("arn:aws:apigateway:%s::/apis/%s/stages/*", data.aws_region.current.name, module.chat_preview.api_id),
         ]
       },
       {

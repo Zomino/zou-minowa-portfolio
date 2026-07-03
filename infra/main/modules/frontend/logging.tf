@@ -1,6 +1,6 @@
 resource "aws_s3_bucket" "logs" {
   count  = var.enable_logging ? 1 : 0
-  bucket = "${var.project_name}-logs"
+  bucket = format("%s-logs", var.project_name)
 }
 
 resource "aws_s3_bucket_ownership_controls" "logs" {
