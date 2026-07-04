@@ -145,26 +145,7 @@
         "region": "us-east-1",
         "period": 3600,
         "stat": "Average",
-        "title": "CloudFront error rate %  ▸ good ≤ 1, poor > 5",
-        "yAxis": {
-          "left": { "min": 0 }
-        },
-        "annotations": {
-          "horizontal": [
-            [
-              { "label": "Good", "value": 0, "color": "#2ca02c" },
-              { "value": 1 }
-            ],
-            [
-              { "label": "Needs improvement", "value": 1, "color": "#ff9900" },
-              { "value": 5 }
-            ],
-            [
-              { "label": "Poor", "value": 5, "color": "#d62728" },
-              { "value": 100 }
-            ]
-          ]
-        }
+        "title": "CloudFront error rate %"
       }
     },
     {
@@ -238,26 +219,7 @@
         "region": "eu-west-2",
         "stat": "Average",
         "period": 3600,
-        "title": "RUM log archive: Firehose delivery success  ▸ good ≥ 99%",
-        "yAxis": {
-          "left": { "min": 0, "max": 1 }
-        },
-        "annotations": {
-          "horizontal": [
-            [
-              { "label": "Poor", "value": 0, "color": "#d62728" },
-              { "value": 0.9 }
-            ],
-            [
-              { "label": "Needs improvement", "value": 0.9, "color": "#ff9900" },
-              { "value": 0.99 }
-            ],
-            [
-              { "label": "Good", "value": 0.99, "color": "#2ca02c" },
-              { "value": 1 }
-            ]
-          ]
-        }
+        "title": "RUM log archive: Firehose delivery success"
       }
     },
     {
