@@ -1,5 +1,9 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
+import {
+  loadChatSession,
+  updateChatSession,
+} from "../../../../utils/chatSession/chatSession";
 import { sendChatRequest } from "./utils/sendChatRequest/sendChatRequest";
 
 export interface ChatMessage {
@@ -19,9 +23,17 @@ const assistantMessage = (content: string): ChatMessage => ({
 export const useChat = ({
   pageSlug,
 }: { pageSlug?: string | undefined } = {}) => {
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [messages, setMessages] = useState<ChatMessage[]>(
+    () => loadChatSession().messages,
+  );
   const [isSending, setIsSending] = useState(false);
-  const [cooldownUntil, setCooldownUntil] = useState<number | null>(null);
+  const [cooldownUntil, setCooldownUntil] = useState<number | null>(
+    () => loadChatSession().cooldownUntil,
+  );
+
+  useEffect(() => {
+    updateChatSession({ messages, cooldownUntil });
+  }, [messages, cooldownUntil]);
 
   const send = useCallback(
     async (text: string) => {

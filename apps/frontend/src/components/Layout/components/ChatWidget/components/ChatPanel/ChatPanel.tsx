@@ -1,8 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import { useChat } from "./hooks/useChat/useChat";
+import {
+  loadChatSession,
+  updateChatSession,
+} from "../../utils/chatSession/chatSession";
 import { ChatInput } from "./components/ChatInput/ChatInput";
-import { TypingIndicator } from "./components/TypingIndicator/TypingIndicator";
 import { CloseButton } from "./components/CloseButton/CloseButton";
 import { MessageList } from "./components/MessageList/MessageList";
 import { PanelShell } from "./components/PanelShell/PanelShell";
@@ -16,15 +19,19 @@ const GREETING =
   "Hello. Ask me anything about Zou's projects, skills, or experience.";
 
 const useChatVisibility = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(() => loadChatSession().open);
 
   const close = useCallback(() => {
     setIsOpen(false);
+    updateChatSession({ open: false });
     window.dispatchEvent(new Event("chat:closed"));
   }, []);
 
   useEffect(() => {
-    const open = () => setIsOpen(true);
+    const open = () => {
+      setIsOpen(true);
+      updateChatSession({ open: true });
+    };
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") close();
     };
@@ -59,13 +66,17 @@ const useCooldown = (until: number | null) => {
   return coolingDown;
 };
 
-const useAutoScroll = (messageCount: number, isOpen: boolean) => {
+const useAutoScroll = (
+  messageCount: number,
+  isOpen: boolean,
+  isPending: boolean,
+) => {
   const ref = useRef<HTMLOListElement>(null);
 
   useEffect(() => {
     const node = ref.current;
     if (node) node.scrollTop = node.scrollHeight;
-  }, [messageCount, isOpen]);
+  }, [messageCount, isOpen, isPending]);
 
   return ref;
 };
@@ -76,7 +87,7 @@ const ChatPanel = ({ pageSlug, className }: Props) => {
   });
   const { isOpen, close } = useChatVisibility();
   const coolingDown = useCooldown(cooldownUntil);
-  const logRef = useAutoScroll(messages.length, isOpen);
+  const logRef = useAutoScroll(messages.length, isOpen, isSending);
 
   return (
     <PanelShell isOpen={isOpen} className={className}>
@@ -89,8 +100,8 @@ const ChatPanel = ({ pageSlug, className }: Props) => {
         className="flex-1"
         greeting={GREETING}
         messages={messages}
+        isPending={isSending}
       />
-      {isSending && <TypingIndicator />}
       <ChatInput
         active={isOpen}
         disabled={isSending || coolingDown}

@@ -1,4 +1,5 @@
 interface Project {
+  slug: string;
   title: string;
   description: string;
   tags: string[];
@@ -8,6 +9,7 @@ interface Project {
 }
 
 interface JournalEntry {
+  slug: string;
   title: string;
   description: string;
   tags: string[];

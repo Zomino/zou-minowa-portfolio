@@ -24,13 +24,13 @@ describe("ChatWidget", () => {
     const html = await renderChatWidget(true);
 
     expect(html).toContain('aria-label="Open chat"');
-    expect(html).toContain('aria-label="Chat assistant"');
+    expect(html).toContain("<astro-island");
   });
 
   it("omits the launcher and the chat panel island when disabled", async () => {
     const html = await renderChatWidget(false);
 
     expect(html).not.toContain('aria-label="Open chat"');
-    expect(html).not.toContain('aria-label="Chat assistant"');
+    expect(html).not.toContain("<astro-island");
   });
 });

@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import type { ReactNode } from "react";
 
 interface Props {
@@ -12,14 +13,22 @@ const OPEN_CLASS = "translate-y-0 opacity-100";
 const CLOSED_CLASS =
   "pointer-events-none translate-y-full sm:translate-y-2 sm:opacity-0";
 
-export const PanelShell = ({ isOpen, className = "", children }: Props) => (
-  <div
-    className={`${className} ${BASE_CLASS} ${isOpen ? OPEN_CLASS : CLOSED_CLASS}`}
-    role="dialog"
-    aria-label="Chat assistant"
-    aria-hidden={!isOpen}
-    inert={!isOpen}
-  >
-    {children}
-  </div>
-);
+export const PanelShell = ({ isOpen, className = "", children }: Props) => {
+  const shellClassName = clsx(
+    className,
+    BASE_CLASS,
+    isOpen ? OPEN_CLASS : CLOSED_CLASS,
+  );
+
+  return (
+    <div
+      className={shellClassName}
+      role="dialog"
+      aria-label="Chat assistant"
+      aria-hidden={!isOpen}
+      inert={!isOpen}
+    >
+      {children}
+    </div>
+  );
+};

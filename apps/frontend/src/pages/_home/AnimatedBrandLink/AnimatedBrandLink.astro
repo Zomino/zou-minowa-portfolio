@@ -14,7 +14,7 @@ const {
 } = Astro.props;
 
 const classes = [
-  "transition-all duration-250 ease-in-out pointer-events-none -translate-x-4 opacity-0",
+  "transition-all duration-250 ease-in-out motion-reduce:transition-none pointer-events-none -translate-x-4 opacity-0",
   className,
 ]
   .filter(Boolean)
@@ -85,7 +85,11 @@ const classes = [
 
       link.addEventListener("click", (event) => {
         event.preventDefault();
-        window.scrollTo({ top: 0, behavior: "smooth" });
+        const reduceMotion = window.matchMedia(
+          "(prefers-reduced-motion: reduce)",
+        ).matches;
+        const behavior = reduceMotion ? "auto" : "smooth";
+        window.scrollTo({ top: 0, behavior });
       });
     });
 </script>

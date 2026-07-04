@@ -4,7 +4,9 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 
 import matter from "gray-matter";
 
-type Entry = ReturnType<typeof matter>;
+type Entry = Pick<ReturnType<typeof matter>, "data" | "content"> & {
+  slug: string;
+};
 
 interface Metadata {
   siteTitle: string;
@@ -40,7 +42,8 @@ export const buildPortfolio = ({
 }) => ({
   name: metadata.siteTitle,
   headline: metadata.siteDescription,
-  projects: projects.map(({ data, content }) => ({
+  projects: projects.map(({ slug, data, content }) => ({
+    slug,
     title: data.title,
     description: data.description,
     tags: data.tags ?? [],
@@ -48,7 +51,8 @@ export const buildPortfolio = ({
     ...(data.link ? { link: data.link } : {}),
     ...(data.github ? { github: data.github } : {}),
   })),
-  journal: journal.map(({ data, content }) => ({
+  journal: journal.map(({ slug, data, content }) => ({
+    slug,
     title: data.title,
     description: data.description,
     tags: data.tags ?? [],
@@ -62,7 +66,11 @@ const readCollection = (name: string) => {
 
   return readdirSync(dir)
     .filter((file) => file.endsWith(".md"))
-    .map((file) => matter(readFileSync(join(dir, file), "utf8")));
+    .map((file) => {
+      const { data, content } = matter(readFileSync(join(dir, file), "utf8"));
+
+      return { slug: file.replace(/\.md$/, ""), data, content };
+    });
 };
 
 export const generate = () => {

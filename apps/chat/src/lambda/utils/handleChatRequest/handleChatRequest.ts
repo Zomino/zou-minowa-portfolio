@@ -1,5 +1,6 @@
 import { chatRequestSchema, type ChatContract } from "@zou/chat-contract";
 
+import { buildPageContext } from "../buildPageContext/buildPageContext";
 import {
   buildSystemPrompt,
   type Portfolio,
@@ -89,7 +90,7 @@ export const handleChatRequest = async (
       };
     }
 
-    const { messages } = parsed.data.body;
+    const { messages, pageSlug } = parsed.data.body;
     const userText = messages.at(-1)?.content ?? "";
 
     const inputCheck = await deps.guardrail.inspect({
@@ -106,8 +107,11 @@ export const handleChatRequest = async (
       };
     }
 
+    const pageContext = buildPageContext(PORTFOLIO, pageSlug);
     const { reply, tokens } = await deps.model.generate({
-      systemPrompt,
+      systemPrompt: pageContext
+        ? `${systemPrompt}\n\n${pageContext}`
+        : systemPrompt,
       messages,
     });
     await deps.protection.record({ tokens });

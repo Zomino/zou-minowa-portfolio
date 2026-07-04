@@ -13,7 +13,7 @@ const assistantMessageSchema = z.object({
   content: z.string().trim().min(1).max(MAX_REPLY_CHARS),
 });
 
-const messageSchema = z.discriminatedUnion("role", [
+export const chatMessageSchema = z.discriminatedUnion("role", [
   userMessageSchema,
   assistantMessageSchema,
 ]);
@@ -21,7 +21,7 @@ const messageSchema = z.discriminatedUnion("role", [
 export const chatRequestSchema = z.object({
   body: z.object({
     messages: z
-      .array(messageSchema)
+      .array(chatMessageSchema)
       .min(1)
       .refine((messages) => messages.at(-1)?.role === "user"),
     pageSlug: z.string().optional(),

@@ -57,6 +57,50 @@ describe("handleChatRequest", () => {
     expect(protection.record).toHaveBeenCalledWith({ tokens: 42 });
   });
 
+  it("appends the current page context to the system prompt", async () => {
+    const model = modelReturning("Sure.");
+    const projectSlug = portfolio.projects[0]?.slug ?? "";
+
+    await handleChatRequest(
+      {
+        body: {
+          messages: [{ role: "user", content: "Tell me about this project" }],
+          pageSlug: `/projects/${projectSlug}`,
+        },
+      },
+      CLIENT_ID,
+      {
+        model,
+        protection: allowingProtection(),
+        guardrail: allowingGuardrail(),
+      },
+    );
+
+    expect(model.generate).toHaveBeenCalledWith(
+      expect.objectContaining({
+        systemPrompt: expect.stringContaining(
+          `currently on the page /projects/${projectSlug}`,
+        ),
+      }),
+    );
+  });
+
+  it("omits page context when no pageSlug is sent", async () => {
+    const model = modelReturning("Sure.");
+
+    await handleChatRequest(validPayload, CLIENT_ID, {
+      model,
+      protection: allowingProtection(),
+      guardrail: allowingGuardrail(),
+    });
+
+    expect(model.generate).toHaveBeenCalledWith(
+      expect.objectContaining({
+        systemPrompt: expect.not.stringContaining("currently on the page"),
+      }),
+    );
+  });
+
   it("returns 400 invalid_request when the body fails the contract", async () => {
     const model = modelReturning("unused");
     const protection = allowingProtection();
