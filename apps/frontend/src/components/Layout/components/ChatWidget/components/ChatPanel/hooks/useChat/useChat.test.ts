@@ -9,6 +9,7 @@ vi.mock("./utils/sendChatRequest/sendChatRequest");
 afterEach(() => {
   cleanup();
   vi.clearAllMocks();
+  window.sessionStorage.clear();
 });
 
 describe("useChat", () => {
@@ -47,6 +48,46 @@ describe("useChat", () => {
       content: "Slow down",
     });
     expect(result.current.cooldownUntil).toBeGreaterThanOrEqual(before + 5000);
+  });
+
+  it("restores messages stored in the session on mount", async () => {
+    window.sessionStorage.setItem(
+      "chat-session",
+      JSON.stringify({
+        messages: [
+          { role: "user", content: "earlier question" },
+          { role: "assistant", content: "earlier answer" },
+        ],
+        cooldownUntil: null,
+        open: false,
+      }),
+    );
+
+    const { result } = renderHook(() => useChat());
+
+    await waitFor(() =>
+      expect(result.current.messages).toEqual([
+        { role: "user", content: "earlier question" },
+        { role: "assistant", content: "earlier answer" },
+      ]),
+    );
+  });
+
+  it("persists the conversation to the session after a reply", async () => {
+    vi.mocked(sendChatRequest).mockResolvedValue({ ok: true, reply: "Hello" });
+    const { result } = renderHook(() => useChat());
+
+    await act(async () => {
+      await result.current.send("remember this");
+    });
+
+    await waitFor(() => {
+      const raw = window.sessionStorage.getItem("chat-session");
+      expect(raw && JSON.parse(raw).messages).toEqual([
+        { role: "user", content: "remember this" },
+        { role: "assistant", content: "Hello" },
+      ]);
+    });
   });
 
   it("ignores empty input", async () => {

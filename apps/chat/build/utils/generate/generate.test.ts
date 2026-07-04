@@ -8,6 +8,7 @@ describe("buildPortfolio", () => {
       metadata: { siteTitle: "Zou Minowa", siteDescription: "London-based." },
       projects: [
         {
+          slug: "portfolio",
           data: {
             title: "Portfolio",
             description: "A site",
@@ -20,6 +21,7 @@ describe("buildPortfolio", () => {
       ],
       journal: [
         {
+          slug: "post",
           data: {
             title: "Post",
             description: "Hello",
@@ -34,6 +36,7 @@ describe("buildPortfolio", () => {
     expect(portfolio.headline).toBe("London-based.");
     expect(portfolio.projects).toEqual([
       {
+        slug: "portfolio",
         title: "Portfolio",
         description: "A site",
         tags: ["astro"],
@@ -44,6 +47,7 @@ describe("buildPortfolio", () => {
     ]);
     expect(portfolio.journal).toEqual([
       {
+        slug: "post",
         title: "Post",
         description: "Hello",
         tags: [],
@@ -56,7 +60,9 @@ describe("buildPortfolio", () => {
   it("omits optional project links and defaults tags", () => {
     const portfolio = buildPortfolio({
       metadata: { siteTitle: "Zou Minowa", siteDescription: "x" },
-      projects: [{ data: { title: "T", description: "D" }, content: "B" }],
+      projects: [
+        { slug: "t", data: { title: "T", description: "D" }, content: "B" },
+      ],
       journal: [],
     });
 
@@ -73,6 +79,7 @@ describe("buildPortfolio", () => {
       projects: [],
       journal: [
         {
+          slug: "t",
           data: { title: "T", description: "D", date: "2026-01-01" },
           content: "B",
         },
