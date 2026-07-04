@@ -1,0 +1,79 @@
+style.fill: transparent
+direction: right
+
+classes: {
+  messy: {
+    style: {
+      stroke-dash: 4
+      fill-pattern: lines
+    }
+  }
+}
+
+s1: "1" {
+  width: 600
+  height: 880
+  api: API {
+    width: 380
+    height: 680
+    mess: Messy code {
+      class: messy
+      width: 280
+      height: 580
+    }
+  }
+}
+
+s2: "2" {
+  width: 600
+  height: 880
+  tests: Unit tests {
+    width: 500
+    height: 780
+    api: API {
+      width: 380
+      height: 680
+      mess: Messy code {
+        class: messy
+        width: 280
+        height: 580
+      }
+    }
+  }
+}
+
+s3: "3" {
+  width: 600
+  height: 880
+  tests: Unit tests {
+    width: 500
+    height: 780
+    api: API {
+      width: 380
+      height: 680
+      a: API {
+        mess: Messy code {
+          class: messy
+          width: 180
+          height: 80
+        }
+      }
+      b: API {
+        mess: Messy code {
+          class: messy
+          width: 180
+          height: 80
+        }
+      }
+      c: API {
+        mess: Messy code {
+          class: messy
+          width: 180
+          height: 80
+        }
+      }
+    }
+  }
+}
+
+s1 -> s2 -> s3

@@ -1,0 +1,26 @@
+style.fill: transparent
+direction: down
+
+me: Me { shape: person }
+
+hard: Hard task {
+  label.near: top-center
+  design: Design a new feature {
+    width: 187
+    height: 231
+  }
+}
+
+easy: Easy tasks {
+  label.near: top-center
+  grid-columns: 1
+  grid-gap: 28
+  dep: Dependency upgrade { width: 231; height: 67 }
+  ui: Small UI tweak { width: 231; height: 67 }
+  bug: Simple bug fix { width: 231; height: 67 }
+}
+
+me -> hard: most of my attention {
+  style.stroke-width: 8
+}
+me -> easy: on the side

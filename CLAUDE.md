@@ -2,6 +2,10 @@
 
 Guidelines for working in this repo.
 
+## Persistent guidance
+
+- Never save anything to the auto-memory system. Persist preferences, rules, and feedback in this file or in a skill instead.
+
 ## Project basics
 
 - Framework: Astro with Tailwind CSS.
@@ -25,6 +29,16 @@ docker exec -u node -w /workspaces/zou-minowa-portfolio zou-minowa-portfolio-dev
 This is a pnpm workspace. Run install at the repo root, and run app scripts with `pnpm -F frontend <script>` (e.g. `pnpm -F frontend build`) or by setting the working directory to `apps/frontend`.
 
 See `apps/frontend/package.json` scripts for available commands.
+
+## Dev server
+
+- Only ports 4321 and 8080 are published from the container, and every worktree shares them. If 4321 is taken, find the holder (`ss -tlpn`), confirm it is stale, and stop it rather than letting astro fall back to an unpublished port.
+- A dead dev server can leave a stale lock that blocks the next start. Clear it with `npx astro dev stop` in the app directory.
+- A fresh worktree needs its own `pnpm install` before dev commands work.
+
+## Verification
+
+- After any visual or layout change, take a screenshot of the rendered page (browser MCP tools) and inspect it before reporting the change as done. Passing builds do not catch broken layouts.
 
 ## Conventions
 
@@ -71,6 +85,8 @@ See `apps/frontend/package.json` scripts for available commands.
 ## Writing style
 
 - Never use hyphens or dashes as punctuation in written content (no em dashes, en dashes, or hyphen separators). Use commas or full stops instead.
+- Avoid colons within sentences in written content. Rephrase as separate sentences or with conjunctions. Colons are reserved for introducing lists.
+- Never join clauses or fragments with commas in a casual, conversational way (e.g. "Nothing revolutionary, just a handful of habits..."). Write complete grammatical sentences. Commas are for lists and standard grammatical roles only.
 - Keep explanations brief by default. Only go into line by line or low level specifics when explicitly asked.
 - Never use the second person ("you", "your") in written content. Write in the first person or rephrase impersonally.
 

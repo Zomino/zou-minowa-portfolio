@@ -1,0 +1,18 @@
+style.fill: transparent
+direction: down
+
+p1: "Do it"
+p2: "I think we should do this part slightly differently"
+p3: "This part is still not to my liking"
+p4: "Okay, any skills we can create?"
+
+files: "Skills, CLAUDE.md, AGENTS.md" {
+  shape: page
+  style.multiple: true
+}
+
+p1 -> p2
+p2 -> p3
+p3 -> p4
+p4 -> files: created
+files -> p1: loaded next session

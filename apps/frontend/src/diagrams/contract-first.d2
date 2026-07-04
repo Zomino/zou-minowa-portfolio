@@ -1,0 +1,17 @@
+style.fill: transparent
+direction: right
+
+a: Agent A
+contract: Contract { shape: document }
+
+b: Agent B
+c: Agent C
+
+fe: Frontend { shape: hexagon }
+be: Backend { shape: cylinder }
+
+a -> contract
+contract -> b
+contract -> c
+b -> fe: built in parallel
+c -> be: built in parallel
