@@ -4,7 +4,7 @@ import { useChat } from "./hooks/useChat/useChat";
 import {
   loadChatSession,
   updateChatSession,
-} from "./utils/chatSession/chatSession";
+} from "../../utils/chatSession/chatSession";
 import { ChatInput } from "./components/ChatInput/ChatInput";
 import { CloseButton } from "./components/CloseButton/CloseButton";
 import { MessageList } from "./components/MessageList/MessageList";
@@ -19,7 +19,7 @@ const GREETING =
   "Hello. Ask me anything about Zou's projects, skills, or experience.";
 
 const useChatVisibility = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(() => loadChatSession().open);
 
   const close = useCallback(() => {
     setIsOpen(false);
@@ -38,7 +38,6 @@ const useChatVisibility = () => {
 
     window.addEventListener("chat:open", open);
     window.addEventListener("keydown", onKeyDown);
-    if (loadChatSession().open) window.dispatchEvent(new Event("chat:open"));
 
     return () => {
       window.removeEventListener("chat:open", open);
