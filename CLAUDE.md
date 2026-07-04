@@ -30,6 +30,16 @@ This is a pnpm workspace. Run install at the repo root, and run app scripts with
 
 See `apps/frontend/package.json` scripts for available commands.
 
+## Dev server
+
+- Only ports 4321 and 8080 are published from the container, and every worktree shares them. If 4321 is taken, find the holder (`ss -tlpn`), confirm it is stale, and stop it rather than letting astro fall back to an unpublished port.
+- A dead dev server can leave a stale lock that blocks the next start. Clear it with `npx astro dev stop` in the app directory.
+- A fresh worktree needs its own `pnpm install` before dev commands work.
+
+## Verification
+
+- After any visual or layout change, take a screenshot of the rendered page (browser MCP tools) and inspect it before reporting the change as done. Passing builds do not catch broken layouts.
+
 ## Conventions
 
 - Components live in `apps/frontend/src/components/`.
