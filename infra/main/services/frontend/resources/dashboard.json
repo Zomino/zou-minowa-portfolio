@@ -194,8 +194,10 @@
       "height": 6,
       "properties": {
         "metrics": [
-          ["AWS/RUM", "SessionCount", "application_name", "${project_name}"],
-          [".", "PageViewCount", ".", "."]
+          ["AWS/RUM", "SessionCount", "application_name", "${project_name}", { "id": "s", "visible": false }],
+          [".", "PageViewCount", ".", ".", { "id": "p", "visible": false }],
+          [{ "expression": "FILL(s, 0)", "label": "Sessions", "id": "sf" }],
+          [{ "expression": "FILL(p, 0)", "label": "Page views", "id": "pf" }]
         ],
         "view": "timeSeries",
         "stacked": false,
@@ -213,7 +215,8 @@
       "height": 6,
       "properties": {
         "metrics": [
-          ["AWS/Firehose", "DeliveryToS3.Success", "DeliveryStreamName", "${project_name}-rum-archive", { "label": "Delivery success" }]
+          ["AWS/Firehose", "DeliveryToS3.Success", "DeliveryStreamName", "${project_name}-rum-archive", { "id": "ds", "visible": false }],
+          [{ "expression": "FILL(ds, REPEAT)", "label": "Delivery success", "id": "dsf" }]
         ],
         "view": "timeSeries",
         "stacked": false,
@@ -231,8 +234,10 @@
       "height": 6,
       "properties": {
         "metrics": [
-          ["AWS/Firehose", "IncomingRecords", "DeliveryStreamName", "${project_name}-rum-archive", { "label": "In" }],
-          ["AWS/Firehose", "DeliveryToS3.Records", "DeliveryStreamName", "${project_name}-rum-archive", { "label": "Delivered to S3" }]
+          ["AWS/Firehose", "IncomingRecords", "DeliveryStreamName", "${project_name}-rum-archive", { "id": "ri", "visible": false }],
+          ["AWS/Firehose", "DeliveryToS3.Records", "DeliveryStreamName", "${project_name}-rum-archive", { "id": "rd", "visible": false }],
+          [{ "expression": "FILL(ri, 0)", "label": "In", "id": "rif" }],
+          [{ "expression": "FILL(rd, 0)", "label": "Delivered to S3", "id": "rdf" }]
         ],
         "view": "timeSeries",
         "stacked": false,
