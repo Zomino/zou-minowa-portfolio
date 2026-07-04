@@ -1,5 +1,9 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
+import {
+  loadChatSession,
+  updateChatSession,
+} from "../../utils/chatSession/chatSession";
 import { sendChatRequest } from "./utils/sendChatRequest/sendChatRequest";
 
 export interface ChatMessage {
@@ -22,6 +26,21 @@ export const useChat = ({
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isSending, setIsSending] = useState(false);
   const [cooldownUntil, setCooldownUntil] = useState<number | null>(null);
+  const restoredFromStorage = useRef(false);
+
+  useEffect(() => {
+    const session = loadChatSession();
+    if (session.messages.length > 0) setMessages(session.messages);
+    if (session.cooldownUntil !== null) setCooldownUntil(session.cooldownUntil);
+  }, []);
+
+  useEffect(() => {
+    if (!restoredFromStorage.current) {
+      restoredFromStorage.current = true;
+      return;
+    }
+    updateChatSession({ messages, cooldownUntil });
+  }, [messages, cooldownUntil]);
 
   const send = useCallback(
     async (text: string) => {

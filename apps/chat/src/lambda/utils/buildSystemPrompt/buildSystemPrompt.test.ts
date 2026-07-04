@@ -7,6 +7,7 @@ const portfolio = {
   headline: "Software engineer building maintainable products.",
   projects: [
     {
+      slug: "daisuke-minowa-website",
       title: "Painter Portfolio",
       description: "A portfolio website for my father, a painter.",
       tags: ["Next.js", "Strapi"],
@@ -15,6 +16,7 @@ const portfolio = {
       body: "Strapi runs as the CMS backend with a least-privilege account.",
     },
     {
+      slug: "zou-minowa-portfolio",
       title: "This Portfolio",
       description: "The site you are reading right now.",
       tags: ["Astro", "Tailwind CSS"],
@@ -23,6 +25,7 @@ const portfolio = {
   ],
   journal: [
     {
+      slug: "migrating-vercel-to-aws",
       title: "Migrating from Vercel to AWS in a Weekend",
       description: "Why the speed was not the point.",
       tags: ["AWS", "Replatforming"],

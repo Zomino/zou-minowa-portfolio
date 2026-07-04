@@ -37,6 +37,9 @@ const { class: className } = Astro.props;
 
     launcher.addEventListener("click", () => {
       window.dispatchEvent(new Event("chat:open"));
+    });
+
+    window.addEventListener("chat:open", () => {
       setHidden(true);
     });
 
