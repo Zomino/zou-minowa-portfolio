@@ -1,5 +1,6 @@
 // @vitest-environment jsdom
 import "@testing-library/jest-dom/vitest";
+
 import { cleanup, render } from "@testing-library/react";
 import { afterEach, describe, expect, it } from "vitest";
 
@@ -21,5 +22,21 @@ describe("AssistantMessage", () => {
     );
 
     expect(container.querySelector("img")).toBeNull();
+  });
+
+  it("shows typing dots inside the bubble while pending", () => {
+    const { container } = render(<AssistantMessage content="" pending />);
+
+    expect(
+      container.querySelectorAll('[class*="animate-bounce"]'),
+    ).toHaveLength(3);
+  });
+
+  it("shows no typing dots once resolved", () => {
+    const { container } = render(<AssistantMessage content="done" />);
+
+    expect(
+      container.querySelectorAll('[class*="animate-bounce"]'),
+    ).toHaveLength(0);
   });
 });

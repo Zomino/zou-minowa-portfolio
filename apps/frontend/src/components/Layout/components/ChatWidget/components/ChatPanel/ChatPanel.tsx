@@ -2,7 +2,6 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 import { useChat } from "./hooks/useChat/useChat";
 import { ChatInput } from "./components/ChatInput/ChatInput";
-import { TypingIndicator } from "./components/TypingIndicator/TypingIndicator";
 import { CloseButton } from "./components/CloseButton/CloseButton";
 import { MessageList } from "./components/MessageList/MessageList";
 import { PanelShell } from "./components/PanelShell/PanelShell";
@@ -59,13 +58,17 @@ const useCooldown = (until: number | null) => {
   return coolingDown;
 };
 
-const useAutoScroll = (messageCount: number, isOpen: boolean) => {
+const useAutoScroll = (
+  messageCount: number,
+  isOpen: boolean,
+  isPending: boolean,
+) => {
   const ref = useRef<HTMLOListElement>(null);
 
   useEffect(() => {
     const node = ref.current;
     if (node) node.scrollTop = node.scrollHeight;
-  }, [messageCount, isOpen]);
+  }, [messageCount, isOpen, isPending]);
 
   return ref;
 };
@@ -76,7 +79,7 @@ const ChatPanel = ({ pageSlug, className }: Props) => {
   });
   const { isOpen, close } = useChatVisibility();
   const coolingDown = useCooldown(cooldownUntil);
-  const logRef = useAutoScroll(messages.length, isOpen);
+  const logRef = useAutoScroll(messages.length, isOpen, isSending);
 
   return (
     <PanelShell isOpen={isOpen} className={className}>
@@ -89,8 +92,8 @@ const ChatPanel = ({ pageSlug, className }: Props) => {
         className="flex-1"
         greeting={GREETING}
         messages={messages}
+        isPending={isSending}
       />
-      {isSending && <TypingIndicator />}
       <ChatInput
         active={isOpen}
         disabled={isSending || coolingDown}

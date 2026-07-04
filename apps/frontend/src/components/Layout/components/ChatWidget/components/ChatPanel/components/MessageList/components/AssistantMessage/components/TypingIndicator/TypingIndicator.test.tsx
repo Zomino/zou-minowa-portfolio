@@ -1,5 +1,6 @@
 // @vitest-environment jsdom
 import "@testing-library/jest-dom/vitest";
+
 import { cleanup, render } from "@testing-library/react";
 import { afterEach, describe, expect, it } from "vitest";
 
@@ -11,6 +12,8 @@ describe("TypingIndicator", () => {
   it("renders three animated dots", () => {
     const { container } = render(<TypingIndicator />);
 
-    expect(container.querySelectorAll(".animate-bounce")).toHaveLength(3);
+    expect(
+      container.querySelectorAll('[class*="animate-bounce"]'),
+    ).toHaveLength(3);
   });
 });

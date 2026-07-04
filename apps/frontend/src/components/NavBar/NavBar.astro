@@ -22,7 +22,7 @@ interface Props {
 
 const PANEL_ID = "navbar-mobile-panel";
 const MENU_CLASS_NAME =
-  "absolute left-0 w-full bg-theme shadow-lg overflow-hidden transition-[max-height] duration-250 ease-in-out md:hidden pointer-events-none max-h-0";
+  "absolute left-0 w-full bg-theme shadow-lg overflow-hidden transition-[max-height] duration-250 ease-in-out motion-reduce:transition-none md:hidden pointer-events-none max-h-0";
 
 const { navItems = DEFAULT_NAV_ITEMS, class: className } = Astro.props;
 
