@@ -4,7 +4,6 @@ import { z } from "zod";
 const chatSessionSchema = z.object({
   messages: z.array(chatMessageSchema),
   cooldownUntil: z.number().nullable(),
-  open: z.boolean(),
 });
 
 export type ChatSession = z.infer<typeof chatSessionSchema>;
@@ -15,7 +14,6 @@ const emptyChatSession = () => {
   const session: ChatSession = {
     messages: [],
     cooldownUntil: null,
-    open: false,
   };
 
   return session;

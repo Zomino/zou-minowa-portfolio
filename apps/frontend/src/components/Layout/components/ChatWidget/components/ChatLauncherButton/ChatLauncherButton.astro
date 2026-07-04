@@ -23,8 +23,6 @@ const { class: className } = Astro.props;
 </button>
 
 <script>
-  import { loadChatSession } from "../../utils/chatSession/chatSession";
-
   const launcher = document.querySelector("[data-chat-launcher]");
 
   init: {
@@ -49,7 +47,5 @@ const { class: className } = Astro.props;
       setHidden(false);
       launcher.focus();
     });
-
-    if (loadChatSession().open) setHidden(true);
   }
 </script>
