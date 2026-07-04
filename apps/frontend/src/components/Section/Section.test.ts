@@ -44,6 +44,20 @@ describe("Section", () => {
     expect(html).toContain("heading-3-spacing");
   });
 
+  it("renders a provided heading slot instead of the default heading", async () => {
+    const container = await AstroContainer.create();
+    const html = await container.renderToString(Section, {
+      props: {},
+      slots: {
+        heading: "<h2>Custom heading</h2>",
+        default: "<p>Content</p>",
+      },
+    });
+
+    expect(html).toContain("Custom heading");
+    expect(html).not.toContain("heading-2-spacing");
+  });
+
   it("merges custom classes onto the section element", async () => {
     const container = await AstroContainer.create();
     const html = await container.renderToString(Section, {

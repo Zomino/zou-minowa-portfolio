@@ -1,10 +1,12 @@
 ---
+import clsx from "clsx";
+
 import Badge from "../Badge/Badge.astro";
 import BadgeGroup from "../BadgeGroup/BadgeGroup.astro";
 import EyebrowText from "../EyebrowText/EyebrowText.astro";
 import Heading from "../Heading/Heading.astro";
 import type { Props as HeadingProps } from "../Heading/Heading.astro";
-import Link from "../Link/Link.astro";
+import SummaryCard from "../SummaryCard/SummaryCard.astro";
 import Text from "../Text/Text.astro";
 import { formatDate } from "@/utils/formatDate/formatDate";
 
@@ -34,14 +36,10 @@ const formattedDate = formatDate(date, {
   format: { year: "numeric", month: "short", day: "numeric" },
 });
 
-const classes =
-  `group relative flex h-full cursor-pointer flex-col gap-3 ${className}`.trim();
+const classes = clsx("gap-3 hover:-translate-y-0.5", className);
 ---
 
-<article class={classes}>
-  <Link href={`/journal/${slug}`} class="absolute inset-0 z-10">
-    <span class="sr-only">Read {title}</span>
-  </Link>
+<SummaryCard href={`/journal/${slug}`} label={`Read ${title}`} class={classes}>
   <EyebrowText variant="small">{formattedDate}</EyebrowText>
   <a href={`/journal/${slug}`} class="relative z-20">
     <Heading
@@ -62,4 +60,4 @@ const classes =
       </BadgeGroup>
     )
   }
-</article>
+</SummaryCard>

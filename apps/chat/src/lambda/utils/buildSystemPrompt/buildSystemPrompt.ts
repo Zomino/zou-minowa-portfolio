@@ -23,7 +23,11 @@ export interface Portfolio {
 }
 
 const renderProject = (project: Project) => {
-  const lines = [`### ${project.title}`, project.description, `Tags: ${project.tags.join(", ")}`];
+  const lines = [
+    `### ${project.title}`,
+    project.description,
+    `Tags: ${project.tags.join(", ")}`,
+  ];
 
   project.link && lines.push(`Link: ${project.link}`);
   project.github && lines.push(`Repository: ${project.github}`);

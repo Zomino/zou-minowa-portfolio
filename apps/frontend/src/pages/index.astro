@@ -4,6 +4,7 @@ import NavBar from "../components/NavBar/NavBar.astro";
 import AnimatedBrandLink from "./_home/AnimatedBrandLink/AnimatedBrandLink.astro";
 import FeaturedProjectsSection from "./_home/FeaturedProjectsSection/FeaturedProjectsSection.astro";
 import Hero from "./_home/Hero/Hero.astro";
+import Reveal from "../components/Reveal/Reveal.astro";
 import SkillsSection from "./_home/SkillsSection/SkillsSection.astro";
 import metadata from "@/metadata.json";
 ---
@@ -21,7 +22,9 @@ import metadata from "@/metadata.json";
     class="flex flex-col gap-14 lg:flex-row lg:items-center lg:justify-between lg:gap-12"
   >
     <Hero />
-    <SkillsSection />
+    <Reveal>
+      <SkillsSection />
+    </Reveal>
   </div>
   <div class="mt-14">
     <FeaturedProjectsSection />

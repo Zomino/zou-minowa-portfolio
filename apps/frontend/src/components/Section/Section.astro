@@ -5,7 +5,7 @@ import type { Props as HeadingProps } from "../Heading/Heading.astro";
 import Heading from "../Heading/Heading.astro";
 
 interface Props extends HTMLAttributes<"section"> {
-  heading: string;
+  heading?: string;
   headingLevel?: HeadingProps["level"];
   headingVariant?: HeadingProps["variant"];
 }
@@ -20,8 +20,10 @@ const {
 ---
 
 <section class={className} {...rest}>
-  <Heading level={headingLevel} variant={headingVariant} spacing>
-    {heading}
-  </Heading>
+  <slot name="heading">
+    <Heading level={headingLevel} variant={headingVariant} spacing>
+      {heading}
+    </Heading>
+  </slot>
   <slot />
 </section>

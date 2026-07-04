@@ -40,11 +40,11 @@
     "prettier-plugin-tailwindcss": "^0.8.0",
     "tailwindcss": "^4.1.18",
     "typescript": "^6.0.3",
-    "vite": "^6.4.3",
+    "vite": "^8.1.0",
     "vitest": "^4.1.9"
   },
   "dependencies": {
-    "@astrojs/react": "^4.4.2",
+    "@astrojs/react": "^6.0.0",
     "@astrojs/sitemap": "^3.7.2",
     "@zou/chat-contract": "workspace:*",
     "astro-icon": "^1.1.5",

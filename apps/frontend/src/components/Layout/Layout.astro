@@ -69,7 +69,9 @@ const personJsonLd = buildPersonJsonLd(siteOrigin, metadata);
     <slot name="head" />
   </head>
   <body class="bg-theme flex min-h-screen flex-col font-serif text-slate-900">
-    <header class="sticky top-0 z-50">
+    <header
+      class="sticky top-0 z-50 motion-safe:[view-transition-name:site-header]"
+    >
       <slot name="navbar">
         <NavBar>
           <Link href="/">{metadata.siteTitle}</Link>

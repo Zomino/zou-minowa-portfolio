@@ -3,6 +3,7 @@ import { getCollection } from "astro:content";
 import ProjectSummary from "../../components/ProjectSummary/ProjectSummary.astro";
 import ListPage from "../../components/ListPage/ListPage.astro";
 import ListPageItem from "../../components/ListPage/components/ListPageItem/ListPageItem.astro";
+import Reveal from "../../components/Reveal/Reveal.astro";
 
 const TITLE = "Projects";
 const DESCRIPTION = "Software projects I have built.";
@@ -26,17 +27,19 @@ const allTags = [...new Set(projects.flatMap((p) => p.data.tags))].sort();
     {
       projects.map((project) => (
         <ListPageItem tags={project.data.tags}>
-          <ProjectSummary
-            title={project.data.title}
-            description={project.data.description}
-            link={project.data.link}
-            github={project.data.github}
-            image={project.data.image}
-            tags={project.data.tags}
-            type={project.data.type}
-            slug={project.id}
-            headingVariant={4}
-          />
+          <Reveal class="h-full">
+            <ProjectSummary
+              title={project.data.title}
+              description={project.data.description}
+              link={project.data.link}
+              github={project.data.github}
+              image={project.data.image}
+              tags={project.data.tags}
+              type={project.data.type}
+              slug={project.id}
+              headingVariant={4}
+            />
+          </Reveal>
         </ListPageItem>
       ))
     }

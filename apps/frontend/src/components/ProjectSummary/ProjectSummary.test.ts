@@ -43,4 +43,23 @@ describe("ProjectSummary", () => {
     expect(html).toContain("TypeScript");
     expect(html).toContain("Astro");
   });
+
+  it("lifts on hover with a reduced motion guard", async () => {
+    const container = await AstroContainer.create();
+    const html = await container.renderToString(ProjectSummary, {
+      props: {
+        title: "Signal Stack",
+        description: "Realtime observability platform.",
+        link: "https://example.com/signal",
+        github: "https://github.com/example/signal",
+        image: projectImage,
+        tags: ["TypeScript", "Astro"],
+        type: "personal",
+        slug: "signal-stack",
+      },
+    });
+
+    expect(html).toContain("hover:-translate-y-1");
+    expect(html).toContain("motion-reduce:transition-none");
+  });
 });
