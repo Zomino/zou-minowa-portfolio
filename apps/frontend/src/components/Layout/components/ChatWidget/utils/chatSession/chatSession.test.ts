@@ -13,7 +13,6 @@ describe("chatSession", () => {
     expect(loadChatSession()).toEqual({
       messages: [],
       cooldownUntil: null,
-      open: false,
     });
   });
 
@@ -21,24 +20,21 @@ describe("chatSession", () => {
     updateChatSession({
       messages: [{ role: "user", content: "hi" }],
       cooldownUntil: 123,
-      open: true,
     });
 
     expect(loadChatSession()).toEqual({
       messages: [{ role: "user", content: "hi" }],
       cooldownUntil: 123,
-      open: true,
     });
   });
 
   it("merges a partial update into the stored session", () => {
     updateChatSession({ messages: [{ role: "user", content: "hi" }] });
-    updateChatSession({ open: true });
+    updateChatSession({ cooldownUntil: 456 });
 
     expect(loadChatSession()).toEqual({
       messages: [{ role: "user", content: "hi" }],
-      cooldownUntil: null,
-      open: true,
+      cooldownUntil: 456,
     });
   });
 
@@ -48,7 +44,6 @@ describe("chatSession", () => {
     expect(loadChatSession()).toEqual({
       messages: [],
       cooldownUntil: null,
-      open: false,
     });
   });
 
@@ -61,7 +56,6 @@ describe("chatSession", () => {
     expect(loadChatSession()).toEqual({
       messages: [],
       cooldownUntil: null,
-      open: false,
     });
   });
 
@@ -76,8 +70,7 @@ describe("chatSession", () => {
     expect(loadChatSession()).toEqual({
       messages: [],
       cooldownUntil: null,
-      open: false,
     });
-    expect(() => updateChatSession({ open: true })).not.toThrow();
+    expect(() => updateChatSession({ cooldownUntil: 1 })).not.toThrow();
   });
 });

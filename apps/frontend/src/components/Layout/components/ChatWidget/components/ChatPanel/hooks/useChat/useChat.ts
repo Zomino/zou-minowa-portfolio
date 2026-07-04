@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import {
   loadChatSession,
@@ -23,15 +23,22 @@ const assistantMessage = (content: string): ChatMessage => ({
 export const useChat = ({
   pageSlug,
 }: { pageSlug?: string | undefined } = {}) => {
-  const [messages, setMessages] = useState<ChatMessage[]>(
-    () => loadChatSession().messages,
-  );
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isSending, setIsSending] = useState(false);
-  const [cooldownUntil, setCooldownUntil] = useState<number | null>(
-    () => loadChatSession().cooldownUntil,
-  );
+  const [cooldownUntil, setCooldownUntil] = useState<number | null>(null);
+  const restoredFromStorage = useRef(false);
 
   useEffect(() => {
+    const session = loadChatSession();
+    if (session.messages.length > 0) setMessages(session.messages);
+    if (session.cooldownUntil !== null) setCooldownUntil(session.cooldownUntil);
+  }, []);
+
+  useEffect(() => {
+    if (!restoredFromStorage.current) {
+      restoredFromStorage.current = true;
+      return;
+    }
     updateChatSession({ messages, cooldownUntil });
   }, [messages, cooldownUntil]);
 
