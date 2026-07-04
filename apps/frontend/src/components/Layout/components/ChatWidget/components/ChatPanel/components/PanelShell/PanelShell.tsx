@@ -8,7 +8,7 @@ interface Props {
 }
 
 const BASE_CLASS =
-  "bg-theme transition duration-200 ease-out motion-reduce:transition-none flex h-[90dvh] flex-col overflow-hidden rounded-t-2xl border-t border-slate-200 pb-[env(safe-area-inset-bottom)] shadow-xl sm:h-[70vh] sm:max-h-[32rem] sm:w-96 sm:rounded-2xl sm:border sm:pb-0";
+  "bg-theme transition duration-200 ease-out motion-reduce:transition-none flex h-full flex-col overflow-hidden pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)] shadow-xl sm:h-[70vh] sm:max-h-[32rem] sm:w-96 sm:rounded-2xl sm:border sm:border-slate-200 sm:pt-0 sm:pb-0";
 const OPEN_CLASS = "translate-y-0 opacity-100";
 const CLOSED_CLASS =
   "pointer-events-none translate-y-full sm:translate-y-2 sm:opacity-0";

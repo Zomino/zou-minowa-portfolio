@@ -38,7 +38,7 @@ export const MessageList = ({
   return (
     <ol
       ref={ref}
-      className={`${className} flex flex-col gap-3 overflow-y-auto px-4 py-4`}
+      className={`${className} flex flex-col gap-3 overflow-y-auto overscroll-contain px-4 py-4`}
       aria-live="polite"
       aria-atomic="false"
     >
