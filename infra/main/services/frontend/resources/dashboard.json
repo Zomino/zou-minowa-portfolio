@@ -64,15 +64,33 @@
       "height": 6,
       "properties": {
         "metrics": [
-          ["AWS/RUM", "WebVitalsLargestContentfulPaint", "application_name", "${project_name}", { "label": "LCP p75" }],
-          [".", "WebVitalsInteractionToNextPaint", ".", ".", { "label": "INP p75" }]
+          ["AWS/RUM", "WebVitalsLargestContentfulPaint", "application_name", "${project_name}", { "label": "LCP p75" }]
         ],
         "view": "timeSeries",
         "stacked": false,
         "region": "eu-west-2",
         "period": 3600,
-        "stat": "Average",
-        "title": "Core Web Vitals (LCP, INP) ms"
+        "stat": "p75",
+        "title": "LCP p75 (ms)  ▸ good ≤ 2500, poor > 4000",
+        "yAxis": {
+          "left": { "min": 0, "max": 6000 }
+        },
+        "annotations": {
+          "horizontal": [
+            [
+              { "label": "Good", "value": 0, "color": "#2ca02c" },
+              { "value": 2500 }
+            ],
+            [
+              { "label": "Needs improvement", "value": 2500, "color": "#ff9900" },
+              { "value": 4000 }
+            ],
+            [
+              { "label": "Poor", "value": 4000, "color": "#d62728" },
+              { "value": 6000 }
+            ]
+          ]
+        }
       }
     },
     {
@@ -160,6 +178,43 @@
         "stacked": false,
         "view": "table",
         "title": "CloudFront recent 4xx and 5xx requests"
+      }
+    },
+    {
+      "type": "metric",
+      "x": 0,
+      "y": 18,
+      "width": 6,
+      "height": 6,
+      "properties": {
+        "metrics": [
+          ["AWS/RUM", "WebVitalsInteractionToNextPaint", "application_name", "${project_name}", { "label": "INP p75" }]
+        ],
+        "view": "timeSeries",
+        "stacked": false,
+        "region": "eu-west-2",
+        "period": 3600,
+        "stat": "p75",
+        "title": "INP p75 (ms)  ▸ good ≤ 200, poor > 500",
+        "yAxis": {
+          "left": { "min": 0, "max": 700 }
+        },
+        "annotations": {
+          "horizontal": [
+            [
+              { "label": "Good", "value": 0, "color": "#2ca02c" },
+              { "value": 200 }
+            ],
+            [
+              { "label": "Needs improvement", "value": 200, "color": "#ff9900" },
+              { "value": 500 }
+            ],
+            [
+              { "label": "Poor", "value": 500, "color": "#d62728" },
+              { "value": 700 }
+            ]
+          ]
+        }
       }
     }
   ]
