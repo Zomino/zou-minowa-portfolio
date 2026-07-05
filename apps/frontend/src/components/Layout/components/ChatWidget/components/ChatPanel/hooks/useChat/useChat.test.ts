@@ -59,7 +59,6 @@ describe("useChat", () => {
           { role: "assistant", content: "earlier answer" },
         ],
         cooldownUntil: null,
-        open: false,
       }),
     );
 

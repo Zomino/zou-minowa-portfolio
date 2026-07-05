@@ -6,7 +6,6 @@ import {
   fireEvent,
   render,
   screen,
-  waitFor,
 } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
@@ -31,23 +30,15 @@ describe("ChatPanel", () => {
     expect(screen.getByText(/Ask me anything about Zou/i)).toBeInTheDocument();
   });
 
-  it("reopens on mount when the stored session was open", async () => {
+  it("stays closed on mount even when a stored session exists", () => {
     window.sessionStorage.setItem(
       "chat-session",
-      JSON.stringify({ messages: [], cooldownUntil: null, open: true }),
+      JSON.stringify({
+        messages: [{ role: "user", content: "earlier" }],
+        cooldownUntil: null,
+      }),
     );
 
-    render(<ChatPanel />);
-
-    await waitFor(() =>
-      expect(screen.getByRole("dialog", { hidden: true })).toHaveAttribute(
-        "aria-hidden",
-        "false",
-      ),
-    );
-  });
-
-  it("stays closed on mount when nothing is stored", () => {
     render(<ChatPanel />);
 
     expect(screen.getByRole("dialog", { hidden: true })).toHaveAttribute(

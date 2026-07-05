@@ -11,8 +11,8 @@ const pageSlug = Astro.url.pathname;
   PUBLIC_CHAT_ENABLED && (
     <Fragment>
       <ChatPanel
-        client:only="react"
-        className="fixed inset-x-0 bottom-0 z-50 sm:inset-x-auto sm:right-5 sm:bottom-5"
+        client:idle
+        className="fixed inset-0 z-50 sm:inset-auto sm:right-5 sm:bottom-5"
         pageSlug={pageSlug}
       />
       <ChatLauncherButton class="fixed right-5 bottom-5 z-50" />

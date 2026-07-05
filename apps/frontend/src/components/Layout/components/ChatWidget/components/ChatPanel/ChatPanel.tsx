@@ -1,10 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import { useChat } from "./hooks/useChat/useChat";
-import {
-  loadChatSession,
-  updateChatSession,
-} from "../../utils/chatSession/chatSession";
 import { ChatInput } from "./components/ChatInput/ChatInput";
 import { CloseButton } from "./components/CloseButton/CloseButton";
 import { MessageList } from "./components/MessageList/MessageList";
@@ -19,19 +15,15 @@ const GREETING =
   "Hello. Ask me anything about Zou's projects, skills, or experience.";
 
 const useChatVisibility = () => {
-  const [isOpen, setIsOpen] = useState(() => loadChatSession().open);
+  const [isOpen, setIsOpen] = useState(false);
 
   const close = useCallback(() => {
     setIsOpen(false);
-    updateChatSession({ open: false });
     window.dispatchEvent(new Event("chat:closed"));
   }, []);
 
   useEffect(() => {
-    const open = () => {
-      setIsOpen(true);
-      updateChatSession({ open: true });
-    };
+    const open = () => setIsOpen(true);
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") close();
     };
