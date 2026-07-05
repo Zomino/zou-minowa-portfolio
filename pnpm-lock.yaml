@@ -29,6 +29,9 @@ importers:
       '@anthropic-ai/bedrock-sdk':
         specifier: ^0.31.0
         version: 0.31.0(zod@4.4.3)
+      '@anthropic-ai/sdk':
+        specifier: ^0.106.0
+        version: 0.106.0(zod@4.4.3)
       '@aws-sdk/client-bedrock-runtime':
         specifier: ^3.1075.0
         version: 3.1075.0
@@ -41,6 +44,9 @@ importers:
       '@zou/chat-contract':
         specifier: workspace:*
         version: link:../../packages/chat-contract
+      zod:
+        specifier: ^4
+        version: 4.4.3
     devDependencies:
       '@types/aws-lambda':
         specifier: ^8.10.162
