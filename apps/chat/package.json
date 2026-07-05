@@ -11,15 +11,18 @@
     "prepare": "node build/utils/generate/generate.ts",
     "build": "node build/build.ts",
     "test": "vitest run",
+    "evals": "vitest run --config vitest.evals.config.ts",
     "check": "tsc --noEmit",
     "lint": "eslint ."
   },
   "dependencies": {
     "@anthropic-ai/bedrock-sdk": "^0.31.0",
+    "@anthropic-ai/sdk": "^0.106.0",
     "@aws-sdk/client-bedrock-runtime": "^3.1075.0",
     "@aws-sdk/client-dynamodb": "^3.1075.0",
     "@aws-sdk/lib-dynamodb": "^3.1075.0",
-    "@zou/chat-contract": "workspace:*"
+    "@zou/chat-contract": "workspace:*",
+    "zod": "^4"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.162",
