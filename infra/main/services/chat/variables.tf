@@ -41,6 +41,5 @@ variable "preview_role_id" {
 }
 
 variable "evals_role_id" {
-  type    = string
-  default = null
+  type = string
 }

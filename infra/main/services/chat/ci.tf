@@ -21,9 +21,8 @@ resource "aws_iam_role_policy" "deploy" {
 }
 
 resource "aws_iam_role_policy" "evals" {
-  count = var.evals_role_id == null ? 0 : 1
-  name  = "chat-evals"
-  role  = var.evals_role_id
+  name = "chat-evals"
+  role = var.evals_role_id
 
   policy = jsonencode({
     Version = "2012-10-17"
