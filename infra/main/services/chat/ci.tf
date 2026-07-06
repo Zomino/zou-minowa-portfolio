@@ -20,6 +20,34 @@ resource "aws_iam_role_policy" "deploy" {
   })
 }
 
+resource "aws_iam_role_policy" "evals" {
+  name = "chat-evals"
+  role = var.evals_role_id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Sid    = "InvokeModels"
+        Effect = "Allow"
+        Action = ["bedrock:InvokeModel"]
+        Resource = [
+          format("arn:aws:bedrock:%s:%s:inference-profile/%s", data.aws_region.current.name, data.aws_caller_identity.current.account_id, local.inference_profile_id),
+          format("arn:aws:bedrock:*::foundation-model/%s", var.model_id),
+          format("arn:aws:bedrock:%s:%s:inference-profile/%s", data.aws_region.current.name, data.aws_caller_identity.current.account_id, local.judge_inference_profile_id),
+          format("arn:aws:bedrock:*::foundation-model/%s", var.judge_model_id),
+        ]
+      },
+      {
+        Sid      = "ApplyGuardrail"
+        Effect   = "Allow"
+        Action   = ["bedrock:ApplyGuardrail"]
+        Resource = aws_bedrock_guardrail.this.guardrail_arn
+      }
+    ]
+  })
+}
+
 resource "aws_iam_role_policy" "preview" {
   count = var.preview_role_id == null ? 0 : 1
   name  = "chat-preview"
