@@ -20,6 +20,11 @@ variable "model_id" {
   default = "anthropic.claude-haiku-4-5-20251001-v1:0"
 }
 
+variable "judge_model_id" {
+  type    = string
+  default = "anthropic.claude-sonnet-4-6"
+}
+
 variable "sns_topic_eu_arn" {
   type    = string
   default = null
@@ -31,6 +36,11 @@ variable "deploy_role_id" {
 }
 
 variable "preview_role_id" {
+  type    = string
+  default = null
+}
+
+variable "evals_role_id" {
   type    = string
   default = null
 }

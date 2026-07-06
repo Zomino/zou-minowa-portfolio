@@ -42,6 +42,10 @@ output "chat_guardrail_version" {
   value = module.chat.guardrail_version
 }
 
+output "evals_role_arn" {
+  value = module.github_oidc.role_arns["evals"]
+}
+
 output "terraform_plan_role_arn" {
   value = module.github_oidc.role_arns["terraform_plan"]
 }

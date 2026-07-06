@@ -69,6 +69,7 @@ module "chat" {
   sns_topic_eu_arn = module.alerts_eu.arn
   deploy_role_id   = module.github_oidc.role_ids["deploy"]
   preview_role_id  = module.github_oidc.role_ids["preview"]
+  evals_role_id    = module.github_oidc.role_ids["evals"]
 }
 
 module "alerts_us" {
@@ -102,6 +103,7 @@ module "github_oidc" {
   subjects = {
     deploy  = { subject = "ref:refs/heads/main" }
     preview = { subject = "pull_request" }
+    evals   = { subject = "ref:refs/heads/main" }
     terraform_plan = {
       subject             = "pull_request"
       managed_policy_arns = ["arn:aws:iam::aws:policy/ReadOnlyAccess"]

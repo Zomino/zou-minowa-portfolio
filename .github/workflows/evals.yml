@@ -1,0 +1,35 @@
+name: Evals
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  evals:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: ./.github/actions/setup
+
+      - uses: aws-actions/configure-aws-credentials@v6
+        with:
+          role-to-assume: ${{ secrets.EVALS_ROLE_ARN }}
+          aws-region: eu-west-2
+
+      - name: Run evals
+        env:
+          CHAT_GUARDRAIL_ID: ${{ vars.CHAT_GUARDRAIL_ID }}
+          CHAT_GUARDRAIL_VERSION: ${{ vars.CHAT_GUARDRAIL_VERSION }}
+        run: pnpm -F @zou/chat evals
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: eval-results
+          path: apps/chat/evals/results/

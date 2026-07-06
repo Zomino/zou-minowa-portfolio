@@ -3,9 +3,10 @@ data "aws_caller_identity" "current" {}
 data "aws_region" "current" {}
 
 locals {
-  name                 = format("%s-chat", var.project_name)
-  name_preview         = format("%s-chat-preview", var.project_name)
-  inference_profile_id = format("%s.%s", substr(data.aws_region.current.name, 0, 2), var.model_id)
+  name                       = format("%s-chat", var.project_name)
+  name_preview               = format("%s-chat-preview", var.project_name)
+  inference_profile_id       = format("%s.%s", substr(data.aws_region.current.name, 0, 2), var.model_id)
+  judge_inference_profile_id = format("%s.%s", substr(data.aws_region.current.name, 0, 2), var.judge_model_id)
 }
 
 module "certificate" {
